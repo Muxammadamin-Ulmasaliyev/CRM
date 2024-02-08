@@ -1,0 +1,140 @@
+﻿<Page x:Class="InventoryManagementSystem.Pages.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
+      xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
+      mc:Ignorable="d" 
+      d:DesignHeight="700" d:DesignWidth="1400"
+      Title="HomePage">
+    <Page.Resources>
+
+        <Style TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style TargetType="Viewbox">
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="12*"/>
+            <RowDefinition Height="12*"/>
+            <RowDefinition Height="76*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="90*"/>
+        </Grid.ColumnDefinitions>
+
+        <Rectangle Grid.Row="0" Grid.Column="1" Fill="Green"/>
+        <Rectangle Grid.Row="1" Grid.Column="1" Fill="Red"/>
+        <Rectangle Grid.Row="2" Grid.Column="1" Fill="WhiteSmoke"/>
+        <Rectangle Grid.Row="3" Grid.Column="1" Fill="Purple"/>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+            <Button Name="btnViewCart" Width="80"  Height="40" Margin="5" 
+             Content="Cart"  Click="btnViewCart_Click"/>
+
+            <ComboBox Width="100" Name="cbCurrentCustomer" DisplayMemberPath="Name" SelectionChanged="cbCurrentCustomer_SelectionChanged"/>
+            <TextBlock x:Name="txtCurrencyRate" Text="" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="24"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+
+            <TextBox x:Name="searchBar"  Width="200" Height="35" FontSize="18" 
+         HorizontalAlignment="Left" Margin="20,0,0,0" TextChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged"/>
+            <Button x:Name="btnClearSearchBar" BorderThickness="0" Content="X" Margin="0,0,20,0" Width="25" Height="35" Click="btnClearSearchBar_Click"/>
+
+            <ComboBox Width="100" Name="cbCountry" DisplayMemberPath="Name" 
+             SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged"/>
+            <ComboBox Width="100" Name="cbCompany"    DisplayMemberPath="Name"
+               SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
+            <ComboBox Width="100"  Name="cbCarType"     DisplayMemberPath="Name"
+              SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
+            <ComboBox Width="100"  Name="cbSetType"    DisplayMemberPath="Name"
+             SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Name="btnResetFilter" Width="80"  Height="40" Margin="5" Background="LightGoldenrodYellow" 
+                Content="Reset Filters "  Click="btnResetFilter_Click"/>
+                <Button Name="btnAddCountry" Width="80"  Height="40" Margin="5" 
+                 Content="Add Country"  Click="btnAddCountry_Click"/>
+                <Button Name="btnAddCompany" Width="80"  Height="40" Margin="5" 
+                 Content="Add Company"  Click="btnAddCompany_Click"/>
+                <Button Name="btnAddCarType" Width="80"  Height="40" Margin="5" 
+                 Content="Add Car"  Click="btnAddCarType_Click"/>
+                <Button Name="btnRefreshDb" Width="80"  Height="40" Margin="5" 
+                  Content="Refresh DB"  Click="btnRefreshDb_Click"/>
+            </StackPanel>
+
+            <Button x:Name="btnAddProduct" Width="100" Height ="40" Content="Mahsulot qo`shish" 
+        HorizontalAlignment="Right" Margin="0,0,20,0" Click="btnAddProduct_Click"/>
+
+        </StackPanel>
+
+
+        <ScrollViewer x:Name="scrollViewer" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="2" Grid.Column="2" VerticalScrollBarVisibility="Auto">
+
+            <DataGrid x:Name="productDataGrid" FontSize="18"
+   ItemsSource="{Binding products}" SelectedItem="{Binding SelectedProduct}"
+   CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" 
+      CellEditEnding="productDataGrid_CellEditEnding">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="5*"/>
+                    <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Name}" Width="15*"/>
+                    <DataGridTextColumn Header="Code" IsReadOnly="True" Binding="{Binding Code}" Width="10*"/>
+                    <DataGridTextColumn Header="Tannarx" IsReadOnly="True" Binding="{Binding RealPrice, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
+                    <DataGridTextColumn Header="Sotish narxi" IsReadOnly="True" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
+                    <DataGridTextColumn Header="To`plam turi" IsReadOnly="True" Binding="{Binding SetType.Name}" Width="10*"/>
+                    <DataGridTextColumn Header="Soni" IsReadOnly="False" Binding="{Binding Quantity}" Width="10*" />
+                    <DataGridTextColumn Header="Zavod" IsReadOnly="True" Binding="{Binding Company.Name}" Width="10*"/>
+                    <DataGridTextColumn Header="Davlat" IsReadOnly="True" Binding="{Binding Country.Name}" Width="10*"/>
+                    <DataGridTextColumn Header="Mashina" IsReadOnly="True" Binding="{Binding CarType.Name}" Width="10*"/>
+                    <DataGridTextColumn Header="$ tannarx" IsReadOnly="True" Binding="{Binding USDPrice,StringFormat={}{0:C0}}" Width="10*"/>
+                    <DataGridTextColumn Header="$ donabay narx" IsReadOnly="True" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C0}}" Width="10*"/>
+
+                    
+                    <DataGridTemplateColumn Header="" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="btnAddToCart" Content="Add" Click="btnAddToCart_Click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="btnEditProduct" Content="Edit" Click="btnEditProduct_Click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="btnDeleteProduct" Content="Delete" Click="btnDeleteProduct_Click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+
+            </DataGrid>
+        </ScrollViewer>
+        <TextBlock x:Name="txtNumberOfProducts" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Jadvaldagi produktlar soni : " 
+           HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+
+        <notifications:NotificationArea Grid.RowSpan="4" Grid.ColumnSpan="2"
+                                x:Name="notificationArea" Position="BottomRight" MaxItems="3"/>
+
+    </Grid>
+</Page>

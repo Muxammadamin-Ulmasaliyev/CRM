@@ -1,0 +1,122 @@
+﻿<Page x:Class="InventoryManagementSystem.Pages.CategoriesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
+      mc:Ignorable="d"  Background="AliceBlue"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CategoriesPage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="15"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+
+        <Rectangle Fill="MistyRose" Grid.Row="0" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="MistyRose" Grid.Row="3" Grid.ColumnSpan="2"/>
+
+        <ScrollViewer Grid.Row="1" Grid.Column="0"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
+
+            <Expander  Background="Red" Header="Companies"  x:Name="companiesExpander" ExpandDirection="Down" IsExpanded="False">
+                <StackPanel>
+                    <DataGrid CellEditEnding="companyDataGrid_CellEditEnding" x:Name="companyDataGrid" FontSize="18"
+                                     ItemsSource="{Binding Companies}" SelectedItem="{Binding SelectedCompany}"
+                                    CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="5*"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
+                            <DataGridTemplateColumn Header="" Width="60">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="btnDeleteCompany" Content="Delete" Click="btnDeleteCompany_Click"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Expander>
+        </ScrollViewer>
+
+        <ScrollViewer Grid.Row="1" Grid.Column="1" PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
+
+            <Expander  Background="Purple" Header="Countries" x:Name="countriesExpander" ExpandDirection="Down" IsExpanded="False">
+                <StackPanel>
+                    <DataGrid  CellEditEnding="countryDataGrid_CellEditEnding" x:Name="countryDataGrid" FontSize="18"
+                     ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}"
+                       CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="5*"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
+                            <DataGridTemplateColumn Header="" Width="60">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="btnDeleteCountry" Content="Delete" Click="btnDeleteCountry_Click"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Expander>
+        </ScrollViewer>
+
+        <ScrollViewer Grid.Row="2" Grid.Column="0"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
+            <Expander Background="DeepSkyBlue" Header="Car Types"  x:Name="carTypesExpander" ExpandDirection="Down" IsExpanded="False">
+                <StackPanel>
+                    <DataGrid CellEditEnding="carTypeDataGrid_CellEditEnding" x:Name="carTypeDataGrid" FontSize="18"
+                    ItemsSource="{Binding CarTypes}" SelectedItem="{Binding SelectedCarType}"
+                     CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="5*"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
+                            <DataGridTemplateColumn Header="" Width="60">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="btnDeleteCarType" Content="Delete" Click="btnDeleteCarType_Click"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Expander>
+        </ScrollViewer>
+
+        <ScrollViewer Grid.Row="2" Grid.Column="1"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
+
+            <Expander Background="Orange" Header="Set Types"  x:Name="setTypesExpander" ExpandDirection="Down" IsExpanded="False">
+                <StackPanel>
+                    <DataGrid CellEditEnding="setTypeDataGrid_CellEditEnding" x:Name="setTypeDataGrid" FontSize="18"
+                    ItemsSource="{Binding SetTypes}" SelectedItem="{Binding SelectedSetType}"
+                    CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="5*"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
+                            <DataGridTemplateColumn Header="" Width="60">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="btnDeleteSetType" Content="Delete" Click="btnDeleteSetType_Click"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Expander>
+        </ScrollViewer>
+    </Grid>
+</Page>
