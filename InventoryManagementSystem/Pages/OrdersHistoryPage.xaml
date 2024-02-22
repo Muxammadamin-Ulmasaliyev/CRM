@@ -21,9 +21,9 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40*" />
+            <ColumnDefinition Width="35*" />
             <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="60*" />
+            <ColumnDefinition Width="65*" />
         </Grid.ColumnDefinitions>
 
         <Button x:Name="btnBack" Click="btnBack_Click" Content="Back" Width="75" Height="45" HorizontalAlignment="Left" Margin="15"/>
@@ -33,47 +33,61 @@
         </StackPanel>
         <TextBlock x:Name="txtOrderDetailsTitle" Grid.Column="2" Text="OrderDetails -> Id : "/>
 
-        <DataGrid x:Name="ordersDataGrid" Grid.Row="1" FontSize="18"
+
+        <ScrollViewer x:Name="scrollViewer" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="1"
+               VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+            <DataGrid x:Name="ordersDataGrid" FontSize="18"
           CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="15*"/>
-                <DataGridTextColumn Header="OrderDate" Binding="{Binding OrderDate, StringFormat={}{0:dd-MM-yyyy}}" Width="25*"/>
-                <DataGridTextColumn Header="TotalAmountUzs" Binding="{Binding TotalAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="35*"/>
-                <DataGridTemplateColumn Header="" Width="60">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button x:Name="btnShowDetails" Content="Details" Click="btnShowDetails_Click"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="" Width="60">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button x:Name="btnPrintPdfCheque" Content="Cheque" Click="btnPrintPdfCheque_Click"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
+                    <DataGridTextColumn Header="OrderDate" Binding="{Binding OrderDate, StringFormat={}{0:dd-MM-yyyy}}" Width="Auto"/>
+                    <DataGridTextColumn Header="TotalAmountUzs" Binding="{Binding TotalAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                    <DataGridTemplateColumn Header="" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="btnShowDetails" Content="Details" Click="btnShowDetails_Click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="" Width="70">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="btnPrintPdfCheque" Content="Cheque" Click="btnPrintPdfCheque_Click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </ScrollViewer>
 
 
-
-
-        <!-- <Expander Width="auto" Grid.Column="1" Grid.Row="1" ExpandDirection="Right" IsExpanded="False">-->
+        <!-- 
+        <Expander Width="auto" Grid.Column="1" Grid.Row="1" ExpandDirection="Right" IsExpanded="False">
+        -->
+        
+        
         <GridSplitter Background="LightGray" Grid.RowSpan="3" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
-        <DataGrid Grid.Row="1" Grid.Column="2"  x:Name="orderDetailsDataGrid"  FontSize="18"
-         CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="5*"/>
-                <DataGridTextColumn Header="Product" Binding="{Binding Product.Name}" Width="5*"/>
-                <DataGridTextColumn Header="Car" Binding="{Binding Product.CarType.Name}" Width="5*"/>
-                <DataGridTextColumn Header="Company" Binding="{Binding Product.Company.Name}" Width="5*"/>
-                <DataGridTextColumn Header="Country" Binding="{Binding Product.Country.Name}" Width="5*"/>
-                <DataGridTextColumn Header="Price" Binding="{Binding Price,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="5*"/>
-                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="5*"/>
-                <DataGridTextColumn Header="SubTotal" Binding="{Binding SubTotal,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="5*"/>
-            </DataGrid.Columns>
-        </DataGrid>
+
+
+
+        <ScrollViewer x:Name="scrollViewer2" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="1" Grid.Column="2"
+        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <DataGrid  x:Name="orderDetailsDataGrid"  FontSize="18"
+                CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto" />
+                    <DataGridTextColumn Header="Product" Binding="{Binding Product.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Car" Binding="{Binding Product.CarType.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Company" Binding="{Binding Product.Company.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Country" Binding="{Binding Product.Country.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Price" Binding="{Binding Price,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto"/>
+                    <DataGridTextColumn Header="SubTotal" Binding="{Binding SubTotal,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -1,5 +1,6 @@
 ﻿using InventoryManagementSystem.AppConfiguration;
 using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
 using Microsoft.EntityFrameworkCore;
 using Notification.Wpf;
@@ -16,13 +17,17 @@ namespace InventoryManagementSystem.Pages
         private ObservableCollection<Product> products;
         private Order? currentOrder;
         private Customer selectedCustomer;
+        private readonly ProductService _productService;
+        private readonly CustomerService _customerService;
         public HomePage()
         {
+            _productService = new(new AppDbContext());
+            _customerService = new(new AppDbContext());
             InitializeComponent();
             InitializeNewOrder();
             PopulateDataGrid();
             PopulateDataGridComboboxes();
-            PopulateCustomersComboBox();
+           
             PopulateCurrencyRate();
             notificationManager = new();
         }
@@ -38,13 +43,7 @@ namespace InventoryManagementSystem.Pages
                 OrderDetails = new List<OrderDetail>()
             };
         }
-        private void PopulateCustomersComboBox()
-        {
-            using (var dbContext = new AppDbContext())
-            {
-                cbCurrentCustomer.ItemsSource = dbContext.Customers.ToList();
-            }
-        }
+        
         private void PopulateDataGridComboboxes()
         {
             using (var dbContext = new AppDbContext())
@@ -58,19 +57,18 @@ namespace InventoryManagementSystem.Pages
         private void PopulateDataGrid()
         {
 
-            products = new ObservableCollection<Product>(GetProductsFromDb());
+
+
+            //_productService.AddProducts(AppConfiguration.Configuration.GenerateFakeProducts(100));
+
+            products = new ObservableCollection<Product>(_productService.GetAll());
+
             productDataGrid.ItemsSource = products;
 
             txtNumberOfProducts.Text = $"Jadvaldagi produktlar soni : {productDataGrid.Items.Count}";
 
         }
-        private List<Product> GetProductsFromDb()
-        {
-            using (var dbContext = new AppDbContext())
-            {
-                return dbContext.Products.Include(p => p.Company).Include(p => p.Country).Include(p => p.CarType).Include(p => p.SetType).ToList();
-            }
-        }
+
         private void Search()
         {
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(productDataGrid.ItemsSource);
@@ -173,13 +171,7 @@ namespace InventoryManagementSystem.Pages
 
 
 
-        private void btnEditProduct_Click(object sender, RoutedEventArgs e)
-        {
-            var productToUpdate = (Product)(sender as Button).DataContext;
-            var editProductWindow = new EditProductWindow(productToUpdate);
-            editProductWindow.ShowDialog();
-            PopulateDataGrid();
-        }
+      
 
         private void btnClearSearchBar_Click(object sender, RoutedEventArgs e)
         {
@@ -198,11 +190,9 @@ namespace InventoryManagementSystem.Pages
             var choice = MessageBox.Show($"Are you sure to delete product : {product.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (choice == MessageBoxResult.Yes)
             {
-                using (var dbContext = new AppDbContext())
-                {
-                    dbContext.Products.Remove(product);
-                    dbContext.SaveChanges();
-                }
+
+                _productService.Delete(product);
+
                 notificationManager.Show("Success", "product Deleted successfully", NotificationType.Success, areaName: "notificationArea");
 
             }
@@ -211,49 +201,43 @@ namespace InventoryManagementSystem.Pages
 
         private void btnAddToCart_Click(object sender, RoutedEventArgs e)
         {
+            Product selectedProduct = (Product)productDataGrid.SelectedItem;
 
-            if (cbCurrentCustomer.SelectedItem != null)
+            if (selectedProduct != null)
             {
-                Product selectedProduct = (Product)productDataGrid.SelectedItem;
+                var quantityWindow = new SetQuantityWindow();
+                quantityWindow.ShowDialog();
 
-                if (selectedProduct != null)
+                var quantity = quantityWindow.GetQuantity();
+                if (quantity <= 0)
                 {
-                    var quantityWindow = new SetQuantityWindow();
-                    quantityWindow.ShowDialog();
-
-                    var quantity = quantityWindow.GetQuantity();
-                    if (quantity <= 0)
-                    {
-                        return;
-                    }
-                    if (quantity > selectedProduct.Quantity)
-                    {
-                        notificationManager.Show("Error", "No sufficient quantity in store", NotificationType.Error, "notificationArea");
-                        return;
-                    }
-
-                    var orderDetail = new OrderDetail
-                    {
-                        ProductId = selectedProduct.Id,
-                        Product = selectedProduct,
-                        Quantity = quantity,
-                        SubTotal = (double)(selectedProduct.Price > 0 ?
-                                    (quantity * (selectedProduct.Price)) :
-                                    (quantity * selectedProduct.USDPriceForCustomer * Configuration.CurrencyRate)),
-                        Price = (double)(selectedProduct.Price > 0 ?
-                                    (selectedProduct.Price) :
-                                    (selectedProduct.USDPriceForCustomer * Configuration.CurrencyRate))
-                    };
-
-                    currentOrder.OrderDetails.Add(orderDetail);
-                    CalculateOrderTotals();
-                    notificationManager.Show("Success", "Item added to cart successfully", NotificationType.Success, "notificationArea");
+                    return;
                 }
+                if (quantity > selectedProduct.Quantity)
+                {
+                    notificationManager.Show("Error", "No sufficient quantity in store", NotificationType.Error, "notificationArea");
+                    return;
+                }
+
+                var orderDetail = new OrderDetail
+                {
+                    ProductId = selectedProduct.Id,
+                    Product = selectedProduct,
+                    Quantity = quantity,
+                    SubTotal = (double)(selectedProduct.Price > 0 ?
+                                (quantity * (selectedProduct.Price)) :
+                                (quantity * selectedProduct.USDPriceForCustomer * Configuration.CurrencyRate)),
+                    Price = (double)(selectedProduct.Price > 0 ?
+                                (selectedProduct.Price) :
+                                (selectedProduct.USDPriceForCustomer * Configuration.CurrencyRate))
+                };
+
+                currentOrder.OrderDetails.Add(orderDetail);
+                CalculateOrderTotals();
+                notificationManager.Show("Success", "Item added to cart successfully", NotificationType.Success, "notificationArea");
             }
-            else
-            {
-                MessageBox.Show("Mijozni tanlang!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+
+           
 
         }
         private void CalculateOrderTotals()
@@ -262,12 +246,18 @@ namespace InventoryManagementSystem.Pages
         }
 
 
+       
+
+
 
         private void btnViewCart_Click(object sender, RoutedEventArgs e)
         {
-            var currentOrderDetails = new CurrentOrderDetails(currentOrder, (Customer)cbCurrentCustomer.SelectedItem);
-            currentOrderDetails.OrderSavedButtonClicked += CurrentOrderDetails_OrderSaved;
-            currentOrderDetails.ShowDialog();
+
+
+            var cartPage = new CartPage(currentOrder);
+            NavigationService?.Navigate(cartPage);
+            cartPage.OrderSavedButtonClicked += CurrentOrderDetails_OrderSaved;
+
 
         }
 
@@ -276,68 +266,135 @@ namespace InventoryManagementSystem.Pages
         private void CurrentOrderDetails_OrderSaved(object sender, EventArgs e)
         {
             InitializeNewOrder();
-            IncrementOrdersCountOfCustomer(currentOrder.CustomerId);
+           
             PopulateDataGrid();
         }
 
 
 
-        private void IncrementOrdersCountOfCustomer(int customerId)
-        {
-            using (var dbContext = new AppDbContext())
-            {
-                selectedCustomer.TotalOrdersCount++;
-                dbContext.Customers.Update(selectedCustomer);
-                dbContext.SaveChanges();
-            }
-        }
+        
 
-        private void cbCurrentCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            selectedCustomer = (Customer)cbCurrentCustomer.SelectedItem;
-            currentOrder.Customer = selectedCustomer;
-            currentOrder.CustomerId = selectedCustomer.Id;
-        }
+       
 
-        //  ************************************************************************************************************
         private void productDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             var editedProduct = e.Row.Item as Product;
 
-            if (editedProduct != null)
+            string propertyName = e.Column.SortMemberPath;
+
+            var editedValue = (e.EditingElement as TextBox).Text;
+
+            switch (propertyName)
             {
-                var editedValue = (e.EditingElement as TextBox).Text;
-                if (!string.IsNullOrWhiteSpace(editedValue))
-                {
-                    if (int.TryParse(editedValue, out var quantity))
+                case "Name":
+                    editedProduct.Name = editedValue.ToString();
+                    break;
+                case "Code":
+                    editedProduct.Code = editedValue.ToString();
+
+                    break;
+                case "Quantity":
+                    if (int.TryParse(editedValue.ToString(), out int quantity))
+                    {
+                        editedProduct.Quantity = quantity;
+                    }
+                    else
                     {
 
-                        editedProduct.Quantity = quantity;
-                        using (var dbContext = new AppDbContext())
-                        {
-                            dbContext.Products.Update(editedProduct);
-                            dbContext.SaveChanges();
+                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        (e.EditingElement as TextBox).Text = editedProduct.Quantity.ToString();
+                        return;
+                    }
+                    break;
+                case "RealPrice":
+                    if (editedProduct.RealPrice == null || editedProduct.Price == null)
+                    {
+                        notificationManager.Show("Error", "Bu mahsulot $ sotiladi.", NotificationType.Error);
+                        (e.EditingElement as TextBox).Text = null;
+                        return;
 
-                        }
-                        notificationManager.Show("Success", "Quantity changed successfully", NotificationType.Success);
-
+                    }
+                    if (double.TryParse(editedValue.ToString(), out double realPrice))
+                    {
+                        editedProduct.RealPrice = realPrice;
                     }
                     else
                     {
                         notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
-                        (e.EditingElement as TextBox).Text = editedProduct.Quantity.ToString();
+                        (e.EditingElement as TextBox).Text = editedProduct.RealPrice.ToString();
+                        return;
                     }
+                    break;
+                case "Price":
+                    if (editedProduct.RealPrice == null || editedProduct.Price == null)
+                    {
+                        notificationManager.Show("Error", "Bu mahsulot $ sotiladi.", NotificationType.Error);
+                        (e.EditingElement as TextBox).Text = null;
+                        return;
+
+                    }
+                    if (double.TryParse(editedValue.ToString(), out double price))
+                    {
+                        editedProduct.Price = price;
+                    }
+                    else
+                    {
+                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        (e.EditingElement as TextBox).Text = editedProduct.Price.ToString();
+                        return;
 
 
-                }
-                else
-                {
-                    notificationManager.Show("Error", "quantity be null", NotificationType.Error);
-                    (e.EditingElement as TextBox).Text = editedProduct.Quantity.ToString();
+                    }
+                    break;
+                case "USDPrice":
+                    if (editedProduct.USDPrice == null || editedProduct.USDPriceForCustomer == null)
+                    {
+                        notificationManager.Show("Error", "Bu mahsulot so`mda sotiladi.", NotificationType.Error);
+                        (e.EditingElement as TextBox).Text = null;
+                        return;
 
+                    }
+                    if (double.TryParse(editedValue.ToString(), out double usdPrice))
+                    {
+                        editedProduct.USDPrice = usdPrice;
+                    }
+                    else
+                    {
+                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        (e.EditingElement as TextBox).Text = editedProduct.USDPrice.ToString();
+                        return;
 
-                }
+                    }
+                    break;
+                case "USDPriceForCustomer":
+                    if (editedProduct.USDPrice == null || editedProduct.USDPriceForCustomer == null)
+                    {
+                        notificationManager.Show("Error", "Bu mahsulot so`mda sotiladi.", NotificationType.Error);
+                        (e.EditingElement as TextBox).Text = null;
+                        return;
+
+                    }
+                    if (double.TryParse(editedValue.ToString(), out double usdPriceForCustomer))
+                    {
+                        editedProduct.USDPriceForCustomer = usdPriceForCustomer;
+                    }
+                    else
+                    {
+                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        (e.EditingElement as TextBox).Text = editedProduct.USDPriceForCustomer.ToString();
+                        return;
+
+                    }
+                    break;
+
+                default:
+                    break;
             }
+
+            _productService.Update(editedProduct);
+            notificationManager.Show("Success", "Quantity changed successfully", NotificationType.Success);
+
+
 
         }
 

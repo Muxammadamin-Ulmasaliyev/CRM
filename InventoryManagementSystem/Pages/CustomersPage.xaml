@@ -10,6 +10,18 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CustomersPage">
     <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <!--
+    <Page.Resources>
         <Style TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
@@ -20,6 +32,7 @@
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
     </Page.Resources>
+    -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="75"/>
@@ -31,15 +44,15 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <TextBox x:Name="searchBar"  Width="200" Height="35" FontSize="18" 
               HorizontalAlignment="Left" Margin="20,0,0,0" TextChanged="searchBar_TextChanged"/>
-            <Button x:Name="btnClearSearchBar" BorderThickness="0" Content="X" Margin="0,0,20,0" Width="25" Height="35" Click="btnClearSearchBar_Click"/>
-            <Button x:Name="btnAddCustomer"  Content="Add Customer" Margin="0,0,20,0" Width="100" Height="40" Click="btnAddCustomer_Click"/>
+            <Button  x:Name="btnClearSearchBar" BorderThickness="0" Content="X" Margin="0,0,20,0" Width="25" Height="35" Click="btnClearSearchBar_Click"/>
+            <Button  x:Name="btnAddCustomer"  Content="Add Customer" Margin="0,0,20,0" Width="100" Height="40" Click="btnAddCustomer_Click"/>
 
         </StackPanel>
         <DataGrid x:Name="customerDataGrid" Grid.Row="2" FontSize="18"
         ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}"
          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="5*"/>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                 <DataGridTextColumn Header="FIO" Binding="{Binding Name}" Width="15*"/>
                 <DataGridTextColumn Header="Telefon raqam" Binding="{Binding Phone}" Width="10*"/>
                 <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="10*"/>

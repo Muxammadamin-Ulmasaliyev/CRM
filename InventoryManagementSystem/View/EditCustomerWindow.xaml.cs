@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using InventoryManagementSystem.UserControls;
 using Notification.Wpf;
 using Notification.Wpf.Controls;
@@ -12,9 +13,11 @@ namespace InventoryManagementSystem.View
 
         private Customer customerToEdit;
         private NotificationManager notificationManager;
-        public EditCustomerWindow( Customer customerToEdit)
+        private readonly CustomerService _customerService;
+        public EditCustomerWindow(Customer customerToEdit)
         {
             notificationManager = new();
+            _customerService = new(new AppDbContext());
             InitializeComponent();
             this.customerToEdit = customerToEdit;
             PopulateInfo(customerToEdit);
@@ -36,14 +39,11 @@ namespace InventoryManagementSystem.View
                 Phone = tbPhone.txtInput.Text,
                 TotalOrdersCount = customerToEdit.TotalOrdersCount
             };
-            using (var dbContext = new AppDbContext())
-            {
-                dbContext.Customers.Update(customerToUpdate);
-                dbContext.SaveChanges();
-            }
+
+            _customerService.Update(customerToUpdate);
+
             notificationManager.Show("Success", "Customer updated successfully", NotificationType.Success);
 
-            //MessageBox.Show("Klient muvaffaqiyatli yangilandi !", "Muvaffaqiyat", MessageBoxButton.OK, MessageBoxImage.Exclamation, MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
             Close();
         }
         private void btnCancel_Click(object sender, RoutedEventArgs e)

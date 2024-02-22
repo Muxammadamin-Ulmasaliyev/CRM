@@ -3,6 +3,8 @@ using System.Windows.Controls;
 using Notification.Wpf;
 using InventoryManagementSystem.CustomControls;
 using InventoryManagementSystem.View;
+using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Pages;
 namespace InventoryManagementSystem
 {
     public partial class MainWindow : Window

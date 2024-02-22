@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using System.Windows;
 using System.Windows.Input;
@@ -8,12 +9,13 @@ namespace InventoryManagementSystem.View
 {
     public partial class AddCountryWindow : Window
     {
-        private NotificationManager notificationManager;
+        private NotificationManager _notificationManager;
         public event EventHandler AddCountryButtonClicked;
-
+        private readonly CountryService _countryService;
         public AddCountryWindow()
         {
-            notificationManager = new ();
+            _notificationManager = new();
+            _countryService = new(new AppDbContext());
             InitializeComponent();
             tbName.txtInput.Focus();
             KeyDown += btnAddCountry_KeyDown;
@@ -21,26 +23,27 @@ namespace InventoryManagementSystem.View
 
         private void btnAddCountry_Click(object sender, RoutedEventArgs e)
         {
-            
+
             if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
             {
-                txtErrorName.Text = "* Davlat nomini kiriting ! *";
-                tbName.txtInput.BorderThickness = new Thickness(2);
-                tbName.txtInput.BorderBrush = Brushes.Red;
+                DisplayError("* Davlat nomini kiriting ! *");
+                return;
             }
-            else
+            using (var dbContext = new AppDbContext())
             {
-                using (var dbContext = new AppDbContext())
+                if (_countryService.IsCountryExists(countryName: tbName.txtInput.Text))
                 {
-                    dbContext.Countries.Add(new Country { Name = tbName.txtInput.Text });
-                    dbContext.SaveChanges();
-             
+                    DisplayError("* Shu nomli davlat bazada mavjud ! *");
+                    return;
                 }
 
-                notificationManager.Show("Success", "country added successfully", NotificationType.Success);
-                tbName.txtInput.Clear();
-                CountryAdded();
+                _countryService.AddCountry(countryName :  tbName.txtInput.Text);
+
             }
+
+            _notificationManager.Show("Success", "country added successfully", NotificationType.Success);
+            tbName.txtInput.Clear();
+            CountryAdded();
 
         }
 
@@ -69,6 +72,12 @@ namespace InventoryManagementSystem.View
                     btnAddCountry_Click((object)sender, e);
                 }
             }
+        }
+        private void DisplayError(string errorMessage)
+        {
+            txtErrorName.Text = errorMessage;
+            tbName.txtInput.BorderThickness = new Thickness(2);
+            tbName.txtInput.BorderBrush = Brushes.Red;
         }
     }
 }

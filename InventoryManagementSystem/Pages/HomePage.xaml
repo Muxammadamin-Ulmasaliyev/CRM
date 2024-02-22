@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
       xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
-      mc:Ignorable="d" 
+      mc:Ignorable="d" KeepAlive="True"
       d:DesignHeight="700" d:DesignWidth="1400"
       Title="HomePage">
     <Page.Resources>
@@ -47,7 +47,6 @@
             <Button Name="btnViewCart" Width="80"  Height="40" Margin="5" 
              Content="Cart"  Click="btnViewCart_Click"/>
 
-            <ComboBox Width="100" Name="cbCurrentCustomer" DisplayMemberPath="Name" SelectionChanged="cbCurrentCustomer_SelectionChanged"/>
             <TextBlock x:Name="txtCurrencyRate" Text="" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="24"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
@@ -83,42 +82,37 @@
         </StackPanel>
 
 
-        <ScrollViewer x:Name="scrollViewer" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="2" Grid.Column="2" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer x:Name="scrollViewer" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="2" Grid.Column="2" 
+                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
-            <DataGrid x:Name="productDataGrid" FontSize="18"
-   ItemsSource="{Binding products}" SelectedItem="{Binding SelectedProduct}"
-   CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" 
-      CellEditEnding="productDataGrid_CellEditEnding">
+            <DataGrid x:Name="productDataGrid" FontSize="18" HeadersVisibility="Column"
+                       ItemsSource="{Binding products}" SelectedItem="{Binding SelectedProduct}"
+                       CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" 
+                       CellEditEnding="productDataGrid_CellEditEnding">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="5*"/>
-                    <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Name}" Width="15*"/>
-                    <DataGridTextColumn Header="Code" IsReadOnly="True" Binding="{Binding Code}" Width="10*"/>
-                    <DataGridTextColumn Header="Tannarx" IsReadOnly="True" Binding="{Binding RealPrice, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
-                    <DataGridTextColumn Header="Sotish narxi" IsReadOnly="True" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
-                    <DataGridTextColumn Header="To`plam turi" IsReadOnly="True" Binding="{Binding SetType.Name}" Width="10*"/>
-                    <DataGridTextColumn Header="Soni" IsReadOnly="False" Binding="{Binding Quantity}" Width="10*" />
-                    <DataGridTextColumn Header="Zavod" IsReadOnly="True" Binding="{Binding Company.Name}" Width="10*"/>
-                    <DataGridTextColumn Header="Davlat" IsReadOnly="True" Binding="{Binding Country.Name}" Width="10*"/>
-                    <DataGridTextColumn Header="Mashina" IsReadOnly="True" Binding="{Binding CarType.Name}" Width="10*"/>
-                    <DataGridTextColumn Header="$ tannarx" IsReadOnly="True" Binding="{Binding USDPrice,StringFormat={}{0:C0}}" Width="10*"/>
-                    <DataGridTextColumn Header="$ donabay narx" IsReadOnly="True" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C0}}" Width="10*"/>
 
-                    
-                    <DataGridTemplateColumn Header="" Width="60">
+                    <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>
+                    <DataGridTextColumn Header="Name" IsReadOnly="False" Binding="{Binding Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Code" IsReadOnly="False" Binding="{Binding Code}" Width="Auto"/>
+                    <DataGridTextColumn Header="Tannarx" IsReadOnly="False" Binding="{Binding RealPrice, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Sotish narxi" IsReadOnly="False" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                    <DataGridTextColumn Header="To`plam turi" IsReadOnly="True" Binding="{Binding SetType.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Soni" IsReadOnly="False" Binding="{Binding Quantity}" Width="Auto" />
+                    <DataGridTextColumn Header="Zavod" IsReadOnly="True" Binding="{Binding Company.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Davlat" IsReadOnly="True" Binding="{Binding Country.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Mashina" IsReadOnly="True" Binding="{Binding CarType.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="$ tannarx" IsReadOnly="False" Binding="{Binding USDPrice,StringFormat={}{0:C0}}" Width="Auto"/>
+                    <DataGridTextColumn Header="$ donabay narx" IsReadOnly="False" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C0}}" Width="Auto"/>
+
+                    <DataGridTemplateColumn  Header="" Width="60">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="btnAddToCart" Content="Add" Click="btnAddToCart_Click"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="" Width="60">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button x:Name="btnEditProduct" Content="Edit" Click="btnEditProduct_Click"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    
                     <DataGridTemplateColumn Header="" Width="60">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -128,13 +122,15 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
 
+
             </DataGrid>
         </ScrollViewer>
+
+
         <TextBlock x:Name="txtNumberOfProducts" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Jadvaldagi produktlar soni : " 
            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
 
-        <notifications:NotificationArea Grid.RowSpan="4" Grid.ColumnSpan="2"
-                                x:Name="notificationArea" Position="BottomRight" MaxItems="3"/>
+        <notifications:NotificationArea Grid.RowSpan="4" Grid.ColumnSpan="2" x:Name="notificationArea" Position="BottomRight" MaxItems="3"/>
 
     </Grid>
 </Page>

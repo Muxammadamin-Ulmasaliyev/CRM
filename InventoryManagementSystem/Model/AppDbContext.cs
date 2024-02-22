@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace InventoryManagementSystem.Model
 {
@@ -15,10 +16,13 @@ namespace InventoryManagementSystem.Model
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
+      
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Configure your SQL Server connection string here
-            optionsBuilder.UseSqlServer("server=(localDb)\\MSSQLLocalDB;database=1;Integrated Security=true;");
+            optionsBuilder.UseSqlServer("server=(localDb)\\MSSQLLocalDB;database=999999999999999999;Integrated Security=true;");
         }
     }
 }

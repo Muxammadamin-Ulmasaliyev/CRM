@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240201175214_[Key]added")]
-    partial class Keyadded
+    [Migration("20240219081247_tavakkal")]
+    partial class tavakkal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,6 +98,9 @@ namespace InventoryManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TotalOrdersCount")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
@@ -117,10 +120,7 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("TotalAmountUsd")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TotalAmountUzs")
+                    b.Property<double>("TotalAmount")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -141,16 +141,16 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<double>("SubTotalUsd")
-                        .HasColumnType("float");
-
-                    b.Property<double>("SubTotalUzs")
+                    b.Property<double>("SubTotal")
                         .HasColumnType("float");
 
                     b.HasKey("Id");

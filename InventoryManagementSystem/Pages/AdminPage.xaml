@@ -14,5 +14,9 @@
             <RowDefinition Height="80*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
+        <Button x:Name="btnExportToExcel" Grid.Row="1" HorizontalAlignment="Left" Width="100" Height="45"
+                    Content="Export To Excel" Margin="10" Click="btnExportToExcel_Click"/>
+
+
     </Grid>
 </Page>

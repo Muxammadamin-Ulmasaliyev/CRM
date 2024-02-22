@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using Microsoft.EntityFrameworkCore;
 using Notification.Wpf;
 using QuestPDF.Fluent;
@@ -15,8 +16,14 @@ namespace InventoryManagementSystem.Pages
         private ObservableCollection<OrderDetail> orderDetails;
         private Customer customer;
         private NotificationManager notificationManager;
+
+
+        private readonly OrderService _orderService;
+        private readonly OrderDetailService _orderDetailService;
         public OrdersHistoryPage(Customer customer)
         {
+            _orderService = new(new AppDbContext());
+            _orderDetailService = new(new AppDbContext());
             this.customer = customer;
             InitializeComponent();
             PopulateOrdersDataGrid();
@@ -25,39 +32,16 @@ namespace InventoryManagementSystem.Pages
         }
         private void PopulateOrdersDataGrid()
         {
-            orders = new ObservableCollection<Order>(GetOrdersByCustomerId());
+            orders = new ObservableCollection<Order>(_orderService.GetOrdersByCustomerId(customer.Id));
             ordersDataGrid.ItemsSource = orders;
         }
 
         private void PopulateOrderDetailsDataGrid(int orderId)
         {
-            orderDetails = new ObservableCollection<OrderDetail>(GetOrderDetailsByOrderId(orderId));
+            orderDetails = new ObservableCollection<OrderDetail>(_orderDetailService.GetOrderDetailsByOrderId(orderId));
             orderDetailsDataGrid.ItemsSource = orderDetails;
 
         }
-
-        private List<Order> GetOrdersByCustomerId()
-        {
-            using (var dbContext = new AppDbContext())
-            {
-                return dbContext.Orders.Where(c => c.CustomerId == customer.Id).ToList();
-            }
-        }
-        private List<OrderDetail> GetOrderDetailsByOrderId(int orderId)
-        {
-            using (var dbContext = new AppDbContext())
-            {
-                return dbContext.OrderDetails
-                         .Include(o => o.Product)
-                         .ThenInclude(p => p.Company)
-                         .Include(o => o.Product)
-                         .ThenInclude(p => p.CarType)
-                         .Include(o => o.Product)
-                         .ThenInclude(p => p.Country)
-                    .Where(o => o.OrderId == orderId).ToList();
-            }
-        }
-
 
         private void btnShowDetails_Click(object sender, RoutedEventArgs e)
         {
@@ -68,45 +52,40 @@ namespace InventoryManagementSystem.Pages
 
         private void btnPrintPdfCheque_Click(object sender, RoutedEventArgs e)
         {
-            Order orderFromTable = (Order)(sender as Button).DataContext;
-
-            using (var dbContext = new AppDbContext())
-            {
-
-                var order = dbContext.Orders
-                    .Include(o => o.Customer)
-                    .Include(o => o.OrderDetails)
-                    .ThenInclude(od => od.Product)
-                    .ThenInclude(p => p.CarType)
-
-                    .Include(o => o.OrderDetails)
-                    .ThenInclude(od => od.Product)
-                    .ThenInclude(p => p.Country)
-
-                    .Include(o => o.OrderDetails)
-                    .ThenInclude(od => od.Product)
-                    .ThenInclude(p => p.Company)
+            Order selectedOrder = (Order)(sender as Button).DataContext;
 
 
-                    .First(o => o.Id == orderFromTable.Id);
+            Order order = _orderService.GetOrderById(selectedOrder.Id);
+
+            GeneretePDFCheque(order);
+
+            notificationManager.Show("Success", "Cheque created successfully", NotificationType.Success);
 
 
+        }
 
-                QuestPDF.Settings.License = LicenseType.Community;
-                var filePath = "D://invoiceFromHistory.pdf";
+        private void GeneretePDFCheque(Order order)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+            var filePath = $"D://{order.Customer.Name} {order.OrderDate.ToString("dd-MM-yyyy")}.pdf";
 
-                var model = order;
-                var document = new ChequeDocument(model);
-                document.GeneratePdf(filePath);
-
-                notificationManager.Show("Success", "Cheque created successfully", NotificationType.Success);
-
-            }
+            var model = order;
+            var document = new ChequeDocument(model);
+            document.GeneratePdf(filePath);
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             NavigationService?.GoBack();
+        }
+
+        private void scrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            if (sender is ScrollViewer scrollViewer)
+            {
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+                e.Handled = true;
+            }
         }
     }
 }

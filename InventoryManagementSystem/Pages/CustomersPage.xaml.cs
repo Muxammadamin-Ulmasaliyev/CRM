@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
 using Notification.Wpf;
 using System.Collections.ObjectModel;
@@ -12,25 +13,21 @@ namespace InventoryManagementSystem.Pages
     {
         private ObservableCollection<Customer> customers;
         private NotificationManager notificationManager;
+        private readonly CustomerService _customerService;
         public CustomersPage()
         {
+            _customerService = new(new AppDbContext());
             InitializeComponent();
             PopulateDataGrid();
             notificationManager = new();
         }
         private void PopulateDataGrid()
         {
-            customers = new ObservableCollection<Customer>(GetCustomersFromDb());
+            customers = new ObservableCollection<Customer>(_customerService.GetAll());
             customerDataGrid.ItemsSource = customers;
             txtNumberOfCustomers.Text = $"Jadvaldagi Mijozlar soni : {customerDataGrid.Items.Count}";
         }
-        private List<Customer> GetCustomersFromDb()
-        {
-            using (var dbContext = new AppDbContext())
-            {
-                return dbContext.Customers.ToList();
-            }
-        }
+
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
@@ -53,11 +50,9 @@ namespace InventoryManagementSystem.Pages
                     var choice = MessageBox.Show($"Are you sure to delete customer : {customer.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (choice == MessageBoxResult.Yes)
                     {
-                        using (var dbContext = new AppDbContext())
-                        {
-                            dbContext.Customers.Remove(customer);
-                            dbContext.SaveChanges();
-                        }
+
+                        _customerService.Delete(customer);
+
                         notificationManager.Show("Success", "Customer Deleted successfully", NotificationType.Success, "notificationArea");
                     }
                 }
@@ -104,10 +99,6 @@ namespace InventoryManagementSystem.Pages
             }
 
             return isMatching;
-
-
-
-
         }
 
         private void btnClearSearchBar_Click(object sender, RoutedEventArgs e)
@@ -120,8 +111,7 @@ namespace InventoryManagementSystem.Pages
             Customer customer = (Customer)(sender as Button).DataContext;
 
             OrdersHistoryPage ordersHistoryPage = new OrdersHistoryPage(customer);
-            NavigationService?.Navigate(ordersHistoryPage); 
-
+            NavigationService?.Navigate(ordersHistoryPage);
 
         }
     }

@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,12 +12,13 @@ namespace InventoryManagementSystem.View
     {
         private NotificationManager notificationManager;
         public event EventHandler AddCarTypeButtonClicked;
-
+        private readonly CarTypeService _carTypeService;
 
 
         public AddCarTypeWindow()
         {
             notificationManager = new();
+            _carTypeService = new(new AppDbContext());
             InitializeComponent();
             tbName.txtInput.Focus();
             KeyDown += btnAddCarType_KeyDown;
@@ -28,21 +30,21 @@ namespace InventoryManagementSystem.View
 
             if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
             {
-                txtErrorName.Text = "* Mashina nomini kiriting ! *";
-                tbName.txtInput.BorderThickness = new Thickness(2);
-                tbName.txtInput.BorderBrush = Brushes.Red;
+                DisplayError("* Mashina nomini kiriting ! *");
+                return;
             }
-            else
+            using (var dbContext = new AppDbContext())
             {
-                using (var dbContext = new AppDbContext())
+                if (_carTypeService.IsCarTypeExists(carTypeName: tbName.txtInput.Text))
                 {
-                    dbContext.CarTypes.Add(new CarType { Name = tbName.txtInput.Text });
-                    dbContext.SaveChanges();
+                    DisplayError("* Shu nomli mashina bazada mavjud ! *");
+                    return;
                 }
-                notificationManager.Show("Success", "Car added successfully", NotificationType.Success);
-                tbName.txtInput.Clear();
-                CarTypeAdded();
+                _carTypeService.AddCarType(carTypeName: tbName.txtInput.Text);
             }
+            notificationManager.Show("Success", "Car added successfully", NotificationType.Success);
+            tbName.txtInput.Clear();
+            CarTypeAdded();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -71,6 +73,14 @@ namespace InventoryManagementSystem.View
                     btnAddCarType_Click((object)sender, e);
                 }
             }
+        }
+
+
+        private void DisplayError(string errorMessage)
+        {
+            txtErrorName.Text = errorMessage;
+            tbName.txtInput.BorderThickness = new Thickness(2);
+            tbName.txtInput.BorderBrush = Brushes.Red;
         }
     }
 }

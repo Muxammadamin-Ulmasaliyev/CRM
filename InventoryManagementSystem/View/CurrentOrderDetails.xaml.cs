@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
@@ -14,11 +15,18 @@ namespace InventoryManagementSystem.View
         public ObservableCollection<OrderDetail> orderDetails;
         private NotificationManager notificationManager;
         public event EventHandler OrderSavedButtonClicked;
+        private readonly OrderDetailService _orderDetailService;
+        private readonly OrderService _orderService;
+        private readonly ProductService _productService;
 
 
-        public CurrentOrderDetails( Order currentOrder, Customer currentCustomer)
+        public CurrentOrderDetails(Order currentOrder, Customer currentCustomer)
         {
             notificationManager = new();
+            _orderDetailService = new(new AppDbContext());
+            _orderService = new(new AppDbContext());
+            _productService = new(new AppDbContext());
+
             this.currentOrder = currentOrder;
             InitializeComponent();
             PopulateDataGrid();
@@ -64,65 +72,63 @@ namespace InventoryManagementSystem.View
 
         private void btnSaveOrder_Click(object sender, RoutedEventArgs e)
         {
-            using (var dbContext = new AppDbContext())
+            var order = new Order()
             {
-                var newOrder = dbContext.Orders.Add(new Order()
+                OrderDate = DateTime.Today,
+                TotalAmount = currentOrder.TotalAmount,
+                CustomerId = currentOrder.CustomerId
+            };
+
+            var newOrder = _orderService.AddOrder(order);
+
+            foreach (var orderDetail in orderDetails)
+            {
+                var orderDetailToAdd = new OrderDetail()
                 {
-                    OrderDate = DateTime.Today,
-                    TotalAmount = currentOrder.TotalAmount,
-                    CustomerId = currentOrder.CustomerId
-                });
-                dbContext.SaveChanges();
-                foreach (var orderDetail in orderDetails)
-                {
-                    dbContext.OrderDetails.Add(new OrderDetail()
-                    {
-                        SubTotal = orderDetail.SubTotal,
-                        Quantity = orderDetail.Quantity,
-                        OrderId = newOrder.Entity.Id,
-                        ProductId = orderDetail.Product.Id,
-                        Price = orderDetail.Price,
-                    });
-                }
-                dbContext.SaveChanges();
-                notificationManager.Show("Success", "Order saved successfully", NotificationType.Success);
+                    SubTotal = orderDetail.SubTotal,
+                    Quantity = orderDetail.Quantity,
+                    OrderId = newOrder.Entity.Id,
+                    ProductId = orderDetail.Product.Id,
+                    Price = orderDetail.Price,
+                };
 
-                Close();
-                WithdrawalSoldProducts();
-                OrderSaved();
-
-
-
-
-
-                QuestPDF.Settings.License = LicenseType.Community;
-                var filePath = "D://invoice.pdf";
-                var model = currentOrder;
-                var document = new ChequeDocument(model);
-                document.GeneratePdf(filePath);
-
-                orderDetails.Clear();
-                currentOrder = null;
-
-                //Process.Start("explorer.exe", filePath);
-
+                _orderDetailService.AddOrderDetail(orderDetailToAdd);
             }
+            notificationManager.Show("Success", "Order saved successfully", NotificationType.Success);
+
+            Close();
+            WithdrawalSoldProducts();
+            OrderSaved();
+
+            currentOrder.Id = newOrder.Entity.Id;
+
+            GeneretePDFCheque(currentOrder);
+
+            orderDetails.Clear();
+            currentOrder = null;
+
+        }
+        private void GeneretePDFCheque(Order order)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+            var filePath = "D://invoice.pdf";
+            var model = order;
+            var document = new ChequeDocument(model);
+            document.GeneratePdf(filePath);
+
+            //Process.Start("explorer.exe", filePath);
 
         }
 
+        // REFACTOR -------------------------------------------------------------
         private void WithdrawalSoldProducts()
         {
-            using (var dbContext = new AppDbContext())
+
+            foreach (var item in currentOrder.OrderDetails)
             {
-                foreach (var item in currentOrder.OrderDetails)
-                {
-                    var productToUpdate = dbContext.Products.Find(item.Product.Id);
-                    productToUpdate.Quantity -= item.Quantity;
-
-                    dbContext.Products.Update(productToUpdate);
-
-                }
-                dbContext.SaveChanges();
+                var productToUpdate = _productService.GetProduct(item.Product.Id);
+                productToUpdate.Quantity -= item.Quantity;
+                _productService.UpdateQuantity(productToUpdate);
             }
         }
 
@@ -131,17 +137,7 @@ namespace InventoryManagementSystem.View
             OrderSavedButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void GeneretePDFCheque()
-        {
-            QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
-
-            QuestPDF.Fluent.Document.Create(container =>
-            {
-
-            })
-                .ShowInPreviewer();
-        }
 
 
     }

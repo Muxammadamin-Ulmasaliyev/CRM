@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -24,22 +25,42 @@ public class ChequeDocument : IDocument
             {
                 page.Margin(40);
                 page.Size(PageSizes.A4.Landscape());
+
                 page.Header().Element(ComposeHeader);
                 page.Content().Element(ComposeContent);
 
+                page.Footer().Element(ComposeFooter);
 
-                page.Footer().AlignCenter().Text(x =>
-                {
-                    x.CurrentPageNumber();
-                    x.Span(" / ");
-                    x.TotalPages();
-                });
+
             });
     }
 
+    void ComposeFooter(IContainer container)
+    {
+        var textStyle = TextStyle.Default.FontSize(16).SemiBold().FontColor(Colors.Blue.Medium).FontFamily("Cambria");
+
+        container.Row(row =>
+        {
+            row.RelativeItem().AlignLeft().Column(column =>
+            {
+                column.Item().Text($"Asadbek : +998916034105").Style(textStyle);
+                column.Item().Text($"Zohidjon : +998902560976").Style(textStyle);
+
+            });
+
+            row.RelativeItem().AlignBottom().AlignRight().Text(x =>
+            {
+                x.CurrentPageNumber();
+                x.Span(" / ");
+                x.TotalPages();
+            });
+        });
+    }
+
+
     void ComposeHeader(IContainer container)
     {
-        var titleStyle = TextStyle.Default.FontSize(18).SemiBold().FontColor(Colors.Blue.Medium).FontFamily("Times New Roman");
+        var titleStyle = TextStyle.Default.FontSize(18).SemiBold().FontColor(Colors.Blue.Medium).FontFamily("Cambria");
 
         container.Row(row =>
         {
@@ -50,7 +71,7 @@ public class ChequeDocument : IDocument
                 column.Item().Text(text =>
                 {
                     text.Span("Issue date: ").SemiBold();
-                    text.Span($"{Order.OrderDate:d}");
+                    text.Span($"{Order.OrderDate.ToString("dd-MM-yyyy")}");
                 });
 
 
@@ -80,7 +101,29 @@ public class ChequeDocument : IDocument
 
             column.Item().Element(ComposeTable);
 
+            column.Item().AlignRight().DefaultTextStyle(x => x.FontFamily("Cambria")).Text(text =>
+            {
+                text.Span($"Total Sum : {Order.TotalAmount.ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold();
+
+
+            });
+            column.Item().AlignRight().DefaultTextStyle(x => x.FontFamily("Cambria")).Text(text =>
+            {
+
+
+                // ################################################################################
+                text.Span($"To`langan summa : ").SemiBold();
+
+            });
+            column.Item().AlignRight().DefaultTextStyle(x => x.FontFamily("Cambria")).Text(text =>
+            {
+                // ################################################################################
+
+                text.Span($"Qarzdorlik : ").SemiBold();
+            });
         });
+
+       
     }
 
 
@@ -118,7 +161,7 @@ public class ChequeDocument : IDocument
 
                 static IContainer CellStyle(IContainer container)
                 {
-                    return container.DefaultTextStyle(x => x.SemiBold().FontFamily("Times New Roman").FontSize(12))
+                    return container.DefaultTextStyle(x => x.SemiBold().FontFamily("Cambria").FontSize(12))
                                     .PaddingVertical(1)
                                     .Border(1)
                                     .Background(Colors.Grey.Lighten3)
@@ -140,7 +183,7 @@ public class ChequeDocument : IDocument
 
                 static IContainer CellStyle(IContainer container)
                 {
-                    return container.DefaultTextStyle(x=>x.FontSize(11).FontFamily("Times New Roman").Light())
+                    return container.DefaultTextStyle(x => x.FontSize(11).FontFamily("Cambria").Light())
                                     .Border(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(1).PaddingHorizontal(1);
 
                 }

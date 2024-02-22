@@ -26,13 +26,13 @@
 
         <ScrollViewer Grid.Row="1" Grid.Column="0"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
 
-            <Expander  Background="Red" Header="Companies"  x:Name="companiesExpander" ExpandDirection="Down" IsExpanded="False">
+            <Expander  Background="Red" Header="Companies"  x:Name="companiesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
                     <DataGrid CellEditEnding="companyDataGrid_CellEditEnding" x:Name="companyDataGrid" FontSize="18"
                                      ItemsSource="{Binding Companies}" SelectedItem="{Binding SelectedCompany}"
                                     CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="5*"/>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
                             <DataGridTemplateColumn Header="" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -50,13 +50,13 @@
 
         <ScrollViewer Grid.Row="1" Grid.Column="1" PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
 
-            <Expander  Background="Purple" Header="Countries" x:Name="countriesExpander" ExpandDirection="Down" IsExpanded="False">
+            <Expander  Background="Purple" Header="Countries" x:Name="countriesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
                     <DataGrid  CellEditEnding="countryDataGrid_CellEditEnding" x:Name="countryDataGrid" FontSize="18"
                      ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}"
                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="5*"/>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
                             <DataGridTemplateColumn Header="" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -73,13 +73,13 @@
         </ScrollViewer>
 
         <ScrollViewer Grid.Row="2" Grid.Column="0"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
-            <Expander Background="DeepSkyBlue" Header="Car Types"  x:Name="carTypesExpander" ExpandDirection="Down" IsExpanded="False">
+            <Expander Background="DeepSkyBlue" Header="Car Types"  x:Name="carTypesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
                     <DataGrid CellEditEnding="carTypeDataGrid_CellEditEnding" x:Name="carTypeDataGrid" FontSize="18"
                     ItemsSource="{Binding CarTypes}" SelectedItem="{Binding SelectedCarType}"
                      CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="5*"/>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
                             <DataGridTemplateColumn Header="" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -97,18 +97,18 @@
 
         <ScrollViewer Grid.Row="2" Grid.Column="1"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
 
-            <Expander Background="Orange" Header="Set Types"  x:Name="setTypesExpander" ExpandDirection="Down" IsExpanded="False">
+            <Expander Background="Orange" Header="Set Types"  x:Name="setTypesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
                     <DataGrid CellEditEnding="setTypeDataGrid_CellEditEnding" x:Name="setTypeDataGrid" FontSize="18"
                     ItemsSource="{Binding SetTypes}" SelectedItem="{Binding SelectedSetType}"
                     CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="5*"/>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
                             <DataGridTemplateColumn Header="" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="btnDeleteSetType" Content="Delete" Click="btnDeleteSetType_Click"/>
+                                        <Button x:Name="btnDeleteSetType" IsEnabled="False" Content="Delete" Click="btnDeleteSetType_Click"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

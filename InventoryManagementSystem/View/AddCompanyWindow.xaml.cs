@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using System.Windows;
 using System.Windows.Input;
@@ -10,10 +11,12 @@ namespace InventoryManagementSystem.View
     {
         private NotificationManager notificationManager;
         public event EventHandler AddCompanyButtonClicked;
+        private readonly CompanyService _companyService;
 
         public AddCompanyWindow()
         {
             notificationManager = new();
+            _companyService = new(new AppDbContext());
             InitializeComponent();
             tbName.txtInput.Focus();
             KeyDown += btnAddCompany_KeyDown;
@@ -23,24 +26,22 @@ namespace InventoryManagementSystem.View
         {
             if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
             {
-                txtErrorName.Text = "* Zavod nomini kiriting ! *";
-
-                tbName.txtInput.BorderThickness = new Thickness(2);
-
-                tbName.txtInput.BorderBrush = Brushes.Red;
+                DisplayError("* Zavod nomini kiriting ! *");
+                return;
             }
-            else
+            using (var dbContext = new AppDbContext())
             {
-                using (var dbContext = new AppDbContext())
+                if (_companyService.IsCompanyExists(companyName: tbName.txtInput.Text))
                 {
-                    dbContext.Companies.Add(new Company { Name = tbName.txtInput.Text });
-                    dbContext.SaveChanges();
+                    DisplayError("* Shu nomli zavod bazada mavjud ! *");
+                    return;
                 }
-               
-                notificationManager.Show("Success", "company added successfully", NotificationType.Success);
-                tbName.txtInput.Clear();
-                CompanyAdded();
+                _companyService.AddCompany(companyName: tbName.txtInput.Text);
             }
+
+            notificationManager.Show("Success", "company added successfully", NotificationType.Success);
+            tbName.txtInput.Clear();
+            CompanyAdded();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -60,7 +61,7 @@ namespace InventoryManagementSystem.View
             AddCompanyButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
-       
+
 
         private void btnAddCompany_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
@@ -71,6 +72,13 @@ namespace InventoryManagementSystem.View
                     btnAddCompany_Click((object)sender, e);
                 }
             }
+        }
+
+        private void DisplayError(string errorMessage)
+        {
+            txtErrorName.Text = errorMessage;
+            tbName.txtInput.BorderThickness = new Thickness(2);
+            tbName.txtInput.BorderBrush = Brushes.Red;
         }
     }
 }

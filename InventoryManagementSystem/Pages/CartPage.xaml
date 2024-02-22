@@ -1,0 +1,67 @@
+﻿<Page x:Class="InventoryManagementSystem.Pages.CartPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
+      mc:Ignorable="d"  Background="Firebrick"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CartPage">
+    <Page.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style TargetType="Viewbox">
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button x:Name="btnBack" Click="btnBack_Click" Content="Back" Width="75" Height="45" HorizontalAlignment="Left" Margin="15"/>
+
+            <TextBlock Name="txtCustomerName" Text="Mijoz : "  FontSize="18" VerticalAlignment="Center" Margin="15" />
+            <TextBlock Name="txtOrderTotalSumUzs" Text="Jami Sum : "  FontSize="18" VerticalAlignment="Center" Margin="15" />
+            
+            <ComboBox Width="100" Name="cbCurrentCustomer"  Height="45" DisplayMemberPath="Name" SelectionChanged="cbCurrentCustomer_SelectionChanged"/>
+
+        </StackPanel>
+
+        <Button x:Name="btnSaveOrder" Content="Save Order" Width="125" Height="40" 
+            HorizontalAlignment="Right" Margin="15" Click="btnSaveOrder_Click"/>
+
+        <DataGrid x:Name="orderDetailsDataGrid" Grid.Row="2" FontSize="18" CellEditEnding="orderDetailsDataGrid_CellEditEnding"
+                ItemsSource="{Binding OrderDetails}" SelectedItem="{Binding SelectedOrderDetail}"
+                 CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn  IsReadOnly="True" Header="Product" Binding="{Binding Product.Name}" Width="10*"/>
+                <DataGridTextColumn  IsReadOnly="False" Header="Price" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
+                <DataGridTextColumn  IsReadOnly="False" Header="Quantity" Binding="{Binding Quantity}" Width="10*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="SubTotal" Binding="{Binding SubTotal, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="15*"/>
+                <DataGridTemplateColumn Header="" Width="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="btnDeleteOrderDetail" Content="Delete" Click="btnDeleteOrderDetail_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

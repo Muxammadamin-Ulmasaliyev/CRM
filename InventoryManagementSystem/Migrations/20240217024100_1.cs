@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InventoryManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class initialSetup : Migration
+    public partial class _1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,8 +58,9 @@ namespace InventoryManagementSystem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Debt = table.Column<double>(type: "float", nullable: false)
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Debt = table.Column<double>(type: "float", nullable: false),
+                    TotalOrdersCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,7 +68,7 @@ namespace InventoryManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SetType",
+                name: "SetTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -76,7 +77,7 @@ namespace InventoryManagementSystem.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SetType", x => x.Id);
+                    table.PrimaryKey("PK_SetTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,11 +109,12 @@ namespace InventoryManagementSystem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RealPrice = table.Column<double>(type: "float", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    SalePrice = table.Column<double>(type: "float", nullable: false),
+                    RealPrice = table.Column<double>(type: "float", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     USDPrice = table.Column<double>(type: "float", nullable: true),
+                    USDPriceForCustomer = table.Column<double>(type: "float", nullable: true),
+                    StoredAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     QuantitySold = table.Column<int>(type: "int", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
                     CarTypeId = table.Column<int>(type: "int", nullable: false),
@@ -141,9 +143,9 @@ namespace InventoryManagementSystem.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_SetType_SetTypeId",
+                        name: "FK_Products_SetTypes_SetTypeId",
                         column: x => x.SetTypeId,
-                        principalTable: "SetType",
+                        principalTable: "SetTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -156,6 +158,7 @@ namespace InventoryManagementSystem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SubTotal = table.Column<double>(type: "float", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -237,7 +240,7 @@ namespace InventoryManagementSystem.Migrations
                 name: "Countries");
 
             migrationBuilder.DropTable(
-                name: "SetType");
+                name: "SetTypes");
         }
     }
 }

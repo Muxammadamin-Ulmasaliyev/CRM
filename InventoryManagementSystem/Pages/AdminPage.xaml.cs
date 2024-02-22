@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
+using InventoryManagementSystem.View;
+using System.Drawing;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace InventoryManagementSystem.Pages
 {
-    /// <summary>
-    /// Interaction logic for AdminPage.xaml
-    /// </summary>
     public partial class AdminPage : Page
     {
+
+        private readonly ProductService _productService;
+
         public AdminPage()
         {
+            _productService = new(new AppDbContext());
             InitializeComponent();
+        }
+
+
+        private void btnExportToExcel_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ChequeDocumentXlsx.ExportToExcel(_productService.GetAll(), $"{DateTime.Now.ToString("dd-MM-yyyy")}producst.xlsx");
         }
     }
 }

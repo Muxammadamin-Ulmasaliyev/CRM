@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using InventoryManagementSystem.UserControls;
 using Notification.Wpf;
 using System.Windows;
@@ -12,10 +13,12 @@ namespace InventoryManagementSystem.View
     {
         private NotificationManager notificationManager;
         public event EventHandler AddProductButtonClicked;
+        private readonly ProductService _productService;
 
         public AddProductWindow()
         {
             notificationManager = new();
+            _productService = new(new AppDbContext());
             InitializeComponent();
             rbUzs.IsChecked = true;
             PopulateComboboxes();
@@ -35,6 +38,8 @@ namespace InventoryManagementSystem.View
         {
             AddProductButtonClicked?.Invoke(this, EventArgs.Empty);
         }
+
+
         private void btnAddProduct_Click(object sender, RoutedEventArgs e)
         {
 
@@ -44,31 +49,62 @@ namespace InventoryManagementSystem.View
                 {
                     Name = tbName.txtInput.Text,
                     Code = tbCode.txtInput.Text,
-
                     RealPrice = double.TryParse(tbRealPrice.txtInput.Text, out var realPrice) ? realPrice : null,
                     Price = double.TryParse(tbPrice.txtInput.Text, out var price) ? price : null,
                     USDPrice = double.TryParse(tbUsdPrice.txtInput.Text, out var UsdPrice) ? UsdPrice : null,
                     USDPriceForCustomer = double.TryParse(tbUsdPrice2.txtInput.Text, out var UsdPriceForCustomer) ? UsdPriceForCustomer : null,
                     Quantity = int.Parse(tbQuantity.txtInput.Text),
-
                     CountryId = (cbCountry.SelectedItem as Country).Id,
                     CarTypeId = (cbCarType.SelectedItem as CarType).Id,
                     CompanyId = (cbCompany.SelectedItem as Company).Id,
                     SetTypeId = (cbSetType.SelectedItem as SetType).Id
                 };
 
-                using (var dbContext = new AppDbContext())
+
+
+                if (_productService.IsProductCodeExists(productToAdd.Code, out var productFromDb))
                 {
-                    dbContext.Products.Add(productToAdd);
-                    dbContext.SaveChanges();
+                    productFromDb.Quantity += productToAdd.Quantity;
+                    _productService.UpdateQuantity(productFromDb);
+
+                    notificationManager.Show("info", "Product already exists, quantity incremented", NotificationType.Information);
                 }
-                notificationManager.Show("Success", "Product added successfully", NotificationType.Success);
+                else
+                {
+                    _productService.AddProduct(productToAdd);
+                    notificationManager.Show("Success", "Product added successfully", NotificationType.Success);
+                }
 
                 ClearTextBoxesAndComboBoxes();
                 ProductAdded();
             }
         }
 
+        private void DisplayErrorTextBox(string errorMessage, ClearableTextBox textBox, TextBlock textBlock, Thickness thickness)
+        {
+            textBox.txtInput.BorderThickness = thickness;
+            textBox.txtInput.BorderBrush = Brushes.Red;
+            textBlock.Text = errorMessage;
+        }
+
+        private void DisplayErrorComboBox(string errorMessage, TextBlock textBlock)
+        {
+            textBlock.Text = errorMessage;
+
+        }
+        private void DisplaySuccessComboBox(TextBlock textBlock)
+        {
+            textBlock.Text = string.Empty;
+
+        }
+
+        private void DisplaySuccessTextBox(ClearableTextBox textBox, TextBlock textBlock, Thickness thickness)
+        {
+            textBox.txtInput.BorderThickness = thickness;
+            textBox.txtInput.BorderBrush = Brushes.Green;
+            textBlock.Text = string.Empty;
+
+        }
         private bool IsValidTextBoxesAndComboBoxes()
         {
             bool result = true;
@@ -76,87 +112,124 @@ namespace InventoryManagementSystem.View
 
             if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
             {
-                tbName.txtInput.BorderThickness = thickness;
-                tbName.txtInput.BorderBrush = Brushes.Red;
-                txtErrorName.Text = "* Mahsulot nomini kiriting! *";
+                DisplayErrorTextBox(errorMessage: "* Mahsulot nomini kiriting! *", tbName, txtErrorName, thickness);
                 result = result && false;
             }
             else
             {
-                tbName.txtInput.BorderThickness = thickness;
-                tbName.txtInput.BorderBrush = Brushes.Green;
-                txtErrorName.Text = string.Empty;
+                DisplaySuccessTextBox(tbName, txtErrorName, thickness);
                 result = result && true;
-
             }
 
-            
+            if (rbUzs.IsChecked == true)
+            {
+
+
+                if (string.IsNullOrWhiteSpace(tbRealPrice.txtInput.Text))
+                {
+                    DisplayErrorTextBox(errorMessage: "* Mahsulot tannarxini kiriting! *", tbRealPrice, txtErrorRealPrice, thickness);
+                    result = result && false;
+                }
+                else
+                {
+                    DisplaySuccessTextBox(tbRealPrice, txtErrorRealPrice, thickness);
+                    result = result && true;
+                }
+
+
+                if (string.IsNullOrWhiteSpace(tbPrice.txtInput.Text))
+                {
+                    DisplayErrorTextBox(errorMessage: "* Mahsulot narxini kiriting! *", tbPrice, txtErrorPrice, thickness);
+                    result = result && false;
+                }
+                else
+                {
+                    DisplaySuccessTextBox(tbPrice, txtErrorPrice, thickness);
+                    result = result && true;
+                }
+            }
+            if (rbUsd.IsChecked == true)
+            {
+
+                if (string.IsNullOrWhiteSpace(tbUsdPrice.txtInput.Text))
+                {
+                    DisplayErrorTextBox(errorMessage: "* Mahsulot $ tannarxini kiriting! *", tbUsdPrice, txtErrorUsdPrice, thickness);
+                    result = result && false;
+                }
+                else
+                {
+                    DisplaySuccessTextBox(tbUsdPrice, txtErrorUsdPrice, thickness);
+                    result = result && true;
+                }
+
+                if (string.IsNullOrWhiteSpace(tbUsdPrice2.txtInput.Text))
+                {
+                    DisplayErrorTextBox(errorMessage: "* Mahsulot $ narxini kiriting! *", tbUsdPrice2, txtErrorUsdPrice2, thickness);
+                    result = result && false;
+                }
+                else
+                {
+                    DisplaySuccessTextBox(tbUsdPrice2, txtErrorUsdPrice2, thickness);
+                    result = result && true;
+                }
+            }
 
             if (string.IsNullOrWhiteSpace(tbQuantity.txtInput.Text))
             {
-                tbQuantity.txtInput.BorderThickness = thickness;
-                tbQuantity.txtInput.BorderBrush = Brushes.Red;
-                txtErrorQuantity.Text = "* Miqdorni  kiriting! *";
+                DisplayErrorTextBox(errorMessage: "* Miqdorni kiriting! *", tbQuantity, txtErrorQuantity, thickness);
                 result = result && false;
-
             }
             else
             {
-                tbQuantity.txtInput.BorderThickness = thickness;
-                tbQuantity.txtInput.BorderBrush = Brushes.Green;
-                txtErrorQuantity.Text = string.Empty;
+                DisplaySuccessTextBox(tbQuantity, txtErrorQuantity, thickness);
                 result = result && true;
             }
-
-           
-
             if (cbCountry.SelectedItem == null)
             {
-                txtErrorCountry.Text = "* Davlatni tanlang!! *";
+                DisplayErrorComboBox(errorMessage: "* Davlatni tanlang!! *", txtErrorCountry);
                 result = result && false;
             }
             else
             {
-                txtErrorCountry.Text = string.Empty;
+                DisplaySuccessComboBox(txtErrorCountry);
                 result = result && true;
 
             }
 
             if (cbCarType.SelectedItem == null)
             {
-                txtErrorCarType.Text = "* Mashinani tanlang!! *";
+                DisplayErrorComboBox(errorMessage: "* Mashinani tanlang!! *", txtErrorCarType);
                 result = result && false;
 
             }
             else
             {
-                txtErrorCarType.Text = string.Empty;
+                DisplaySuccessComboBox(txtErrorCarType);
                 result = result && true;
 
             }
 
             if (cbCompany.SelectedItem == null)
             {
-                txtErrorCompany.Text = "* Zavodni tanlang!! *";
+                DisplayErrorComboBox(errorMessage: "* Zavodni tanlang!! *", txtErrorCompany);
                 result = result && false;
 
             }
             else
             {
-                txtErrorCompany.Text = string.Empty;
+                DisplaySuccessComboBox(txtErrorCompany);
                 result = result && true;
-
             }
 
             if (cbSetType.SelectedItem == null)
             {
-                txtErrorSetType.Text = "* O`ramni tanlang!! *";
+                DisplayErrorComboBox(errorMessage: "*  O`ramni  tanlang!! *", txtErrorSetType);
                 result = result && false;
 
             }
             else
             {
-                txtErrorSetType.Text = string.Empty;
+                DisplaySuccessComboBox(txtErrorSetType);
                 result = result && true;
             }
             return result;
@@ -215,47 +288,45 @@ namespace InventoryManagementSystem.View
         private bool IsValidNumericInputFields()
         {
             var result = true;
+            var thickness = new Thickness(2);
 
-            if (!string.IsNullOrWhiteSpace(tbRealPrice.txtInput.Text) && !double.TryParse(tbRealPrice.txtInput.Text, out _))
+
+            if (rbUzs.IsChecked == true)
             {
-                tbRealPrice.txtInput.BorderThickness = new Thickness(2);
-                tbRealPrice.txtInput.BorderBrush = Brushes.Red;
-                txtErrorRealPrice.Text = "* Son kiriting! *";
 
-                result = result && false;
+                if (!double.TryParse(tbRealPrice.txtInput.Text, out _))
+                {
+                    DisplayErrorTextBox(errorMessage: "* Son kiriting! *", tbRealPrice, txtErrorRealPrice, thickness);
+                    result = result && false;
+                }
+                if (!double.TryParse(tbPrice.txtInput.Text, out _))
+                {
+                    DisplayErrorTextBox(errorMessage: "* Son kiriting! *", tbPrice, txtErrorPrice, thickness);
+                    result = result && false;
+
+                }
             }
-            if (!string.IsNullOrWhiteSpace(tbPrice.txtInput.Text) && !double.TryParse(tbPrice.txtInput.Text, out _))
+            if (!int.TryParse(tbQuantity.txtInput.Text, out _))
             {
-                tbPrice.txtInput.BorderThickness = new Thickness(2);
-                tbPrice.txtInput.BorderBrush = Brushes.Red;
-                txtErrorPrice.Text = "* Son kiriting! *";
-                result = result && false;
-
-            }
-
-            if (!string.IsNullOrWhiteSpace(tbQuantity.txtInput.Text) && !int.TryParse(tbQuantity.txtInput.Text, out _))
-            {
-                tbQuantity.txtInput.BorderThickness = new Thickness(2);
-                tbQuantity.txtInput.BorderBrush = Brushes.Red;
-                txtErrorQuantity.Text = "* Son kiriting! *";
+                DisplayErrorTextBox(errorMessage: "* Son kiriting! *", tbQuantity, txtErrorQuantity, thickness);
                 result = result && false;
 
             }
-            if (!string.IsNullOrWhiteSpace(tbUsdPrice.txtInput.Text) && !double.TryParse(tbUsdPrice.txtInput.Text, out _))
+            if (rbUsd.IsChecked == true)
             {
-                tbUsdPrice.txtInput.BorderThickness = new Thickness(2);
-                tbUsdPrice.txtInput.BorderBrush = Brushes.Red;
-                txtErrorUsdPrice.Text = "* Son kiriting! *";
-                result = result && false;
 
-            }
-            if (!string.IsNullOrWhiteSpace(tbUsdPrice2.txtInput.Text) && !double.TryParse(tbUsdPrice2.txtInput.Text, out _))
-            {
-                tbUsdPrice2.txtInput.BorderThickness = new Thickness(2);
-                tbUsdPrice2.txtInput.BorderBrush = Brushes.Red;
-                txtErrorUsdPrice2.Text = "* Son kiriting! *";
-                result = result && false;
+                if (!double.TryParse(tbUsdPrice.txtInput.Text, out _))
+                {
+                    DisplayErrorTextBox(errorMessage: "* Son kiriting! *", tbUsdPrice, txtErrorUsdPrice, thickness);
+                    result = result && false;
 
+                }
+                if (!double.TryParse(tbUsdPrice2.txtInput.Text, out _))
+                {
+                    DisplayErrorTextBox(errorMessage: "* Son kiriting! *", tbUsdPrice2, txtErrorUsdPrice2, thickness);
+                    result = result && false;
+
+                }
             }
             return result;
 
@@ -297,7 +368,7 @@ namespace InventoryManagementSystem.View
             }
         }
 
-      
+
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
@@ -305,22 +376,30 @@ namespace InventoryManagementSystem.View
             {
                 tbUsdPrice.Visibility = Visibility.Collapsed;
                 tbUsdPrice2.Visibility = Visibility.Collapsed;
+                txtErrorUsdPrice.Visibility = Visibility.Collapsed;
+                txtErrorUsdPrice2.Visibility = Visibility.Collapsed;
             }
             if (rbUzs.IsChecked == false)
             {
                 tbUsdPrice.Visibility = Visibility.Visible;
                 tbUsdPrice2.Visibility = Visibility.Visible;
+                txtErrorUsdPrice.Visibility = Visibility.Visible;
+                txtErrorUsdPrice2.Visibility = Visibility.Visible;
             }
 
             if (rbUsd.IsChecked == true)
             {
                 tbRealPrice.Visibility = Visibility.Collapsed;
                 tbPrice.Visibility = Visibility.Collapsed;
+                txtErrorRealPrice.Visibility = Visibility.Collapsed;
+                txtErrorPrice.Visibility = Visibility.Collapsed;
             }
             if (rbUsd.IsChecked == false)
             {
                 tbRealPrice.Visibility = Visibility.Visible;
                 tbPrice.Visibility = Visibility.Visible;
+                txtErrorRealPrice.Visibility = Visibility.Visible;
+                txtErrorPrice.Visibility = Visibility.Visible;
             }
         }
     }

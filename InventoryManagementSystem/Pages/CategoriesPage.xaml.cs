@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -13,11 +14,20 @@ namespace InventoryManagementSystem.Pages
         private ObservableCollection<Country> countries;
         private ObservableCollection<SetType> setTypes;
 
+        private readonly CompanyService _companyService;
+        private readonly CarTypeService _carTypeService;
+        private readonly CountryService _countryService;
+
         private NotificationManager notificationManager;
+
+
         public CategoriesPage()
         {
             InitializeComponent();
             notificationManager = new();
+            _companyService = new(new AppDbContext());
+            _carTypeService = new(new AppDbContext());
+            _countryService = new(new AppDbContext());
 
             countryDataGrid.CellEditEnding += countryDataGrid_CellEditEnding;
             companyDataGrid.CellEditEnding += companyDataGrid_CellEditEnding;
@@ -95,11 +105,7 @@ namespace InventoryManagementSystem.Pages
 
                     if (choice == MessageBoxResult.Yes)
                     {
-                        using (var dbContext = new AppDbContext())
-                        {
-                            dbContext.Companies.Remove(company);
-                            dbContext.SaveChanges();
-                        }
+                        _companyService.Delete(company);
                         notificationManager.Show("Success", "company Deleted successfully", NotificationType.Success);
 
                     }
@@ -116,25 +122,16 @@ namespace InventoryManagementSystem.Pages
             if (editedCompany != null)
             {
                 var editedValue = (e.EditingElement as TextBox).Text;
-                if (!string.IsNullOrWhiteSpace(editedValue))
-                {
-                    editedCompany.Name = editedValue;
-                    using (var dbContext = new AppDbContext())
-                    {
-                        dbContext.Companies.Update(editedCompany);
-                        dbContext.SaveChanges();
-
-                    }
-                    notificationManager.Show("Success", "company edited successfully", NotificationType.Success);
-
-                }
-                else
+                if (string.IsNullOrWhiteSpace(editedValue))
                 {
                     notificationManager.Show("Error", "Company name cant be null", NotificationType.Error);
-
                     (e.EditingElement as TextBox).Text = editedCompany.Name;
-
+                    return;
                 }
+
+                editedCompany.Name = editedValue;
+                _companyService.Update(editedCompany);
+                notificationManager.Show("Success", "company edited successfully", NotificationType.Success);
             }
         }
 
@@ -151,11 +148,8 @@ namespace InventoryManagementSystem.Pages
 
                     if (choice == MessageBoxResult.Yes)
                     {
-                        using (var dbContext = new AppDbContext())
-                        {
-                            dbContext.Countries.Remove(country);
-                            dbContext.SaveChanges();
-                        }
+                        _countryService.Delete(country);
+
                         notificationManager.Show("Success", "country Deleted successfully", NotificationType.Success);
 
                     }
@@ -170,27 +164,20 @@ namespace InventoryManagementSystem.Pages
             if (editedCountry != null)
             {
                 var editedValue = (e.EditingElement as TextBox).Text;
-                if (!string.IsNullOrWhiteSpace(editedValue))
-                {
-
-                    editedCountry.Name = editedValue;
-
-                    using (var dbContext = new AppDbContext())
-                    {
-                        dbContext.Countries.Update(editedCountry);
-                        dbContext.SaveChanges();
-
-                    }
-                    notificationManager.Show("Success", "country edited successfully", NotificationType.Success);
-
-                }
-                else
+                if (string.IsNullOrWhiteSpace(editedValue))
                 {
                     notificationManager.Show("Error", "country name cant be null", NotificationType.Error);
-
                     (e.EditingElement as TextBox).Text = editedCountry.Name;
-
+                    return;
                 }
+
+                editedCountry.Name = editedValue;
+
+                _countryService.Update(editedCountry);
+
+                notificationManager.Show("Success", "country edited successfully", NotificationType.Success);
+
+
             }
         }
 
@@ -206,11 +193,9 @@ namespace InventoryManagementSystem.Pages
 
                     if (choice == MessageBoxResult.Yes)
                     {
-                        using (var dbContext = new AppDbContext())
-                        {
-                            dbContext.CarTypes.Remove(carType);
-                            dbContext.SaveChanges();
-                        }
+
+                        _carTypeService.Delete(carType);
+
                         notificationManager.Show("Success", "car Deleted successfully", NotificationType.Success);
 
                     }
@@ -226,26 +211,20 @@ namespace InventoryManagementSystem.Pages
             if (editedCarType != null)
             {
                 var editedValue = (e.EditingElement as TextBox).Text;
-                if (!string.IsNullOrWhiteSpace(editedValue))
-                {
-
-                    editedCarType.Name = editedValue;
-
-                    using (var dbContext = new AppDbContext())
-                    {
-                        dbContext.CarTypes.Update(editedCarType);
-                        dbContext.SaveChanges();
-
-                    }
-                    notificationManager.Show("Success", "car edited successfully", NotificationType.Success);
-
-                }
-                else
+                if (string.IsNullOrWhiteSpace(editedValue))
                 {
                     notificationManager.Show("Error", "car name cant be null", NotificationType.Error);
                     (e.EditingElement as TextBox).Text = editedCarType.Name;
-
+                    return;
                 }
+
+                editedCarType.Name = editedValue;
+
+                _carTypeService.Update(editedCarType);
+
+                notificationManager.Show("Success", "car edited successfully", NotificationType.Success);
+
+
             }
         }
         #endregion
@@ -280,27 +259,23 @@ namespace InventoryManagementSystem.Pages
             if (editedSetType != null)
             {
                 var editedValue = (e.EditingElement as TextBox).Text;
-                if (!string.IsNullOrWhiteSpace(editedValue))
-                {
-
-                    editedSetType.Name = editedValue;
-
-                    using (var dbContext = new AppDbContext())
-                    {
-                        dbContext.SetTypes.Update(editedSetType);
-                        dbContext.SaveChanges();
-
-                    }
-                    notificationManager.Show("Success", "settype edited successfully", NotificationType.Success);
-
-                }
-                else
+                if (string.IsNullOrWhiteSpace(editedValue))
                 {
                     notificationManager.Show("Error", "settype name cant be null", NotificationType.Error);
 
                     (e.EditingElement as TextBox).Text = editedSetType.Name;
+                    return;
 
                 }
+                editedSetType.Name = editedValue;
+
+                using (var dbContext = new AppDbContext())
+                {
+                    dbContext.SetTypes.Update(editedSetType);
+                    dbContext.SaveChanges();
+
+                }
+                notificationManager.Show("Success", "settype edited successfully", NotificationType.Success);
             }
         }
         #endregion

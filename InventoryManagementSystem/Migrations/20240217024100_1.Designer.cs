@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240127120550_PriceNullable")]
-    partial class PriceNullable
+    [Migration("20240217024100_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,6 +98,9 @@ namespace InventoryManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TotalOrdersCount")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
@@ -137,6 +140,9 @@ namespace InventoryManagementSystem.Migrations
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -189,16 +195,19 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<int>("QuantitySold")
                         .HasColumnType("int");
 
-                    b.Property<double>("RealPrice")
-                        .HasColumnType("float");
-
-                    b.Property<double>("SalePrice")
+                    b.Property<double?>("RealPrice")
                         .HasColumnType("float");
 
                     b.Property<int>("SetTypeId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("StoredAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<double?>("USDPrice")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("USDPriceForCustomer")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
