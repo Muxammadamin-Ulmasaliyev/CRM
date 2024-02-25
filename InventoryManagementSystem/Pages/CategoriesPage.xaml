@@ -4,13 +4,36 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
-      mc:Ignorable="d"  Background="AliceBlue"
+      xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      
+      mc:Ignorable="d"  Background="AliceBlue" FontFamily="cambria"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CategoriesPage">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+            <Style TargetType="MaterialDesign:PackIcon" >
+                <Setter Property="Foreground" Value="Red"/>
+                <Setter Property="Kind" Value="TrashCan"/>
+                <Setter Property="Width" Value="25"/>
+                <Setter Property="Height" Value="25"/>
+            </Style>
+
+        </ResourceDictionary>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="15"/>
             <RowDefinition/>
+            <RowDefinition Height="15"/>
             <RowDefinition/>
             <RowDefinition Height="15"/>
         </Grid.RowDefinitions>
@@ -21,12 +44,13 @@
         </Grid.ColumnDefinitions>
 
 
-        <Rectangle Fill="MistyRose" Grid.Row="0" Grid.ColumnSpan="2"/>
-        <Rectangle Fill="MistyRose" Grid.Row="3" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="Gray" Grid.Row="0" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="Gray" Grid.Row="2" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="Gray" Grid.Row="4" Grid.ColumnSpan="2"/>
 
         <ScrollViewer Grid.Row="1" Grid.Column="0"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
 
-            <Expander  Background="Red" Header="Companies"  x:Name="companiesExpander" ExpandDirection="Down" IsExpanded="True">
+            <Expander Background="#614ccb" Header="Companies" x:Name="companiesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
                     <DataGrid CellEditEnding="companyDataGrid_CellEditEnding" x:Name="companyDataGrid" FontSize="18"
                                      ItemsSource="{Binding Companies}" SelectedItem="{Binding SelectedCompany}"
@@ -34,10 +58,14 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
-                            <DataGridTemplateColumn Header="" Width="60">
+                            <DataGridTemplateColumn Header="" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="btnDeleteCompany" Content="Delete" Click="btnDeleteCompany_Click"/>
+                                        <Button x:Name="btnDeleteCompany" 
+                                                Style="{StaticResource MaterialDesignToolButton}"
+                                                Click="btnDeleteCompany_Click">
+                                            <MaterialDesign:PackIcon />
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -50,7 +78,7 @@
 
         <ScrollViewer Grid.Row="1" Grid.Column="1" PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
 
-            <Expander  Background="Purple" Header="Countries" x:Name="countriesExpander" ExpandDirection="Down" IsExpanded="True">
+            <Expander Background="#614ccb"  Header="Countries" x:Name="countriesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
                     <DataGrid  CellEditEnding="countryDataGrid_CellEditEnding" x:Name="countryDataGrid" FontSize="18"
                      ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}"
@@ -58,10 +86,14 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
-                            <DataGridTemplateColumn Header="" Width="60">
+                            <DataGridTemplateColumn Header="" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="btnDeleteCountry" Content="Delete" Click="btnDeleteCountry_Click"/>
+                                        <Button x:Name="btnDeleteCountry" Style="{StaticResource MaterialDesignToolButton}"
+                                                Click="btnDeleteCountry_Click">
+                                            <MaterialDesign:PackIcon />
+
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -72,8 +104,8 @@
             </Expander>
         </ScrollViewer>
 
-        <ScrollViewer Grid.Row="2" Grid.Column="0"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
-            <Expander Background="DeepSkyBlue" Header="Car Types"  x:Name="carTypesExpander" ExpandDirection="Down" IsExpanded="True">
+        <ScrollViewer Grid.Row="3" Grid.Column="0"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
+            <Expander  Background="#614ccb" Header="Car Types"  x:Name="carTypesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
                     <DataGrid CellEditEnding="carTypeDataGrid_CellEditEnding" x:Name="carTypeDataGrid" FontSize="18"
                     ItemsSource="{Binding CarTypes}" SelectedItem="{Binding SelectedCarType}"
@@ -81,10 +113,14 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
-                            <DataGridTemplateColumn Header="" Width="60">
+                            <DataGridTemplateColumn Header="" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="btnDeleteCarType" Content="Delete" Click="btnDeleteCarType_Click"/>
+                                        <Button x:Name="btnDeleteCarType" Style="{StaticResource MaterialDesignToolButton}"
+                                                Click="btnDeleteCarType_Click">
+                                            <MaterialDesign:PackIcon />
+
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -95,20 +131,24 @@
             </Expander>
         </ScrollViewer>
 
-        <ScrollViewer Grid.Row="2" Grid.Column="1"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="3" Grid.Column="1"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
 
-            <Expander Background="Orange" Header="Set Types"  x:Name="setTypesExpander" ExpandDirection="Down" IsExpanded="True">
+            <Expander Background="#614ccb"  Header="Set Types"  x:Name="setTypesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
-                    <DataGrid CellEditEnding="setTypeDataGrid_CellEditEnding" x:Name="setTypeDataGrid" FontSize="18"
+                    <DataGrid  x:Name="setTypeDataGrid" FontSize="18" IsReadOnly="True"
                     ItemsSource="{Binding SetTypes}" SelectedItem="{Binding SelectedSetType}"
-                    CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
+                    CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
-                            <DataGridTemplateColumn Header="" Width="60">
+                            <DataGridTemplateColumn Header="" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="btnDeleteSetType" IsEnabled="False" Content="Delete" Click="btnDeleteSetType_Click"/>
+                                        <Button x:Name="btnDeleteSetType"  Style="{StaticResource MaterialDesignToolButton}"
+                                                IsEnabled="False" Click="btnDeleteSetType_Click">
+                                            <MaterialDesign:PackIcon />
+
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

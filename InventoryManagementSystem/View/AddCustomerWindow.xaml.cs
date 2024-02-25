@@ -49,8 +49,6 @@ namespace InventoryManagementSystem.View
 
             if (string.IsNullOrWhiteSpace(textBox.txtInput.Text))
             {
-                textBox.txtInput.BorderThickness = new Thickness(2);
-                textBox.txtInput.BorderBrush = Brushes.Red;
                 switch (textBoxName)
                 {
                     case "tbName": txtErrorName.Text = "* Klient FIO ni kiriting! *"; break;
@@ -60,8 +58,6 @@ namespace InventoryManagementSystem.View
             }
             else
             {
-                textBox.txtInput.BorderThickness = new Thickness(2);
-                textBox.txtInput.BorderBrush = Brushes.Green;
                 switch (textBoxName)
                 {
                     case "tbName": txtErrorName.Text = string.Empty; break;
@@ -92,6 +88,8 @@ namespace InventoryManagementSystem.View
             tbName.txtInput.Clear();
             tbPhone.txtInput.Clear();
             tbAddress.txtInput.Clear();
+            txtErrorName.Text = string.Empty;
+            txtErrorPhone.Text = string.Empty;
         }
 
         protected virtual void CustomerAdded()

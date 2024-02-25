@@ -6,37 +6,39 @@
         xmlns:local="clr-namespace:InventoryManagementSystem.View"
         xmlns:userControls="clr-namespace:InventoryManagementSystem.UserControls"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None"
-        mc:Ignorable="d" AllowsTransparency="True" Background="Transparent"
-        Title="SetQuantityWindow" Height="200" Width="350">
+        mc:Ignorable="d" AllowsTransparency="True" Background="Transparent" FontFamily="cambria"
+        Title="SetQuantityWindow" Height="160" Width="320">
     <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style TargetType="userControls:ClearableTextBox">
-            <Setter Property="Width" Value="275"/>
-            <Setter Property="Margin" Value="15"/>
-            <Setter Property="Height" Value="40"/>
-        </Style>
-        <Style TargetType="TextBlock">
-            <Setter Property="Margin" Value="-10"/>
-            <Setter Property="Foreground" Value="Red"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="Text" Value=""/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Foreground" Value="Red"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Text" Value=""/>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
+    
     <Border Background="White" BorderBrush="Navy" BorderThickness="3" CornerRadius="12 ">
 
         <Grid>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <userControls:ClearableTextBox Placeholder="Son kiriting" x:Name="tbQuantity" />
+                <userControls:ClearableTextBox Placeholder="Miqdorni kiriting" x:Name="tbQuantity" />
                 <TextBlock x:Name="txtError" />
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                    <Button Name="btnCancel"  Width="100 " Height="40" Margin="7,9,7,0" Foreground="Red" BorderBrush="Red" 
+                    <Button Name="btnCancel"  Width="100 " Height="40" Margin="7,9,7,0" Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Foreground="Red" BorderBrush="Red" 
                      Content="Cancel"  Click="btnCancel_Click"/>
 
-                    <Button Name="btnSubmit" Width="125" Height="40" Margin="7,9,7,0" Foreground="Green" BorderBrush="Green" 
+                    <Button Name="btnSubmit" Width="125" Height="40" Margin="7,9,7,0" Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Foreground="Green" BorderBrush="Green" 
                      Content="Submit"  Click="btnSubmit_Click" KeyDown="btnSubmit_KeyDown"/>
 
 

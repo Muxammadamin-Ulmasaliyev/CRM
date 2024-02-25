@@ -193,8 +193,6 @@ namespace InventoryManagementSystem.Pages
                 case "Quantity":
                     if (int.TryParse(editedValue.ToString(), out int quantity))
                     {
-
-
                         var orderDetail = currentOrder.OrderDetails.First(x => x.Id == editedOrderDetail.Id);
 
                         var productId = orderDetail.Product.Id;

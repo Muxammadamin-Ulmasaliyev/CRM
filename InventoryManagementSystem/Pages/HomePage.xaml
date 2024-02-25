@@ -5,78 +5,108 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
       xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
-      mc:Ignorable="d" KeepAlive="True"
-      d:DesignHeight="700" d:DesignWidth="1400"
+      xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      
+      mc:Ignorable="d" 
+      d:DesignHeight="700" d:DesignWidth="1400" 
       Title="HomePage">
-    <Page.Resources>
 
-        <Style TargetType="Button">
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="FontWeight" Value="Bold"/>
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Width" Value="150"/>
-            <Setter Property="Margin" Value="15"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style TargetType="Viewbox">
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+        </ResourceDictionary>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="12*"/>
             <RowDefinition Height="12*"/>
             <RowDefinition Height="76*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="90*"/>
         </Grid.ColumnDefinitions>
 
-        <Rectangle Grid.Row="0" Grid.Column="1" Fill="Green"/>
-        <Rectangle Grid.Row="1" Grid.Column="1" Fill="Red"/>
+        <Rectangle Grid.Row="0" Grid.Column="1" Fill="#614ccb"/>
+        <Rectangle Grid.Row="1" Grid.Column="1" Fill="#614ccb"/>
         <Rectangle Grid.Row="2" Grid.Column="1" Fill="WhiteSmoke"/>
-        <Rectangle Grid.Row="3" Grid.Column="1" Fill="Purple"/>
+        <Rectangle Grid.Row="3" Grid.Column="1" Fill="#614ccb"/>
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-            <Button Name="btnViewCart" Width="80"  Height="40" Margin="5" 
-             Content="Cart"  Click="btnViewCart_Click"/>
+            <Button Name="btnViewCart"  Margin="20,0,0,0" Height="60" Width="100"
+              Click="btnViewCart_Click" Background="#6024ff">
+                <MaterialDesign:PackIcon Kind="Cart" Width="40" Height="40"/>
+            </Button>
 
-            <TextBlock x:Name="txtCurrencyRate" Text="" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="24"/>
         </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+           
+            <TextBlock x:Name="txtCurrencyRate" Text="" Foreground="FloralWhite" Margin="15"  HorizontalAlignment="Right" 
+                       VerticalAlignment="Center" FontSize="24" FontFamily="Cambria" Style="{StaticResource MaterialDesignTextBlock}"/>
+            <Button Name="btnEditCurrency" Click="btnEditCurrency_Click" Width="50" Height="50" Margin="10">
+                <MaterialDesign:PackIcon Kind="Pencil" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Button>
+        </StackPanel>
+
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
 
-            <TextBox x:Name="searchBar"  Width="200" Height="35" FontSize="18" 
-         HorizontalAlignment="Left" Margin="20,0,0,0" TextChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged"/>
-            <Button x:Name="btnClearSearchBar" BorderThickness="0" Content="X" Margin="0,0,20,0" Width="25" Height="35" Click="btnClearSearchBar_Click"/>
+            <TextBox x:Name="searchBar"  Width="220" Height="40" FontSize="18"  
+                      Margin="15,0,0,0" MaterialDesign:HintAssist.Hint=" Search . . ."
+                     Style="{StaticResource MaterialDesignTextBox}"
+                     HorizontalAlignment="Left" TextChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" Background="MintCream"/>
 
-            <ComboBox Width="100" Name="cbCountry" DisplayMemberPath="Name" 
-             SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged"/>
-            <ComboBox Width="100" Name="cbCompany"    DisplayMemberPath="Name"
+           
+            <Button  x:Name="btnClearSearchBar" Style="{StaticResource MaterialDesignToolButton}" 
+                     Margin="-30,0,20,0" FontSize="10"
+                      Click="btnClearSearchBar_Click">
+                <MaterialDesign:PackIcon Width="20" Height="20" Kind="ClearBox" Foreground="Gray"/>
+            </Button>
+            
+          
+
+            <ComboBox Margin="5" MinWidth="100" Width="auto" Name="cbCountry" DisplayMemberPath="Name" FontSize="15"
+                        SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged"  Height="auto"
+                      MaterialDesign:HintAssist.Hint="Country"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}" Background="MintCream"/>
+
+            <ComboBox Margin="5" MinWidth="100" Width="auto" Height="auto" Name="cbCompany"  
+                      MaterialDesign:HintAssist.Hint="Company" FontSize="15"
+                      DisplayMemberPath="Name" Style="{StaticResource MaterialDesignOutlinedComboBox}"  Background="MintCream"
                SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
-            <ComboBox Width="100"  Name="cbCarType"     DisplayMemberPath="Name"
-              SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
-            <ComboBox Width="100"  Name="cbSetType"    DisplayMemberPath="Name"
-             SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
+
+            <ComboBox Margin="5" MinWidth="100" Width="auto" Height="auto"  Name="cbCarType"    
+                      DisplayMemberPath="Name" MaterialDesign:HintAssist.Hint="Car" FontSize="15"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"  Background="MintCream"
+                         SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
+
+            <ComboBox Margin="5" MinWidth="100" Width="auto" Height="auto" FontSize="15"
+                      Name="cbSetType"  MaterialDesign:HintAssist.Hint="SetType"
+                      DisplayMemberPath="Name" Style="{StaticResource MaterialDesignOutlinedComboBox}"  Background="MintCream"
+                     SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
+
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button Name="btnResetFilter" Width="80"  Height="40" Margin="5" Background="LightGoldenrodYellow" 
+
+                <Button Name="btnResetFilter" Width="auto"  Height="50" Margin="5" Background="#6113b6" 
                 Content="Reset Filters "  Click="btnResetFilter_Click"/>
-                <Button Name="btnAddCountry" Width="80"  Height="40" Margin="5" 
+
+                <Button Name="btnAddCountry" Width="auto"  Height="50" Margin="5" Background="#a47ce9" 
                  Content="Add Country"  Click="btnAddCountry_Click"/>
-                <Button Name="btnAddCompany" Width="80"  Height="40" Margin="5" 
+                <Button Name="btnAddCompany" Width="auto"  Height="50" Margin="5" Background="#a47ce9" 
                  Content="Add Company"  Click="btnAddCompany_Click"/>
-                <Button Name="btnAddCarType" Width="80"  Height="40" Margin="5" 
+                <Button Name="btnAddCarType" Width="auto"  Height="50" Margin="5" Background="#a47ce9" 
                  Content="Add Car"  Click="btnAddCarType_Click"/>
-                <Button Name="btnRefreshDb" Width="80"  Height="40" Margin="5" 
-                  Content="Refresh DB"  Click="btnRefreshDb_Click"/>
+               
             </StackPanel>
 
-            <Button x:Name="btnAddProduct" Width="100" Height ="40" Content="Mahsulot qo`shish" 
+            <Button x:Name="btnAddProduct" Width="auto" Height ="50" Content="Mahsulot qo`shish" Background="#a47ce9" 
         HorizontalAlignment="Right" Margin="0,0,20,0" Click="btnAddProduct_Click"/>
 
         </StackPanel>
@@ -85,38 +115,43 @@
         <ScrollViewer x:Name="scrollViewer" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="2" Grid.Column="2" 
                       VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
-            <DataGrid x:Name="productDataGrid" FontSize="18" HeadersVisibility="Column"
+            <DataGrid x:Name="productDataGrid" FontSize="17" HeadersVisibility="Column" Background="GhostWhite"
                        ItemsSource="{Binding products}" SelectedItem="{Binding SelectedProduct}"
                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" 
                        CellEditEnding="productDataGrid_CellEditEnding">
 
                 <DataGrid.Columns>
 
-                    <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>
+                   <!-- <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>-->
                     <DataGridTextColumn Header="Name" IsReadOnly="False" Binding="{Binding Name}" Width="Auto"/>
                     <DataGridTextColumn Header="Code" IsReadOnly="False" Binding="{Binding Code}" Width="Auto"/>
                     <DataGridTextColumn Header="Tannarx" IsReadOnly="False" Binding="{Binding RealPrice, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
-                    <DataGridTextColumn Header="Sotish narxi" IsReadOnly="False" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Sotish narx" IsReadOnly="False" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
                     <DataGridTextColumn Header="To`plam turi" IsReadOnly="True" Binding="{Binding SetType.Name}" Width="Auto"/>
                     <DataGridTextColumn Header="Soni" IsReadOnly="False" Binding="{Binding Quantity}" Width="Auto" />
                     <DataGridTextColumn Header="Zavod" IsReadOnly="True" Binding="{Binding Company.Name}" Width="Auto"/>
                     <DataGridTextColumn Header="Davlat" IsReadOnly="True" Binding="{Binding Country.Name}" Width="Auto"/>
                     <DataGridTextColumn Header="Mashina" IsReadOnly="True" Binding="{Binding CarType.Name}" Width="Auto"/>
                     <DataGridTextColumn Header="$ tannarx" IsReadOnly="False" Binding="{Binding USDPrice,StringFormat={}{0:C0}}" Width="Auto"/>
-                    <DataGridTextColumn Header="$ donabay narx" IsReadOnly="False" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C0}}" Width="Auto"/>
+                    <DataGridTextColumn Header="$ sotish" IsReadOnly="False" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C0}}" Width="Auto"/>
 
-                    <DataGridTemplateColumn  Header="" Width="60">
+                    <DataGridTemplateColumn  Header="" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button x:Name="btnAddToCart" Content="Add" Click="btnAddToCart_Click"/>
+                                <Button x:Name="btnAddToCart" Style="{StaticResource MaterialDesignToolButton}" Click="btnAddToCart_Click">
+                                    <MaterialDesign:PackIcon Kind="CartArrowDown" Width="25" Height="25" Foreground="Blue"/>
+                                </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    
+
                     <DataGridTemplateColumn Header="" Width="60">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button x:Name="btnDeleteProduct" Content="Delete" Click="btnDeleteProduct_Click"/>
+                                <Button x:Name="btnDeleteProduct" Style="{StaticResource MaterialDesignToolButton}" Click="btnDeleteProduct_Click">
+                                    <MaterialDesign:PackIcon Kind="TrashCan" Width="25" Height="25" Foreground="Red"/>
+
+                                </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -128,8 +163,19 @@
 
 
         <TextBlock x:Name="txtNumberOfProducts" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Jadvaldagi produktlar soni : " 
-           HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
-
+           HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="WhiteSmoke" FontFamily="cambria"/>
+        
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0">
+            <Button  Click="PreviousPage_Click"  >
+                <MaterialDesign:PackIcon Kind="ArrowLeftBold" Width="20" Height="20"/>
+            </Button>
+            <TextBlock x:Name="currentPageText" VerticalAlignment="Center" Margin="10,0" Foreground="WhiteSmoke"
+                       FontSize="16" FontFamily="Cambria" FontWeight="SemiBold"/>
+            <Button  Click="NextPage_Click" >
+                <MaterialDesign:PackIcon Kind="ArrowRightBold" Width="20" Height="20"/>
+            </Button>
+        </StackPanel>
+        
         <notifications:NotificationArea Grid.RowSpan="4" Grid.ColumnSpan="2" x:Name="notificationArea" Position="BottomRight" MaxItems="3"/>
 
     </Grid>

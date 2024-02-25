@@ -4,48 +4,61 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
-      mc:Ignorable="d"  Background="Firebrick"
+      xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      
+      mc:Ignorable="d"  Background="#614ccb"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CartPage">
     <Page.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="FontWeight" Value="Bold"/>
-        </Style>
-        <Style TargetType="Viewbox">
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-
-        <Style TargetType="ComboBox">
-            <Setter Property="Width" Value="150"/>
-            <Setter Property="Margin" Value="15"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+            <Style TargetType="MaterialDesign:PackIcon" >
+                <Setter Property="Width" Value="25"/>
+                <Setter Property="Height" Value="25"/>
+            </Style>
+        </ResourceDictionary>
     </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="75"/>
+            <RowDefinition Height="80"/>
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center">
-            <Button x:Name="btnBack" Click="btnBack_Click" Content="Back" Width="75" Height="45" HorizontalAlignment="Left" Margin="15"/>
+        <StackPanel Orientation="Horizontal" Margin="0,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center">
 
-            <TextBlock Name="txtCustomerName" Text="Mijoz : "  FontSize="18" VerticalAlignment="Center" Margin="15" />
-            <TextBlock Name="txtOrderTotalSumUzs" Text="Jami Sum : "  FontSize="18" VerticalAlignment="Center" Margin="15" />
-            
-            <ComboBox Width="100" Name="cbCurrentCustomer"  Height="45" DisplayMemberPath="Name" SelectionChanged="cbCurrentCustomer_SelectionChanged"/>
+            <Button x:Name="btnBack" Style="{StaticResource MaterialDesignToolButton}" Width="50" Height="50"
+                Click="btnBack_Click" HorizontalAlignment="Left" Margin="0,0,0,0">
+                <MaterialDesign:PackIcon Kind="ArrowBackCircle" Width="35" Height="35" Foreground="GhostWhite" />
+            </Button>
+            <TextBlock Name="txtCustomerName" Text="Mijoz : "  FontSize="18" FontFamily="cambria"
+                                  Foreground="GhostWhite" FontWeight="Bold" VerticalAlignment="Center" Margin="15"/>
+
+            <ComboBox MinWidth="100" Width="auto" Height="auto" Name="cbCurrentCustomer"  Background="MintCream" 
+                      FontSize="18" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      MaterialDesign:HintAssist.Hint="Мижоз "
+                      DisplayMemberPath="Name" SelectionChanged="cbCurrentCustomer_SelectionChanged"/>
+
 
         </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
 
-        <Button x:Name="btnSaveOrder" Content="Save Order" Width="125" Height="40" 
-            HorizontalAlignment="Right" Margin="15" Click="btnSaveOrder_Click"/>
+            <TextBlock Name="txtOrderTotalSumUzs" Text="Jami Sum : "  FontSize="18" Foreground="GhostWhite"
+                      FontFamily="cambria" FontWeight="Bold" VerticalAlignment="Center" Margin="15" />
+            <Button x:Name="btnSaveOrder"  Width="125" Height="50" Background="#4024ff"
+            HorizontalAlignment="Right" Margin="15,5,15,5" Click="btnSaveOrder_Click">
+                <MaterialDesign:PackIcon Kind="AccountCash" Width="40" Height="40" />
+            </Button>
+        </StackPanel>
 
-        <DataGrid x:Name="orderDetailsDataGrid" Grid.Row="2" FontSize="18" CellEditEnding="orderDetailsDataGrid_CellEditEnding"
+        <DataGrid  Background="GhostWhite" Style="{StaticResource MaterialDesignDataGrid}" x:Name="orderDetailsDataGrid" Grid.Row="2" FontSize="18" CellEditEnding="orderDetailsDataGrid_CellEditEnding"
                 ItemsSource="{Binding OrderDetails}" SelectedItem="{Binding SelectedOrderDetail}"
                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
             <DataGrid.Columns>
@@ -53,10 +66,14 @@
                 <DataGridTextColumn  IsReadOnly="False" Header="Price" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
                 <DataGridTextColumn  IsReadOnly="False" Header="Quantity" Binding="{Binding Quantity}" Width="10*"/>
                 <DataGridTextColumn  IsReadOnly="True" Header="SubTotal" Binding="{Binding SubTotal, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="15*"/>
-                <DataGridTemplateColumn Header="" Width="60">
+                <DataGridTemplateColumn Header="" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="btnDeleteOrderDetail" Content="Delete" Click="btnDeleteOrderDetail_Click"/>
+                            <Button x:Name="btnDeleteOrderDetail" Style="{StaticResource MaterialDesignToolButton}"
+                                    Click="btnDeleteOrderDetail_Click">
+                                <MaterialDesign:PackIcon Kind="TrashCan"  Foreground="red"/>
+
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

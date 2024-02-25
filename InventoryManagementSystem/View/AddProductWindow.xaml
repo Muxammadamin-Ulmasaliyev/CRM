@@ -5,38 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryManagementSystem.View"
         xmlns:userControls="clr-namespace:InventoryManagementSystem.UserControls"
+        xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" 
-        Title="AddProductWindow" Height="550" Width="700" ResizeMode="NoResize">
+        Title="AddProductWindow" Height="525" Width="700" ResizeMode="NoResize">
+
     <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style TargetType="userControls:ClearableTextBox">
-            <Setter Property="Width" Value="275"/>
-            <Setter Property="Margin" Value="15"/>
-            <Setter Property="Height" Value="40"/>
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Width" Value="275"/>
-            <Setter Property="Margin" Value="15"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style TargetType="TextBlock">
-            <Setter Property="Margin" Value="-10"/>
-            <Setter Property="Foreground" Value="Red"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="Text" Value=""/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        <Style TargetType="TextBlock" x:Key="ComboBoxPlaceholder">
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="15,-5,0,-25"/>
-            <Setter Property="Foreground" Value="MediumBlue"/>
-        </Style>
+            <Style TargetType="userControls:ClearableTextBox">
+                <Setter Property="Width" Value="275"/>
+                <Setter Property="Margin" Value="15"/>
+                <Setter Property="Height" Value="40"/>
+            </Style>
+            
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="-10"/>
+                <Setter Property="Foreground" Value="Red"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Text" Value=""/>
+            </Style>
 
+            <Style TargetType="TextBlock" x:Key="ComboBoxPlaceholder">
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Margin" Value="15,-5,0,-25"/>
+                <Setter Property="Foreground" Value="MediumBlue"/>
+            </Style>
+
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -52,8 +51,10 @@
             <TextBlock x:Name="txtErrorName" />
             <userControls:ClearableTextBox Placeholder="Kodi (ixtiyoriy)" x:Name="tbCode"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <RadioButton x:Name="rbUzs" Content="Sum" FontSize="14" Checked="RadioButton_Checked" Margin="25"/>
-                <RadioButton x:Name="rbUsd" Content="$" FontSize="14" Checked="RadioButton_Checked" Margin="25"/>
+                <RadioButton Style="{StaticResource MaterialDesignChoiceChipAccentOutlineRadioButton}" BorderThickness="2" x:Name="rbUzs" Content="Сум"
+                             FontSize="16" Checked="RadioButton_Checked" Margin="15" FontWeight="SemiBold"/>
+                <RadioButton Style="{StaticResource MaterialDesignChoiceChipAccentOutlineRadioButton}" BorderThickness="2" x:Name="rbUsd" Content="$"
+                             FontSize="16" Checked="RadioButton_Checked" Margin="15" FontWeight="SemiBold"/>
             </StackPanel>
             <userControls:ClearableTextBox Placeholder="Tannarx" x:Name="tbRealPrice" PreviewTextInput="textBox_PreviewTextInput"   />
             <TextBlock x:Name="txtErrorRealPrice" />
@@ -69,36 +70,47 @@
             <TextBlock x:Name="txtErrorQuantity" Margin="0,-2,0,0" />
         </StackPanel>
 
-        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,-15,0,0">
 
-            <TextBlock Text="Davlat :" Style="{StaticResource ComboBoxPlaceholder}" />
-            <ComboBox Name="cbCountry"  Text="Davlatni tanlang"  DisplayMemberPath="Name" SelectionChanged="comboBox_SelectionChanged"/>
+
+            <ComboBox  Name="cbCountry"    DisplayMemberPath="Name" Width="auto" Height="auto"
+                       FontSize="16"  Background="GhostWhite" MaterialDesign:HintAssist.Hint="Давлат"
+                       Margin="15"  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                       SelectionChanged="comboBox_SelectionChanged"/>
             <TextBlock x:Name="txtErrorCountry" />
-            <TextBlock Text="Mashina :" Style="{StaticResource ComboBoxPlaceholder}" />
 
-            <ComboBox Name="cbCarType"  Text="Mashina turini tanlang" DisplayMemberPath="Name" SelectionChanged="comboBox_SelectionChanged"/>
+            <ComboBox Name="cbCarType" DisplayMemberPath="Name" Margin="15" MaterialDesign:HintAssist.Hint="Машина"
+                      FontSize="16" Width="auto" Height="auto" Background="GhostWhite"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      SelectionChanged="comboBox_SelectionChanged"/>
             <TextBlock x:Name="txtErrorCarType" />
 
-            <TextBlock Text="Zavod :"  Style="{StaticResource ComboBoxPlaceholder}" />
-            <ComboBox Name="cbCompany"  Text="Zavodni tanlang"  DisplayMemberPath="Name" SelectionChanged="comboBox_SelectionChanged"/>
+            <ComboBox Name="cbCompany"   DisplayMemberPath="Name" FontSize="16" 
+                      Width="auto" Height="auto" MaterialDesign:HintAssist.Hint="Завод"
+                      Margin="15"  Style="{StaticResource MaterialDesignOutlinedComboBox}"   Background="GhostWhite"
+                      SelectionChanged="comboBox_SelectionChanged"/>
+            
             <TextBlock x:Name="txtErrorCompany" />
             
-            <TextBlock Text="O`ram :" Style="{StaticResource ComboBoxPlaceholder}" />
-            <ComboBox Name="cbSetType"  Text="O`ram turini tanlang" DisplayMemberPath="Name" SelectionChanged="comboBox_SelectionChanged"/>
+            <ComboBox Name="cbSetType"  DisplayMemberPath="Name" FontSize="16" Width="auto" Height="auto"
+                      Background="GhostWhite" MaterialDesign:HintAssist.Hint="Урам"
+                      Margin="15"  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      SelectionChanged="comboBox_SelectionChanged"/>
             <TextBlock x:Name="txtErrorSetType" />
 
             <Button Name="btnAddProduct" Width="275" Height="40" 
-                     Margin="15" 
+                    Margin="15"  Style="{StaticResource MaterialDesignOutlinedButton}"
                     Content="Add Product" Click="btnAddProduct_Click"/>
-
+            <!--
             <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button Name="btnAddCountry" Width="80"  Height="40" Margin="5" 
+                <Button Name="btnAddCountry" Width="80"  Height="40" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}" 
                          Content="Add Country"  Click="btnAddCountry_Click"/>
-                <Button Name="btnAddCompany" Width="80"  Height="40" Margin="5" 
+                <Button Name="btnAddCompany" Width="80"  Height="40" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}"
                         Content="Add Company"  Click="btnAddCompany_Click"/>
-                <Button Name="btnAddCarType" Width="80"  Height="40" Margin="5" 
+                <Button Name="btnAddCarType" Width="80"  Height="40" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}"
                           Content="Add Car"  Click="btnAddCarType_Click"/>
             </StackPanel>
+-->
 
         </StackPanel>
 

@@ -4,17 +4,35 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
-      mc:Ignorable="d" Background="LightGray"
+      xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      
+      mc:Ignorable="d" Background="#614ccb"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="OrdersHistoryPage">
     <Page.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="FontSize" Value="30"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="GhostWhite"/>
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="MaterialDesign:PackIcon" >
+                <Setter Property="Width" Value="25"/>
+                <Setter Property="Height" Value="25"/>
+            </Style>
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+        </ResourceDictionary>
     </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="75"/>
@@ -26,7 +44,12 @@
             <ColumnDefinition Width="65*" />
         </Grid.ColumnDefinitions>
 
-        <Button x:Name="btnBack" Click="btnBack_Click" Content="Back" Width="75" Height="45" HorizontalAlignment="Left" Margin="15"/>
+        <Button x:Name="btnBack" Style="{StaticResource MaterialDesignToolButton}" Width="50" Height="50"
+                Click="btnBack_Click" HorizontalAlignment="Left" Margin="0,0,0,0">
+            <MaterialDesign:PackIcon Kind="ArrowBackCircle" Width="35" Height="35" Foreground="GhostWhite" />
+
+        </Button>
+        
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock x:Name="txtCustomerName" Grid.Column="0" Text="" Margin="0,0,20,0"/>
             <TextBlock Grid.Column="0" Text="Orders"/>
@@ -37,23 +60,29 @@
         <ScrollViewer x:Name="scrollViewer" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="1"
                VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
-            <DataGrid x:Name="ordersDataGrid" FontSize="18"
+            <DataGrid x:Name="ordersDataGrid" FontSize="18" FontFamily="cambria" Background="GhostWhite"
           CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                     <DataGridTextColumn Header="OrderDate" Binding="{Binding OrderDate, StringFormat={}{0:dd-MM-yyyy}}" Width="Auto"/>
                     <DataGridTextColumn Header="TotalAmountUzs" Binding="{Binding TotalAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
-                    <DataGridTemplateColumn Header="" Width="60">
+                    <DataGridTemplateColumn Header="" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button x:Name="btnShowDetails" Content="Details" Click="btnShowDetails_Click"/>
+                                <Button x:Name="btnShowDetails"  Style="{StaticResource MaterialDesignToolButton}"
+                                         Click="btnShowDetails_Click" >
+                                    <MaterialDesign:PackIcon Kind="ViewList"  Foreground="Blue"/>
+                                </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="" Width="70">
+                    <DataGridTemplateColumn Header="" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button x:Name="btnPrintPdfCheque" Content="Cheque" Click="btnPrintPdfCheque_Click"/>
+                                <Button x:Name="btnPrintPdfCheque"  Style="{StaticResource MaterialDesignToolButton}"
+                                        Click="btnPrintPdfCheque_Click" >
+                                    <MaterialDesign:PackIcon Kind="File" Foreground="Purple"/>
+                                </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -62,23 +91,15 @@
 
         </ScrollViewer>
 
-
-        <!-- 
-        <Expander Width="auto" Grid.Column="1" Grid.Row="1" ExpandDirection="Right" IsExpanded="False">
-        -->
-        
-        
         <GridSplitter Background="LightGray" Grid.RowSpan="3" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-
-
 
 
         <ScrollViewer x:Name="scrollViewer2" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="1" Grid.Column="2"
         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <DataGrid  x:Name="orderDetailsDataGrid"  FontSize="18"
+            <DataGrid  x:Name="orderDetailsDataGrid"  FontSize="18" Background="GhostWhite"
                 CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto" />
+                    <!--<DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto" />-->
                     <DataGridTextColumn Header="Product" Binding="{Binding Product.Name}" Width="Auto"/>
                     <DataGridTextColumn Header="Car" Binding="{Binding Product.CarType.Name}" Width="Auto"/>
                     <DataGridTextColumn Header="Company" Binding="{Binding Product.Company.Name}" Width="Auto"/>

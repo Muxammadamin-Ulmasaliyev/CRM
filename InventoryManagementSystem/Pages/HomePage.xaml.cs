@@ -4,6 +4,7 @@ using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
 using Microsoft.EntityFrameworkCore;
 using Notification.Wpf;
+using QuestPDF.Helpers;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +20,9 @@ namespace InventoryManagementSystem.Pages
         private Customer selectedCustomer;
         private readonly ProductService _productService;
         private readonly CustomerService _customerService;
+        private int _pageSize = 15;
+        private int _currentPage = 1;
+
         public HomePage()
         {
             _productService = new(new AppDbContext());
@@ -27,14 +31,55 @@ namespace InventoryManagementSystem.Pages
             InitializeNewOrder();
             PopulateDataGrid();
             PopulateDataGridComboboxes();
-           
             PopulateCurrencyRate();
+            LoadPage();
+            PopulateNumberOfProductsTxt();
             notificationManager = new();
         }
 
+        private void LoadPage()
+        {
+            int startIndex = (_currentPage - 1) * _pageSize;
+            int endIndex = Math.Min(startIndex + _pageSize - 1, products.Count - 1);
+
+            var currentPageData = new ObservableCollection<Product>();
+
+            for (int i = startIndex; i <= endIndex; i++)
+            {
+                currentPageData.Add(products[i]);
+            }
+
+            productDataGrid.ItemsSource = currentPageData;
+
+            currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)products.Count / _pageSize)}";
+            PopulateNumberOfProductsTxt();
+        }
+        private void PreviousPage_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentPage > 1)
+            {
+                _currentPage--;
+                LoadPage();
+                ResetFilters();
+            }
+        }
+
+        private void NextPage_Click(object sender, RoutedEventArgs e)
+        {
+            int totalPages = (int)Math.Ceiling((double)products.Count / _pageSize);
+            if (_currentPage < totalPages)
+            {
+                _currentPage++;
+                LoadPage();
+                ResetFilters();
+
+            }
+        }
+
+
         private void PopulateCurrencyRate()
         {
-            txtCurrencyRate.Text = $"1 $ = {AppConfiguration.Configuration.CurrencyRate} sum";
+            txtCurrencyRate.Text = $"Курс : 1 $ = {AppConfiguration.Configuration.CurrencyRate} сум";
         }
         private void InitializeNewOrder()
         {
@@ -43,7 +88,7 @@ namespace InventoryManagementSystem.Pages
                 OrderDetails = new List<OrderDetail>()
             };
         }
-        
+
         private void PopulateDataGridComboboxes()
         {
             using (var dbContext = new AppDbContext())
@@ -54,27 +99,27 @@ namespace InventoryManagementSystem.Pages
                 cbSetType.ItemsSource = dbContext.SetTypes.ToList();
             }
         }
+
+        private void PopulateNumberOfProductsTxt()
+        {
+            txtNumberOfProducts.Text = $"Жадвалдаги продуктлар сони : {productDataGrid.Items.Count}";
+        }
+
         private void PopulateDataGrid()
         {
 
-
-
-            //_productService.AddProducts(AppConfiguration.Configuration.GenerateFakeProducts(100));
-
             products = new ObservableCollection<Product>(_productService.GetAll());
 
-            productDataGrid.ItemsSource = products;
-
-            txtNumberOfProducts.Text = $"Jadvaldagi produktlar soni : {productDataGrid.Items.Count}";
-
+            PopulateNumberOfProductsTxt();
         }
 
         private void Search()
         {
+            productDataGrid.ItemsSource = products;
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(productDataGrid.ItemsSource);
             view.Filter = SearchFilter;
 
-            txtNumberOfProducts.Text = $"Jadvaldagi produktlar soni : {view.Cast<object>().Count()}";
+            txtNumberOfProducts.Text = $"Жадвалдаги продуктлар сони : {view.Cast<object>().Count()}";
 
 
         }
@@ -162,6 +207,12 @@ namespace InventoryManagementSystem.Pages
 
         private void btnResetFilter_Click(object sender, RoutedEventArgs e)
         {
+            ResetFilters();
+            LoadPage();
+        }
+
+        private void ResetFilters()
+        {
             searchBar.Text = string.Empty;
             cbCompany.SelectedItem = null;
             cbCountry.SelectedItem = null;
@@ -171,18 +222,14 @@ namespace InventoryManagementSystem.Pages
 
 
 
-      
+
 
         private void btnClearSearchBar_Click(object sender, RoutedEventArgs e)
         {
             searchBar.Clear();
         }
 
-        private void btnRefreshDb_Click(object sender, RoutedEventArgs e)
-        {
-            PopulateDataGridComboboxes();
-            PopulateDataGrid();
-        }
+       
 
         private void btnDeleteProduct_Click(object sender, RoutedEventArgs e)
         {
@@ -237,7 +284,7 @@ namespace InventoryManagementSystem.Pages
                 notificationManager.Show("Success", "Item added to cart successfully", NotificationType.Success, "notificationArea");
             }
 
-           
+
 
         }
         private void CalculateOrderTotals()
@@ -246,7 +293,7 @@ namespace InventoryManagementSystem.Pages
         }
 
 
-       
+
 
 
 
@@ -266,15 +313,15 @@ namespace InventoryManagementSystem.Pages
         private void CurrentOrderDetails_OrderSaved(object sender, EventArgs e)
         {
             InitializeNewOrder();
-           
+
             PopulateDataGrid();
         }
 
 
 
-        
 
-       
+
+
 
         private void productDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
@@ -402,6 +449,11 @@ namespace InventoryManagementSystem.Pages
         {
             scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
             e.Handled = true;
+        }
+
+        private void btnEditCurrency_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

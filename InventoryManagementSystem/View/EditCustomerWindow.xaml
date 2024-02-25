@@ -5,41 +5,58 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryManagementSystem.View"
         xmlns:userControls="clr-namespace:InventoryManagementSystem.UserControls"
+        xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Background="Transparent"
         
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" WindowStyle="None"
         Title="EditCustomerWindow" Height="400" Width="400">
     <Window.Resources>
-        <Style TargetType="userControls:ClearableTextBox">
-            <Setter Property="Width" Value="275"/>
-            <Setter Property="Margin" Value="15"/>
-            <Setter Property="Height" Value="40"/>
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style TargetType="TextBlock">
-            <Setter Property="Margin" Value="-10"/>
-            <Setter Property="Foreground" Value="Red"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="Text" Value=""/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="userControls:ClearableTextBox">
+                <Setter Property="Width" Value="275"/>
+                <Setter Property="Margin" Value="15"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="FontFamily" Value="Cambria"/>
+            </Style>
+           
 
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="-10"/>
+                <Setter Property="Foreground" Value="Red"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Text" Value=""/>
+                <Setter Property="FontFamily" Value="Cambria"/>
+            </Style>
+
+        </ResourceDictionary>
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <userControls:ClearableTextBox Placeholder="Klient FIO" x:Name="tbName" LostFocus="TextBox_LostFocus"/>
-            <TextBlock x:Name="txtErrorName" />
-            <userControls:ClearableTextBox Placeholder="Telefon nomer" x:Name="tbPhone" LostFocus="TextBox_LostFocus"/>
-            <TextBlock x:Name="txtErrorPhone" />
-            <userControls:ClearableTextBox Placeholder="Address (ixtiyoriy)" x:Name="tbAddress" MouseLeave="tbAddress_MouseLeave"/>
-            <Button Name="btnEditCustomer" Width="275" Height="40" Margin="15" 
-         Content="Edit Customer" IsEnabled="False" Click="btnEditCustomer_Click"/>
-            <Button Name="btnCancel"  VerticalAlignment="Bottom" Width="275" Height="40" Margin="0,0,0,-40" Foreground="red" Background="PaleVioletRed"
-             Content="Cancel"  Click="btnCancel_Click"/>
-        </StackPanel>
-    </Grid>
+    <Border Background="White" BorderBrush="Silver" BorderThickness="5" >
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+
+            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <userControls:ClearableTextBox Placeholder="Klient FIO" x:Name="tbName" LostFocus="TextBox_LostFocus"/>
+                <TextBlock x:Name="txtErrorName" />
+                <userControls:ClearableTextBox Placeholder="Telefon nomer" x:Name="tbPhone" LostFocus="TextBox_LostFocus"/>
+                <TextBlock x:Name="txtErrorPhone" />
+                <userControls:ClearableTextBox Placeholder="Address (ixtiyoriy)" x:Name="tbAddress" MouseLeave="tbAddress_MouseLeave"/>
+                
+                <Button Name="btnEditCustomer" Width="275" Height="40" Margin="15" Style="{StaticResource MaterialDesignOutlinedButton}"
+                          BorderBrush="Blue" BorderThickness="2"  Content="Edit Customer" IsEnabled="False" Click="btnEditCustomer_Click"/>
+                <Button Name="btnCancel"  VerticalAlignment="Bottom" Width="275" Height="40" Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Margin="0,0,0,-40" Foreground="DarkRed" BorderBrush="DarkRed"
+                              Content="Cancel"  Click="btnCancel_Click"/>
+                
+            </StackPanel>
+
+        </Grid>
+    </Border>
 </Window>

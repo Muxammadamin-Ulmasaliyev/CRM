@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryManagementSystem"
         xmlns:customControls="clr-namespace:InventoryManagementSystem.CustomControls"
-        mc:Ignorable="d" WindowState="Maximized" 
+        mc:Ignorable="d" WindowState="Maximized" Closing="Window_Closing"
         Title="MainWindow" Height="650" Width="1500">
     <Window.Resources>
         

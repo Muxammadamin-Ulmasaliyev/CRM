@@ -54,8 +54,6 @@ namespace InventoryManagementSystem.View
 
         private void tbName_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            tbName.txtInput.BorderThickness = new Thickness(2);
-            tbName.txtInput.BorderBrush = Brushes.Green;
             txtErrorName.Text = string.Empty;
         }
 
@@ -79,8 +77,6 @@ namespace InventoryManagementSystem.View
         private void DisplayError(string errorMessage)
         {
             txtErrorName.Text = errorMessage;
-            tbName.txtInput.BorderThickness = new Thickness(2);
-            tbName.txtInput.BorderBrush = Brushes.Red;
         }
     }
 }

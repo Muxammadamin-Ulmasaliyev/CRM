@@ -4,8 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InventoryManagementSystem.UserControls"
+             xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="250">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid Background="White">
         <TextBox x:Name="txtInput" VerticalContentAlignment="Center"
                   FontSize="18" FontWeight="Normal" Background="Transparent"
@@ -13,8 +22,10 @@
         <TextBlock x:Name="tbPlaceholder" Text="{Binding Placeholder}" FontSize="18" 
                 VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="DarkGray" FontWeight="Light"
                 Margin="5,0,0,0" Panel.ZIndex="-1"/>
-        <Button x:Name="btnClear"  Content="X" Width="30" HorizontalAlignment="Right"
-             Background="Transparent" Foreground="DarkGray" BorderThickness="0"
-             Click="btnClear_Click"/>
+        <Button x:Name="btnClear" Style="{StaticResource MaterialDesignToolForegroundButton}"  Width="auto" HorizontalAlignment="Right"
+             Background="Transparent" Foreground="Gray" BorderThickness="0"
+             Click="btnClear_Click" Margin="3"  >
+            <MaterialDesign:PackIcon Kind="ClearBox" Width="20" Height="20" VerticalAlignment="Center"  HorizontalAlignment="Center"/>
+        </Button>
     </Grid>
 </UserControl>

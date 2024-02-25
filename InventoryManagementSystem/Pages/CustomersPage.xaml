@@ -3,8 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:InventoryManagementSystem.Pages" Background="NavajoWhite"
+      xmlns:local="clr-namespace:InventoryManagementSystem.Pages" Background="#614ccb"
       xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
+      xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -12,80 +13,99 @@
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-
-
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="MaterialDesign:PackIcon" >
+                <Setter Property="Width" Value="25"/>
+                <Setter Property="Height" Value="25"/>
+            </Style>
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
         </ResourceDictionary>
     </Page.Resources>
-    <!--
-    <Page.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="FontWeight" Value="Bold"/>
-        </Style>
-        <Style TargetType="Viewbox">
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-    </Page.Resources>
-    -->
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="75"/>
-            <RowDefinition Height="75"/>
+            <RowDefinition Height="100"/>
             <RowDefinition Height="80*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <TextBox x:Name="searchBar"  Width="200" Height="35" FontSize="18" 
-              HorizontalAlignment="Left" Margin="20,0,0,0" TextChanged="searchBar_TextChanged"/>
-            <Button  x:Name="btnClearSearchBar" BorderThickness="0" Content="X" Margin="0,0,20,0" Width="25" Height="35" Click="btnClearSearchBar_Click"/>
-            <Button  x:Name="btnAddCustomer"  Content="Add Customer" Margin="0,0,20,0" Width="100" Height="40" Click="btnAddCustomer_Click"/>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="20,20,0,20"  HorizontalAlignment="Right">
+
+            <TextBox x:Name="searchBar"  Width="220" Height="40" FontSize="18"  
+                     MaterialDesign:HintAssist.Hint=" Search . . ."  
+                         Style="{StaticResource MaterialDesignTextBox}"
+                      HorizontalAlignment="Left" TextChanged="searchBar_TextChanged" Background="MintCream"/>
+
+
+            <Button  x:Name="btnClearSearchBar" BorderThickness="0" Style="{StaticResource MaterialDesignToolButton}" 
+                     Margin="-30,0,20,0" FontSize="10"
+                     Click="btnClearSearchBar_Click">
+                <MaterialDesign:PackIcon Width="20" Height="20" Kind="ClearBox" Foreground="Gray"/>
+            </Button>
+
+
+            <Button  x:Name="btnAddCustomer" Height="40" Width="90" 
+                      Margin="0,0,20,0"   Background="#4024ff"
+                     Click="btnAddCustomer_Click">
+                <MaterialDesign:PackIcon Kind="PersonAdd" Foreground="WhiteSmoke" Width="35" Height="35"/>
+            </Button>
 
         </StackPanel>
-        <DataGrid x:Name="customerDataGrid" Grid.Row="2" FontSize="18"
-        ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}"
+
+        <DataGrid Style="{StaticResource MaterialDesignDataGrid}" x:Name="customerDataGrid" Grid.Row="1" FontSize="18" FontFamily="Cambria"
+        ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" Background="GhostWhite"
          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
+
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                 <DataGridTextColumn Header="FIO" Binding="{Binding Name}" Width="15*"/>
                 <DataGridTextColumn Header="Telefon raqam" Binding="{Binding Phone}" Width="10*"/>
                 <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="10*"/>
                 <DataGridTextColumn Header="Qarz" Binding="{Binding Debt,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
                 <DataGridTextColumn Header="Jami zakazlar soni" Binding="{Binding TotalOrdersCount}" Width="10*"/>
-                <DataGridTemplateColumn Header="" Width="60">
+                <DataGridTemplateColumn Header="" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="btnDeleteCustomer" Content="Delete" Click="btnDeleteCustomer_Click"/>
+                            <Button x:Name="btnDeleteCustomer" Style="{StaticResource MaterialDesignToolButton}"
+                                    Click="btnDeleteCustomer_Click"  >
+                                <MaterialDesign:PackIcon Kind="TrashCan"  Foreground="Red"/>
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="" Width="60">
+                <DataGridTemplateColumn Header="" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="btnEditCustomer" Content="Edit" Click="btnEditCustomer_Click"/>
+                            <Button x:Name="btnEditCustomer"  Style="{StaticResource MaterialDesignToolButton}"
+                                    Click="btnEditCustomer_Click" >
+                                <MaterialDesign:PackIcon Kind="Pencil"  Foreground="ForestGreen"/>
+
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="" Width="60">
+                <DataGridTemplateColumn Header="" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="btnHistory" Content="History" Click="btnHistory_Click"/>
+                            <Button x:Name="btnHistory"  Style="{StaticResource MaterialDesignToolButton}"
+                                    Click="btnHistory_Click">
+                                <MaterialDesign:PackIcon Kind="History"
+                                                         Foreground="Blue"/>
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="" Width="10*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <TextBlock x:Name="txtNumberOfCustomers" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Jadvaldagi mijozlar soni : " 
-   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+        <TextBlock x:Name="txtNumberOfCustomers" FontSize="16" FontWeight="bold" Grid.Row="2"  Text="Jadvaldagi mijozlar soni : " 
+                    HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
 
-        <notifications:NotificationArea Grid.RowSpan="4" Grid.ColumnSpan="2"
-                        x:Name="notificationArea" Position="BottomRight" MaxItems="3"/>
+
     </Grid>
 </Page>

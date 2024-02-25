@@ -82,8 +82,7 @@ namespace InventoryManagementSystem.View
 
         private void DisplayErrorTextBox(string errorMessage, ClearableTextBox textBox, TextBlock textBlock, Thickness thickness)
         {
-            textBox.txtInput.BorderThickness = thickness;
-            textBox.txtInput.BorderBrush = Brushes.Red;
+            
             textBlock.Text = errorMessage;
         }
 
@@ -100,8 +99,7 @@ namespace InventoryManagementSystem.View
 
         private void DisplaySuccessTextBox(ClearableTextBox textBox, TextBlock textBlock, Thickness thickness)
         {
-            textBox.txtInput.BorderThickness = thickness;
-            textBox.txtInput.BorderBrush = Brushes.Green;
+           
             textBlock.Text = string.Empty;
 
         }
@@ -339,8 +337,7 @@ namespace InventoryManagementSystem.View
             ClearableTextBox textBox = sender as ClearableTextBox;
             var textBoxName = textBox.Name;
 
-            textBox.txtInput.BorderThickness = new Thickness(2);
-            textBox.txtInput.BorderBrush = Brushes.Green;
+            
 
             switch (textBoxName)
             {

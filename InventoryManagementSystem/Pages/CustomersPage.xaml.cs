@@ -53,7 +53,7 @@ namespace InventoryManagementSystem.Pages
 
                         _customerService.Delete(customer);
 
-                        notificationManager.Show("Success", "Customer Deleted successfully", NotificationType.Success, "notificationArea");
+                        notificationManager.Show("Success", "Customer Deleted successfully", NotificationType.Success);
                     }
                 }
             }
