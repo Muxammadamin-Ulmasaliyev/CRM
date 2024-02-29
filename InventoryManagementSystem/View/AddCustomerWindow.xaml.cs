@@ -1,7 +1,9 @@
 ﻿using InventoryManagementSystem.Model;
+using InventoryManagementSystem.Services;
 using InventoryManagementSystem.UserControls;
 using Notification.Wpf;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace InventoryManagementSystem.View
@@ -10,65 +12,69 @@ namespace InventoryManagementSystem.View
     {
         private NotificationManager notificationManager;
         public event EventHandler AddCustomerButtonClicked;
+        private readonly CustomerService _customerService;
 
         public AddCustomerWindow()
         {
+            _customerService = new(new AppDbContext());
             notificationManager = new();
             InitializeComponent();
+            KeyDown += btnAddCustomer_KeyDown;
+            KeyDown += btnCancel_KeyDown;
         }
+
+       
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
+            if (!IsModelStateValid())
+            {
+                ShowErrorMessages();
+                return;
+            }
             var customerToAdd = new Customer()
             {
                 Name = tbName.txtInput.Text,
                 Address = tbAddress.txtInput.Text,
                 Phone = tbPhone.txtInput.Text,
             };
-            using (var dbContext = new AppDbContext())
-            {
-                dbContext.Customers.Add(customerToAdd);
-                dbContext.SaveChanges();
-            }
+           
+            _customerService.Add(customerToAdd);
             notificationManager.Show("Success", "Customer added successfully", NotificationType.Success);
 
             ClearTextBoxes();
             CustomerAdded();
 
         }
+        private void ShowErrorMessages()
+        {
+            if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
+            {
+                txtErrorName.Text = "* Klient FIO ni kiriting! *";
+            }
+            if (string.IsNullOrWhiteSpace(tbPhone.txtInput.Text))
+            {
+                txtErrorPhone.Text = "* Klient telefon raqamini  kiriting! *";
+            }
+        }
+        private void tbName_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            ClearableTextBox textBox = sender as ClearableTextBox;
+            var textBoxName = textBox.Name;
 
+            switch (textBoxName)
+            {
+                case "tbName": txtErrorName.Text = string.Empty; break;
+                case "tbPhone": txtErrorPhone.Text = string.Empty; break;
+                default: break;
+            }
+        }
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            ClearableTextBox textBox = sender as ClearableTextBox;
-            var textBoxName = textBox.Name;
-
-            if (string.IsNullOrWhiteSpace(textBox.txtInput.Text))
-            {
-                switch (textBoxName)
-                {
-                    case "tbName": txtErrorName.Text = "* Klient FIO ni kiriting! *"; break;
-                    case "tbPhone": txtErrorPhone.Text = "* Klient telefon raqamini  kiriting! *"; break;
-                    default: break;
-                }
-            }
-            else
-            {
-                switch (textBoxName)
-                {
-                    case "tbName": txtErrorName.Text = string.Empty; break;
-                    case "tbPhone": txtErrorName.Text = string.Empty; break;
-                    default: break;
-                }
-            }
-
-            if (IsModelStateValid()) btnAddCustomer.IsEnabled = true;
-            else btnAddCustomer.IsEnabled = false;
-        }
+        
         private bool IsModelStateValid()
         {
             return
@@ -76,11 +82,7 @@ namespace InventoryManagementSystem.View
                 !string.IsNullOrWhiteSpace(tbPhone.txtInput.Text);
         }
 
-        private void tbAddress_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            if (IsModelStateValid()) { btnAddCustomer.IsEnabled = true; }
-            else { btnAddCustomer.IsEnabled = false; }
-        }
+       
 
 
         private void ClearTextBoxes()
@@ -96,5 +98,23 @@ namespace InventoryManagementSystem.View
         {
             AddCustomerButtonClicked?.Invoke(this, EventArgs.Empty);
         }
+
+        private void btnAddCustomer_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btnAddCustomer_Click((object)sender, e);
+            }
+        }
+
+        private void btnCancel_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                btnCancel_Click((object)sender, e);
+            }
+        }
+
+            
     }
 }

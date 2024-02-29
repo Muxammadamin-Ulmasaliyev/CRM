@@ -19,9 +19,13 @@ namespace InventoryManagementSystem.Services
             dbContext.SaveChanges();
         }
 
+        public bool ProductExists(int productId)
+        {
+            return dbContext.OrderDetails.Any(od => od.ProductId == productId);
+        }
         public List<OrderDetail> GetOrderDetailsByOrderId(int orderId)
         {
-            return dbContext.OrderDetails
+            /*return dbContext.OrderDetails
                          .Include(o => o.Product)
                          .ThenInclude(p => p.Company)
                          .Include(o => o.Product)
@@ -29,7 +33,13 @@ namespace InventoryManagementSystem.Services
                          .Include(o => o.Product)
                          .ThenInclude(p => p.Country)
                          .Where(o => o.OrderId == orderId)
-                         .ToList();
+                         .ToList();*/
+
+            return dbContext.OrderDetails
+                        .Where(o => o.OrderId == orderId)
+                        .ToList();
         }
+
+
     }
 }

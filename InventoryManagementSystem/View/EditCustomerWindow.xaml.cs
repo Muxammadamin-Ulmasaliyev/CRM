@@ -4,12 +4,16 @@ using InventoryManagementSystem.UserControls;
 using Notification.Wpf;
 using Notification.Wpf.Controls;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace InventoryManagementSystem.View
 {
     public partial class EditCustomerWindow : Window
     {
+
+        public event EventHandler EditCustomerButtonClicked;
+
 
         private Customer customerToEdit;
         private NotificationManager notificationManager;
@@ -21,6 +25,9 @@ namespace InventoryManagementSystem.View
             InitializeComponent();
             this.customerToEdit = customerToEdit;
             PopulateInfo(customerToEdit);
+
+            KeyDown += btnEditCustomer_KeyDown;
+            KeyDown += btnCancel_KeyDown;
         }
 
         private void PopulateInfo(Customer customerToEdit)
@@ -31,6 +38,11 @@ namespace InventoryManagementSystem.View
         }
         private void btnEditCustomer_Click(object sender, RoutedEventArgs e)
         {
+            if (!IsModelStateValid())
+            {
+                ShowErrorMessages();
+                return;
+            }
             var customerToUpdate = new Customer()
             {
                 Id = customerToEdit.Id,
@@ -44,40 +56,29 @@ namespace InventoryManagementSystem.View
 
             notificationManager.Show("Success", "Customer updated successfully", NotificationType.Success);
 
+
             Close();
+
+            CustomerEdited();
+        }
+
+        private void ShowErrorMessages()
+        {
+            if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
+            {
+                txtErrorName.Text = "* Klient FIO ni kiriting! *";
+            }
+            if (string.IsNullOrWhiteSpace(tbPhone.txtInput.Text))
+            {
+                txtErrorPhone.Text = "* Klient telefon raqamini  kiriting! *";
+            }
         }
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            ClearableTextBox textBox = sender as ClearableTextBox;
-            var textBoxName = textBox.Name;
-
-            if (string.IsNullOrWhiteSpace(textBox.txtInput.Text))
-            {
-                switch (textBoxName)
-                {
-                    case "tbName": txtErrorName.Text = "* Klient FIO ni kiriting! *"; break;
-                    case "tbPhone": txtErrorPhone.Text = "* Klient telefon raqamini  kiriting! *"; break;
-                    default: break;
-                }
-            }
-            else
-            {
-                switch (textBoxName)
-                {
-                    case "tbName": txtErrorName.Text = string.Empty; break;
-                    case "tbPhone": txtErrorName.Text = string.Empty; break;
-                    default: break;
-                }
-            }
-
-            if (IsModelStateValid()) btnEditCustomer.IsEnabled = true;
-            else btnEditCustomer.IsEnabled = false;
-        }
+        
         private bool IsModelStateValid()
         {
             return
@@ -85,14 +86,42 @@ namespace InventoryManagementSystem.View
                 !string.IsNullOrWhiteSpace(tbPhone.txtInput.Text);
         }
 
-        private void tbAddress_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+
+
+
+        protected virtual void CustomerEdited()
         {
-            if (IsModelStateValid()) { btnEditCustomer.IsEnabled = true; }
-            else { btnEditCustomer.IsEnabled = false; }
+            EditCustomerButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
+        private void btnCancel_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                btnCancel_Click((object)sender, e);
+            }
+        }
 
-       
+        private void btnEditCustomer_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btnEditCustomer_Click((object)sender, e);
+            }
+        }
+
+        private void tbName_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            ClearableTextBox textBox = sender as ClearableTextBox;
+            var textBoxName = textBox.Name;
+
+            switch (textBoxName)
+            {
+                case "tbName": txtErrorName.Text = string.Empty; break;
+                case "tbPhone": txtErrorPhone.Text = string.Empty; break;
+                default: break;
+            }
+        }
     }
 }
 

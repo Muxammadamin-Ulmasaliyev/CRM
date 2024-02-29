@@ -24,7 +24,7 @@
         </ResourceDictionary>
     </Window.Resources>
     
-    <Border Background="White" BorderBrush="Navy" BorderThickness="3" CornerRadius="12 ">
+    <Border Background="White" BorderBrush="#614ccb" BorderThickness="2" CornerRadius="25">
 
         <Grid>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -35,7 +35,7 @@
 
                     <Button Name="btnCancel"  Width="100 " Height="40" Margin="7,9,7,0" Style="{StaticResource MaterialDesignOutlinedButton}"
                             Foreground="Red" BorderBrush="Red" 
-                     Content="Cancel"  Click="btnCancel_Click"/>
+                     Content="Cancel"  Click="btnCancel_Click" KeyDown="btnCancel_KeyDown"/>
 
                     <Button Name="btnSubmit" Width="125" Height="40" Margin="7,9,7,0" Style="{StaticResource MaterialDesignOutlinedButton}"
                             Foreground="Green" BorderBrush="Green" 

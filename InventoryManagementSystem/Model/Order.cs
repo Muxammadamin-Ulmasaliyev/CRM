@@ -9,6 +9,7 @@ namespace InventoryManagementSystem.Model
         public int Id { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.Today;
         public double TotalAmount { get; set; } = 0;
+        public double TotalPaidAmount { get; set; } = 0;
 
 
         public List<OrderDetail> OrderDetails { get; set; }

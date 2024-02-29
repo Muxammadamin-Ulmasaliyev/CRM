@@ -23,7 +23,7 @@ public class ChequeDocument : IDocument
         container
             .Page(page =>
             {
-                page.Margin(40);
+                page.Margin(30);
                 page.Size(PageSizes.A4.Landscape());
 
                 page.Header().Element(ComposeHeader);
@@ -105,21 +105,18 @@ public class ChequeDocument : IDocument
             {
                 text.Span($"Total Sum : {Order.TotalAmount.ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold();
 
-
             });
             column.Item().AlignRight().DefaultTextStyle(x => x.FontFamily("Cambria")).Text(text =>
             {
-
-
                 // ################################################################################
-                text.Span($"To`langan summa : ").SemiBold();
+                text.Span($"To`langan summa : {Order.TotalPaidAmount.ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold().FontColor("#26892a");
 
             });
             column.Item().AlignRight().DefaultTextStyle(x => x.FontFamily("Cambria")).Text(text =>
             {
                 // ################################################################################
 
-                text.Span($"Qarzdorlik : ").SemiBold();
+                text.Span($"Jami Qarzdorlik : {Order.Customer.Debt.ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold().FontColor("#BB2020");
             });
         });
 
@@ -173,12 +170,14 @@ public class ChequeDocument : IDocument
             foreach (var item in Order.OrderDetails)
             {
                 table.Cell().Element(CellStyle).AlignCenter().Text(Order.OrderDetails.IndexOf(item) + 1);
-                table.Cell().Element(CellStyle).Text(item.Product.Name);
-                table.Cell().Element(CellStyle).Text(item.Product.CarType.Name);
-                table.Cell().Element(CellStyle).Text(item.Product.Country.Name);
-                table.Cell().Element(CellStyle).Text(item.Product.Company.Name);
+                
+                table.Cell().Element(CellStyle).Text(item.ProductName);
+                table.Cell().Element(CellStyle).Text(item.ProductCarType);
+                table.Cell().Element(CellStyle).Text(item.ProductCountry);
+                table.Cell().Element(CellStyle).Text(item.ProductCompany);
                 table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price.ToString("C0", new CultureInfo("uz-UZ"))}");
-                table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity);
+                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Quantity} {item.ProductSetType}");
+               // table.Cell().Element(CellStyle).Text(item.ProductSetType);
                 table.Cell().Element(CellStyle).AlignRight().Text($"{item.SubTotal.ToString("C0", new CultureInfo("uz-UZ"))}");
 
                 static IContainer CellStyle(IContainer container)

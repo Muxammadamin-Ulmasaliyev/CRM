@@ -1,7 +1,5 @@
-﻿using InventoryManagementSystem.AppConfiguration;
-using InventoryManagementSystem.CustomControls;
+﻿using InventoryManagementSystem.CustomControls;
 using Notification.Wpf;
-using Notification.Wpf.Classes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -29,7 +27,7 @@ namespace InventoryManagementSystem.View
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if (passwordBox.Password == Configuration.AdminPassword)
+            if (passwordBox.Password == Properties.Settings.Default.AdminPassword || passwordBox.Password == Properties.Settings.Default.AdminRecoveryPassword)
             {
                 this.Close();
                 notificationManager.Show("Success", "Xush kelibsiz", NotificationType.Success);

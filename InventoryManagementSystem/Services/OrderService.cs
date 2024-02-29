@@ -28,22 +28,25 @@ namespace InventoryManagementSystem.Services
 
         public Order GetOrderById(int selectedOrderId)
         {
-            return dbContext.Orders
-                    .Include(o => o.Customer)
-                    .Include(o => o.OrderDetails)
-                    .ThenInclude(od => od.Product)
-                    .ThenInclude(p => p.CarType)
+            /* return dbContext.Orders
+                     .Include(o => o.Customer)
 
-                    .Include(o => o.OrderDetails)
-                    .ThenInclude(od => od.Product)
-                    .ThenInclude(p => p.Country)
+                     .Include(o => o.OrderDetails)
+                     .ThenInclude(od => od.Product)
+                     .ThenInclude(p => p.CarType)
 
-                    .Include(o => o.OrderDetails)
-                    .ThenInclude(od => od.Product)
-                    .ThenInclude(p => p.Company)
+                     .Include(o => o.OrderDetails)
+                     .ThenInclude(od => od.Product)
+                     .ThenInclude(p => p.Country)
+
+                     .Include(o => o.OrderDetails)
+                     .ThenInclude(od => od.Product)
+                     .ThenInclude(p => p.Company)
 
 
-                    .First(o => o.Id == selectedOrderId);
+                     .First(o => o.Id == selectedOrderId);*/
+
+            return dbContext.Orders.Include(o => o.Customer).Include(o => o.OrderDetails).First(o => o.Id == selectedOrderId);
         }
     }
 }

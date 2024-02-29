@@ -20,6 +20,7 @@ namespace InventoryManagementSystem.View
             InitializeComponent();
             tbName.txtInput.Focus();
             KeyDown += btnAddCompany_KeyDown;
+            KeyDown += btnCancel_KeyDown;
         }
 
         private void btnAddCompany_Click(object sender, RoutedEventArgs e)
@@ -51,7 +52,7 @@ namespace InventoryManagementSystem.View
 
         private void tbName_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            
+
             txtErrorName.Text = string.Empty;
         }
 
@@ -76,7 +77,15 @@ namespace InventoryManagementSystem.View
         private void DisplayError(string errorMessage)
         {
             txtErrorName.Text = errorMessage;
-            
+
+        }
+
+        private void btnCancel_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                btnCancel_Click((object)sender, e);
+            }
         }
     }
 }

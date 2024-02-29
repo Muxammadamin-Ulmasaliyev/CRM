@@ -1,14 +1,13 @@
-﻿using InventoryManagementSystem.AppConfiguration;
-using InventoryManagementSystem.Model;
+﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Notification.Wpf;
-using QuestPDF.Helpers;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace InventoryManagementSystem.Pages
 {
@@ -16,18 +15,25 @@ namespace InventoryManagementSystem.Pages
     {
         private NotificationManager notificationManager;
         private ObservableCollection<Product> products;
+        private ObservableCollection<Product> filteredProducts;
         private Order? currentOrder;
         private Customer selectedCustomer;
-        private readonly ProductService _productService;
+        private ProductService _productService;
         private readonly CustomerService _customerService;
-        private int _pageSize = 15;
+        private readonly OrderDetailService _orderDetailService;
+        private int _pageSize = Properties.Settings.Default.ProductsPerPage;
         private int _currentPage = 1;
+
+        private System.Timers.Timer debounceTimer;
 
         public HomePage()
         {
+            InitializeComponent();
+            SetupUserCustomizationsSettings();
+            SetupTimerSettings();
             _productService = new(new AppDbContext());
             _customerService = new(new AppDbContext());
-            InitializeComponent();
+            _orderDetailService = new(new AppDbContext());
             InitializeNewOrder();
             PopulateDataGrid();
             PopulateDataGridComboboxes();
@@ -35,24 +41,113 @@ namespace InventoryManagementSystem.Pages
             LoadPage();
             PopulateNumberOfProductsTxt();
             notificationManager = new();
+            txtNumberOfProductsInDb.Text = $"Bazada mavjud jami produktlar soni : {products.Count}";
+            KeyDown += btnSaveCurrencyRate_KeyDown;
+
         }
 
+        private void SetupUserCustomizationsSettings()
+        {
+            productDataGrid.FontSize = Properties.Settings.Default.ProductsDataGridFontSize;
+        }
+
+        private void SetupTimerSettings()
+        {
+            debounceTimer = new();
+            debounceTimer.Interval = 1000;
+            debounceTimer.AutoReset = false;
+            debounceTimer.Elapsed += DebounceTimer_Elapsed;
+        }
+        private void DebounceTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            try
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    string searchText = searchBar.Text;
+                    Search();
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Xatolik", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CheckPaginationButtonStates()
+        {
+            if (_currentPage == 1)
+            {
+                btnPrevious.IsEnabled = false;
+            }
+            else
+            {
+                btnPrevious.IsEnabled = true;
+            }
+            if (!IsFilteringDisabled())
+            {
+                if (_currentPage == Math.Ceiling((decimal)filteredProducts.Count / _pageSize))
+                {
+                    btnNext.IsEnabled = false;
+                }
+                else
+                {
+                    btnNext.IsEnabled = true;
+                }
+            }
+            else
+            {
+
+                if (_currentPage == Math.Ceiling((decimal)products.Count / _pageSize))
+                {
+                    btnNext.IsEnabled = false;
+                }
+                else
+                {
+                    btnNext.IsEnabled = true;
+                }
+            }
+        }
         private void LoadPage()
         {
-            int startIndex = (_currentPage - 1) * _pageSize;
-            int endIndex = Math.Min(startIndex + _pageSize - 1, products.Count - 1);
-
-            var currentPageData = new ObservableCollection<Product>();
-
-            for (int i = startIndex; i <= endIndex; i++)
+            if (!IsFilteringDisabled())
             {
-                currentPageData.Add(products[i]);
+                int startIndex = (_currentPage - 1) * _pageSize;
+                int endIndex = Math.Min(startIndex + _pageSize - 1, filteredProducts.Count - 1);
+
+                var currentPageData = new ObservableCollection<Product>();
+
+                for (int i = startIndex; i <= endIndex; i++)
+                {
+                    currentPageData.Add(filteredProducts[i]);
+                }
+
+                productDataGrid.ItemsSource = currentPageData;
+
+                currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)filteredProducts.Count / _pageSize)}";
+                PopulateNumberOfProductsTxt();
+
+                CheckPaginationButtonStates();
             }
+            else
+            {
+                int startIndex = (_currentPage - 1) * _pageSize;
+                int endIndex = Math.Min(startIndex + _pageSize - 1, products.Count - 1);
 
-            productDataGrid.ItemsSource = currentPageData;
+                var currentPageData = new ObservableCollection<Product>();
 
-            currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)products.Count / _pageSize)}";
-            PopulateNumberOfProductsTxt();
+                for (int i = startIndex; i <= endIndex; i++)
+                {
+                    currentPageData.Add(products[i]);
+                }
+
+                productDataGrid.ItemsSource = currentPageData;
+
+                currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)products.Count / _pageSize)}";
+                PopulateNumberOfProductsTxt();
+
+                CheckPaginationButtonStates();
+            }
         }
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
         {
@@ -60,33 +155,45 @@ namespace InventoryManagementSystem.Pages
             {
                 _currentPage--;
                 LoadPage();
-                ResetFilters();
+                CheckPaginationButtonStates();
             }
         }
 
         private void NextPage_Click(object sender, RoutedEventArgs e)
         {
-            int totalPages = (int)Math.Ceiling((double)products.Count / _pageSize);
+            int totalPages;
+            if (IsFilteringDisabled())
+            {
+                totalPages = (int)Math.Ceiling((double)products.Count / _pageSize);
+            }
+            else
+            {
+                totalPages = (int)Math.Ceiling((double)filteredProducts.Count / _pageSize);
+            }
             if (_currentPage < totalPages)
             {
                 _currentPage++;
                 LoadPage();
-                ResetFilters();
+                CheckPaginationButtonStates();
 
             }
+
+
         }
 
 
         private void PopulateCurrencyRate()
         {
-            txtCurrencyRate.Text = $"Курс : 1 $ = {AppConfiguration.Configuration.CurrencyRate} сум";
+            txtCurrencyRate.Text = $"Курс : 1 $ = {Properties.Settings.Default.CurrencyRate} сум";
         }
         private void InitializeNewOrder()
         {
+
             currentOrder = new Order
             {
                 OrderDetails = new List<OrderDetail>()
             };
+
         }
 
         private void PopulateDataGridComboboxes()
@@ -113,26 +220,44 @@ namespace InventoryManagementSystem.Pages
             PopulateNumberOfProductsTxt();
         }
 
-        private void Search()
+        private bool IsFilteringDisabled()
         {
-            productDataGrid.ItemsSource = products;
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(productDataGrid.ItemsSource);
-            view.Filter = SearchFilter;
-
-            txtNumberOfProducts.Text = $"Жадвалдаги продуктлар сони : {view.Cast<object>().Count()}";
-
-
-        }
-        private bool SearchFilter(object item)
-        {
-            bool isMatching = true;
-            if (
+            return
                 string.IsNullOrWhiteSpace(searchBar.Text) &&
                 cbCarType.SelectedItem == null &&
                 cbCompany.SelectedItem == null &&
                 cbCountry.SelectedItem == null &&
-                cbSetType.SelectedItem == null
-               )
+                cbSetType.SelectedItem == null;
+        }
+        private void Search()
+        {
+            _currentPage = 1;
+            if (IsFilteringDisabled())
+            {
+                LoadPage();
+                txtNumberOfProductsInDb.Text = $"Bazada mavjud jami produktlar soni : {products.Count}";
+
+            }
+            else
+            {
+                productDataGrid.ItemsSource = products;
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(productDataGrid.ItemsSource);
+                view.Filter = SearchFilter;
+                filteredProducts = new ObservableCollection<Product>(view.Cast<Product>().ToList());
+                LoadPage();
+                txtNumberOfProductsInDb.Text = $"Bazada mavjud jami produktlar soni : {filteredProducts.Count}";
+            }
+
+
+        }
+
+        
+
+        /******************************** OPTIMIZE ******************************************************************************/
+        private bool SearchFilter(object item)
+        {
+            bool isMatching = true;
+            if (IsFilteringDisabled())
                 return true;
 
             Product product = item as Product;
@@ -151,11 +276,9 @@ namespace InventoryManagementSystem.Pages
             if (cbSetType.SelectedItem != null) isMatching = isMatching && product.SetTypeId == (cbSetType.SelectedItem as SetType).Id;
 
             return isMatching;
-
-
-
-
         }
+        /******************************** OPTIMIZE ******************************************************************************/
+
         private void btnAddProduct_Click(object sender, RoutedEventArgs e)
         {
             var addProductWindow = new AddProductWindow();
@@ -166,12 +289,20 @@ namespace InventoryManagementSystem.Pages
         {
             PopulateDataGrid();
             PopulateDataGridComboboxes();
+            LoadPage();
+
         }
 
-        private void searchBar_TextChanged_OR_ComboBox_SelectionChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void searchBarTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            Search();
+            // Stop the timer (if it's running)
+            debounceTimer.Stop();
+
+            // Start the timer again
+            debounceTimer.Start();
         }
+
+
 
         private void searchBar_TextChanged_OR_ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -209,6 +340,8 @@ namespace InventoryManagementSystem.Pages
         {
             ResetFilters();
             LoadPage();
+            txtNumberOfProductsInDb.Text = $"Bazada mavjud jami produktlar soni : {products.Count}";
+
         }
 
         private void ResetFilters()
@@ -218,42 +351,46 @@ namespace InventoryManagementSystem.Pages
             cbCountry.SelectedItem = null;
             cbSetType.SelectedItem = null;
             cbCarType.SelectedItem = null;
+
         }
-
-
-
-
-
         private void btnClearSearchBar_Click(object sender, RoutedEventArgs e)
         {
             searchBar.Clear();
         }
 
-       
 
         private void btnDeleteProduct_Click(object sender, RoutedEventArgs e)
         {
             Product product = (Product)productDataGrid.SelectedItem;
-            var choice = MessageBox.Show($"Are you sure to delete product : {product.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            var choice = MessageBox.Show($"Are you sure to delete product : {product.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (choice == MessageBoxResult.Yes)
             {
+                if (_orderDetailService.ProductExists(product.Id))
+                {
+                    MessageBox.Show($"{product.Name} bu produkt avval sotilganligi uchun, o`chirb tashlash mumkin emas", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
 
                 _productService.Delete(product);
 
                 notificationManager.Show("Success", "product Deleted successfully", NotificationType.Success, areaName: "notificationArea");
 
+                PopulateDataGrid();
+                LoadPage();
             }
-            PopulateDataGrid();
         }
 
         private void btnAddToCart_Click(object sender, RoutedEventArgs e)
         {
+
             Product selectedProduct = (Product)productDataGrid.SelectedItem;
 
             if (selectedProduct != null)
             {
                 var quantityWindow = new SetQuantityWindow();
+                this.Opacity = 0.4;
                 quantityWindow.ShowDialog();
+                this.Opacity = 1;
 
                 var quantity = quantityWindow.GetQuantity();
                 if (quantity <= 0)
@@ -273,10 +410,16 @@ namespace InventoryManagementSystem.Pages
                     Quantity = quantity,
                     SubTotal = (double)(selectedProduct.Price > 0 ?
                                 (quantity * (selectedProduct.Price)) :
-                                (quantity * selectedProduct.USDPriceForCustomer * Configuration.CurrencyRate)),
+                                (quantity * selectedProduct.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate)),
                     Price = (double)(selectedProduct.Price > 0 ?
                                 (selectedProduct.Price) :
-                                (selectedProduct.USDPriceForCustomer * Configuration.CurrencyRate))
+                                (selectedProduct.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate)),
+                    ProductName = selectedProduct.Name,
+                    ProductCarType = selectedProduct.CarType.Name,
+                    ProductCompany = selectedProduct.Company.Name,
+                    ProductCountry = selectedProduct.Country.Name,
+                    ProductSetType = selectedProduct.SetType.Name,
+
                 };
 
                 currentOrder.OrderDetails.Add(orderDetail);
@@ -291,20 +434,12 @@ namespace InventoryManagementSystem.Pages
         {
             currentOrder.TotalAmount = currentOrder.OrderDetails.Sum(od => od.SubTotal);
         }
-
-
-
-
-
-
         private void btnViewCart_Click(object sender, RoutedEventArgs e)
         {
-
 
             var cartPage = new CartPage(currentOrder);
             NavigationService?.Navigate(cartPage);
             cartPage.OrderSavedButtonClicked += CurrentOrderDetails_OrderSaved;
-
 
         }
 
@@ -312,16 +447,13 @@ namespace InventoryManagementSystem.Pages
 
         private void CurrentOrderDetails_OrderSaved(object sender, EventArgs e)
         {
+            _productService = new(new AppDbContext());
             InitializeNewOrder();
 
             PopulateDataGrid();
+            LoadPage();
+
         }
-
-
-
-
-
-
 
         private void productDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
@@ -341,7 +473,7 @@ namespace InventoryManagementSystem.Pages
 
                     break;
                 case "Quantity":
-                    if (int.TryParse(editedValue.ToString(), out int quantity))
+                    if (int.TryParse(StringHelper.TrimAllWhiteSpaces(editedValue), out int quantity))
                     {
                         editedProduct.Quantity = quantity;
                     }
@@ -361,7 +493,7 @@ namespace InventoryManagementSystem.Pages
                         return;
 
                     }
-                    if (double.TryParse(editedValue.ToString(), out double realPrice))
+                    if (double.TryParse(StringHelper.TrimAllWhiteSpaces(editedValue), out double realPrice))
                     {
                         editedProduct.RealPrice = realPrice;
                     }
@@ -380,7 +512,7 @@ namespace InventoryManagementSystem.Pages
                         return;
 
                     }
-                    if (double.TryParse(editedValue.ToString(), out double price))
+                    if (double.TryParse(StringHelper.TrimAllWhiteSpaces(editedValue), out double price))
                     {
                         editedProduct.Price = price;
                     }
@@ -401,7 +533,7 @@ namespace InventoryManagementSystem.Pages
                         return;
 
                     }
-                    if (double.TryParse(editedValue.ToString(), out double usdPrice))
+                    if (double.TryParse(StringHelper.TrimAllWhiteSpaces(editedValue), out double usdPrice))
                     {
                         editedProduct.USDPrice = usdPrice;
                     }
@@ -421,7 +553,7 @@ namespace InventoryManagementSystem.Pages
                         return;
 
                     }
-                    if (double.TryParse(editedValue.ToString(), out double usdPriceForCustomer))
+                    if (double.TryParse(StringHelper.TrimAllWhiteSpaces(editedValue), out double usdPriceForCustomer))
                     {
                         editedProduct.USDPriceForCustomer = usdPriceForCustomer;
                     }
@@ -430,7 +562,6 @@ namespace InventoryManagementSystem.Pages
                         notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = editedProduct.USDPriceForCustomer.ToString();
                         return;
-
                     }
                     break;
 
@@ -439,7 +570,7 @@ namespace InventoryManagementSystem.Pages
             }
 
             _productService.Update(editedProduct);
-            notificationManager.Show("Success", "Quantity changed successfully", NotificationType.Success);
+            notificationManager.Show("Success", $"{propertyName} changed successfully", NotificationType.Success);
 
 
 
@@ -453,7 +584,84 @@ namespace InventoryManagementSystem.Pages
 
         private void btnEditCurrency_Click(object sender, RoutedEventArgs e)
         {
+            spCurrency.Visibility = Visibility.Visible;
+            txtCurrencyRate.Visibility = Visibility.Collapsed;
+            btnEditCurrency.IsEnabled = false;
+        }
 
+
+       
+
+        private void productDataGrid_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+        {
+            if (e.Column.Header.Equals("$ tannarx") || e.Column.Header.Equals("$ sotish"))
+            {
+                // Remove the "$" sign temporarily for editing
+                if (e.EditingElement is TextBox textBox)
+                {
+                    // Remove the "$" sign for editing
+                    string textWithoutDollar = StringHelper.RemoveDollarSignFromPrice(textBox.Text); 
+                    textBox.Text = textWithoutDollar;
+
+                    // Set the cursor at the end of the text
+                    textBox.CaretIndex = textWithoutDollar.Length;
+                }
+                return;
+            }
+            if (e.Column.Header.Equals("Tannarx") || e.Column.Header.Equals("Sotish narx"))
+            {
+                if (e.EditingElement is TextBox textBox)
+                {
+                    // Remove the "$" sign for editing
+                   
+                    string textWithoutSum = StringHelper.RemoveSumSignFromPrice(textBox.Text);
+                    textBox.Text = textWithoutSum;
+
+                    // Set the cursor at the end of the text
+                    textBox.CaretIndex = textWithoutSum.Length;
+                }
+                return;
+            }
+
+        }
+
+        private void btnSaveCurrencyRate_Click(object sender, RoutedEventArgs e)
+        {
+            if(string.IsNullOrWhiteSpace(tbCurrencyRate.Text))
+            {
+                notificationManager.Show("Error", "son kiriting", NotificationType.Error);
+
+                return;
+            }
+            if(!double.TryParse(StringHelper.TrimAllWhiteSpaces(tbCurrencyRate.Text), out double currencyRate))
+            {
+                notificationManager.Show("Error", "son kiriting", NotificationType.Error);
+                return;
+            }
+            else
+            {
+                Properties.Settings.Default.CurrencyRate = currencyRate;
+                Properties.Settings.Default.Save();
+
+            }
+            PopulateCurrencyRate();
+            spCurrency.Visibility = Visibility.Collapsed;
+            txtCurrencyRate.Visibility = Visibility.Visible;
+            btnEditCurrency.IsEnabled = true;
+            notificationManager.Show("Success", " changed successfully", NotificationType.Success);
+
+
+        }
+
+        private void btnSaveCurrencyRate_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                if (tbCurrencyRate.IsFocused)
+                {
+                    btnSaveCurrencyRate_Click((object)sender, e);
+                }
+            }
         }
     }
 }

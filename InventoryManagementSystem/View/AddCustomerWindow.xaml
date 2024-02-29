@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:InventoryManagementSystem.View"
         xmlns:userControls="clr-namespace:InventoryManagementSystem.UserControls"
         xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Background="Transparent"
+        Background="Transparent" AllowsTransparency="True"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" WindowStyle="None"
         Title="AddCustomerWindow" Height="400" Width="400">
     <Window.Resources>
@@ -33,7 +33,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Border Background="White" BorderBrush="Silver" BorderThickness="5" >
+    <Border Background="White" BorderBrush="#614ccb" BorderThickness="2" CornerRadius="30" >
 
         <Grid>
             <Grid.RowDefinitions>
@@ -43,18 +43,18 @@
 
 
             <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <userControls:ClearableTextBox Placeholder="Klient FIO" x:Name="tbName" LostFocus="TextBox_LostFocus"/>
+                <userControls:ClearableTextBox Placeholder="Klient FIO" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput"/>
                 <TextBlock x:Name="txtErrorName" />
-                <userControls:ClearableTextBox Placeholder="Telefon nomer" x:Name="tbPhone" LostFocus="TextBox_LostFocus"/>
+                <userControls:ClearableTextBox Placeholder="Telefon nomer" x:Name="tbPhone" PreviewTextInput="tbName_PreviewTextInput"/>
                 <TextBlock x:Name="txtErrorPhone" />
-                <userControls:ClearableTextBox Placeholder="Address (ixtiyoriy)" x:Name="tbAddress" MouseLeave="tbAddress_MouseLeave"/>
+                <userControls:ClearableTextBox Placeholder="Address (ixtiyoriy)" x:Name="tbAddress" />
 
                 <Button Name="btnAddCustomer" Width="275" Height="40" Margin="15" Style="{StaticResource MaterialDesignOutlinedButton}"
-                 Content="Add Customer" IsEnabled="False" Click="btnAddCustomer_Click"  BorderBrush="Blue"/>
+                 Content="Add Customer" IsEnabled="True" Click="btnAddCustomer_Click" KeyDown="btnAddCustomer_KeyDown"  BorderBrush="Blue"/>
                 
                 <Button Name="btnCancel"  VerticalAlignment="Bottom" Width="275" Height="40" Margin="0,0,0,-40" Style="{StaticResource MaterialDesignOutlinedButton}"
                      Foreground="DarkRed" BorderBrush="DarkRed"
-                     Content="Cancel"  Click="btnCancel_Click"/>
+                     Content="Cancel"  Click="btnCancel_Click" KeyDown="btnCancel_KeyDown"/>
             </StackPanel>
 
 

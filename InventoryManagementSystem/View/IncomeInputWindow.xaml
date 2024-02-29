@@ -1,20 +1,21 @@
-﻿<Window x:Class="InventoryManagementSystem.View.AddCountryWindow"
+﻿<Window x:Class="InventoryManagementSystem.View.IncomeInputWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryManagementSystem.View"
         xmlns:userControls="clr-namespace:InventoryManagementSystem.UserControls"
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen" 
-        AllowsTransparency="True" Background="Transparent"
-        ResizeMode="NoResize"  WindowStyle="None"
-        Title="AddCountryWindow" Height="160" Width="320" FontFamily="cambria">
+        xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize" WindowStyle="None"
+        mc:Ignorable="d"
+        Title="IncomeInputWindow" Height="160" Width="320">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="TextBlock">
                 <Setter Property="Margin" Value="0"/>
@@ -24,21 +25,24 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
-    
     <Border Background="White" BorderBrush="#614ccb" BorderThickness="2" CornerRadius="25">
+
         <Grid>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <userControls:ClearableTextBox Placeholder="Davlat nomi" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput" />
+                <TextBox  x:Name="tbIncome"   TextChanged="tbName_PreviewTextInput" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                          MaterialDesign:HintAssist.Hint="Summa . . ."
+                          Width="275" Height="auto" FontSize="20"/>
                 <TextBlock x:Name="txtErrorName" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                    <Button Name="btnCancel"  Width="100 " Height="40" Style="{StaticResource MaterialDesignOutlinedLightButton}"
-                            Margin="7,9,7,0" Foreground="Red" BorderBrush="Red" KeyDown="btnCancel_KeyDown"
-                             Content="Cancel"  Click="btnCancel_Click"/>
+                    <Button Name="btnCancel"  Width="100 " Height="40" Margin="7,9,7,0" 
+                        Foreground="Red" BorderBrush="Red" Style="{StaticResource MaterialDesignOutlinedLightButton}"
+                     Content="Cancel"  Click="btnCancel_Click" KeyDown="btnCancel_KeyDown"/>
 
-                    <Button Name="btnAddCountry" Width="125" Height="40" Style="{StaticResource MaterialDesignOutlinedLightButton}"
-                            Margin="7,9,7,0" Foreground="Green" BorderBrush="Green" 
-                             Content="Add Country"  Click="btnAddCountry_Click" KeyDown="btnAddCountry_KeyDown"/>
+                    <Button Name="btnConfirmOrder" Width="125" Height="40" Margin="7,9,7,0" 
+                        Foreground="Green" BorderBrush="Green" 
+                     Content="Confirm"  Click="btnConfirmOrder_Click" KeyDown="btnConfirmOrder_KeyDown"
+                        Style="{StaticResource MaterialDesignOutlinedLightButton}"/>
 
 
                 </StackPanel>

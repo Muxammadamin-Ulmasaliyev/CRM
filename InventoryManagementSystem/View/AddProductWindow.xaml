@@ -100,7 +100,7 @@
 
             <Button Name="btnAddProduct" Width="275" Height="40" 
                     Margin="15"  Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Content="Add Product" Click="btnAddProduct_Click"/>
+                    Content="Add Product" Click="btnAddProduct_Click" KeyDown="btnAddProduct_KeyDown"/>
             <!--
             <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button Name="btnAddCountry" Width="80"  Height="40" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}" 

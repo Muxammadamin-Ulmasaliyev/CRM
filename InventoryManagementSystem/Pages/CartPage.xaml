@@ -32,40 +32,47 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="0,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center">
 
             <Button x:Name="btnBack" Style="{StaticResource MaterialDesignToolButton}" Width="50" Height="50"
                 Click="btnBack_Click" HorizontalAlignment="Left" Margin="0,0,0,0">
                 <MaterialDesign:PackIcon Kind="ArrowBackCircle" Width="35" Height="35" Foreground="GhostWhite" />
             </Button>
-            <TextBlock Name="txtCustomerName" Text="Mijoz : "  FontSize="18" FontFamily="cambria"
-                                  Foreground="GhostWhite" FontWeight="Bold" VerticalAlignment="Center" Margin="15"/>
-
+           
             <ComboBox MinWidth="100" Width="auto" Height="auto" Name="cbCurrentCustomer"  Background="MintCream" 
                       FontSize="18" Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      MaterialDesign:HintAssist.Hint="Мижоз "
+                      MaterialDesign:HintAssist.Hint="Мижоз " Margin="10"
                       DisplayMemberPath="Name" SelectionChanged="cbCurrentCustomer_SelectionChanged"/>
 
+            <Button  x:Name="btnAddCustomer" Height="55" Width="125" 
+                  Margin="20,0,0,0"   Background="#4024ff" 
+                  Click="btnAddCustomer_Click">
+                <MaterialDesign:PackIcon Kind="PersonAdd" Foreground="WhiteSmoke" Width="35" Height="35"/>
+            </Button>
 
         </StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
 
             <TextBlock Name="txtOrderTotalSumUzs" Text="Jami Sum : "  FontSize="18" Foreground="GhostWhite"
                       FontFamily="cambria" FontWeight="Bold" VerticalAlignment="Center" Margin="15" />
-            <Button x:Name="btnSaveOrder"  Width="125" Height="50" Background="#4024ff"
-            HorizontalAlignment="Right" Margin="15,5,15,5" Click="btnSaveOrder_Click">
+            <Button x:Name="btnSaveOrder"  Width="150" Height="60" Background="#291b93"
+                      HorizontalAlignment="Right" Margin="15,5,15,5" Click="btnSaveOrder_Click">
                 <MaterialDesign:PackIcon Kind="AccountCash" Width="40" Height="40" />
             </Button>
         </StackPanel>
 
         <DataGrid  Background="GhostWhite" Style="{StaticResource MaterialDesignDataGrid}" x:Name="orderDetailsDataGrid" Grid.Row="2" FontSize="18" CellEditEnding="orderDetailsDataGrid_CellEditEnding"
-                ItemsSource="{Binding OrderDetails}" SelectedItem="{Binding SelectedOrderDetail}"
+                ItemsSource="{Binding OrderDetails}" SelectedItem="{Binding SelectedOrderDetail}" PreparingCellForEdit="productDataGrid_PreparingCellForEdit"
                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
             <DataGrid.Columns>
-                <DataGridTextColumn  IsReadOnly="True" Header="Product" Binding="{Binding Product.Name}" Width="10*"/>
-                <DataGridTextColumn  IsReadOnly="False" Header="Price" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Product" Binding="{Binding ProductName}" Width="15*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="car" Binding="{Binding ProductCarType}" Width="8*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="company" Binding="{Binding ProductCompany}" Width="8*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="country" Binding="{Binding ProductCountry}" Width="8*"/>
+                <DataGridTextColumn  IsReadOnly="False" Header="Price" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="12*"/>
                 <DataGridTextColumn  IsReadOnly="False" Header="Quantity" Binding="{Binding Quantity}" Width="10*"/>
-                <DataGridTextColumn  IsReadOnly="True" Header="SubTotal" Binding="{Binding SubTotal, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="15*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Settype" Binding="{Binding ProductSetType}" Width="10*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="SubTotal" Binding="{Binding SubTotal, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="18*"/>
                 <DataGridTemplateColumn Header="" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

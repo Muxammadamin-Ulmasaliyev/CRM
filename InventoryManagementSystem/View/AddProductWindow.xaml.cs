@@ -22,6 +22,8 @@ namespace InventoryManagementSystem.View
             InitializeComponent();
             rbUzs.IsChecked = true;
             PopulateComboboxes();
+
+            KeyDown += btnAddProduct_KeyDown;
         }
         private void PopulateComboboxes()
         {
@@ -82,7 +84,7 @@ namespace InventoryManagementSystem.View
 
         private void DisplayErrorTextBox(string errorMessage, ClearableTextBox textBox, TextBlock textBlock, Thickness thickness)
         {
-            
+
             textBlock.Text = errorMessage;
         }
 
@@ -99,7 +101,7 @@ namespace InventoryManagementSystem.View
 
         private void DisplaySuccessTextBox(ClearableTextBox textBox, TextBlock textBlock, Thickness thickness)
         {
-           
+
             textBlock.Text = string.Empty;
 
         }
@@ -337,7 +339,7 @@ namespace InventoryManagementSystem.View
             ClearableTextBox textBox = sender as ClearableTextBox;
             var textBoxName = textBox.Name;
 
-            
+
 
             switch (textBoxName)
             {
@@ -397,6 +399,14 @@ namespace InventoryManagementSystem.View
                 tbPrice.Visibility = Visibility.Visible;
                 txtErrorRealPrice.Visibility = Visibility.Visible;
                 txtErrorPrice.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void btnAddProduct_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btnAddProduct_Click((object)sender, e);
             }
         }
     }

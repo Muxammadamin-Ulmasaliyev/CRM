@@ -28,11 +28,7 @@ namespace InventoryManagementSystem.Pages
             _companyService = new(new AppDbContext());
             _carTypeService = new(new AppDbContext());
             _countryService = new(new AppDbContext());
-
-            countryDataGrid.CellEditEnding += countryDataGrid_CellEditEnding;
-            companyDataGrid.CellEditEnding += companyDataGrid_CellEditEnding;
-            setTypeDataGrid.CellEditEnding += setTypeDataGrid_CellEditEnding;
-            carTypeDataGrid.CellEditEnding += carTypeDataGrid_CellEditEnding;
+          
             PopulateDataGrids();
         }
 
@@ -101,7 +97,7 @@ namespace InventoryManagementSystem.Pages
             {
                 if (button.DataContext is Company company)
                 {
-                    var choice = MessageBox.Show($"Every product of this company will be deleted. Are you sure to delete company : {company.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    var choice = MessageBox.Show($"Every product of this company will be deleted. Are you sure to delete company : {company.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
 
                     if (choice == MessageBoxResult.Yes)
                     {
@@ -144,7 +140,7 @@ namespace InventoryManagementSystem.Pages
             {
                 if (button.DataContext is Country country)
                 {
-                    var choice = MessageBox.Show($"Every product of this country will be deleted. Are you sure to delete country : {country.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    var choice = MessageBox.Show($"Every product of this country will be deleted. Are you sure to delete country : {country.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
 
                     if (choice == MessageBoxResult.Yes)
                     {
@@ -189,7 +185,7 @@ namespace InventoryManagementSystem.Pages
             {
                 if (button.DataContext is CarType carType)
                 {
-                    var choice = MessageBox.Show($"Every product of this car will be deleted. Are you sure to delete car : {carType.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    var choice = MessageBox.Show($"Every product of this car will be deleted. Are you sure to delete car : {carType.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
 
                     if (choice == MessageBoxResult.Yes)
                     {
@@ -235,7 +231,7 @@ namespace InventoryManagementSystem.Pages
             {
                 if (button.DataContext is SetType setType)
                 {
-                    var choice = MessageBox.Show($"Every product of this setType will be deleted. Are you sure to delete setType : {setType.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    var choice = MessageBox.Show($"Every product of this setType will be deleted. Are you sure to delete setType : {setType.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
 
                     if (choice == MessageBoxResult.Yes)
                     {

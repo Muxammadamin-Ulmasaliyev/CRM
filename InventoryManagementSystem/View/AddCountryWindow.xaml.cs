@@ -3,7 +3,6 @@ using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace InventoryManagementSystem.View
 {
@@ -19,6 +18,7 @@ namespace InventoryManagementSystem.View
             InitializeComponent();
             tbName.txtInput.Focus();
             KeyDown += btnAddCountry_KeyDown;
+            KeyDown += btnCancel_KeyDown;
         }
 
         private void btnAddCountry_Click(object sender, RoutedEventArgs e)
@@ -37,7 +37,7 @@ namespace InventoryManagementSystem.View
                     return;
                 }
 
-                _countryService.AddCountry(countryName :  tbName.txtInput.Text);
+                _countryService.AddCountry(countryName: tbName.txtInput.Text);
 
             }
 
@@ -54,7 +54,7 @@ namespace InventoryManagementSystem.View
 
         private void tbName_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            
+
             txtErrorName.Text = string.Empty;
         }
         protected virtual void CountryAdded()
@@ -75,7 +75,15 @@ namespace InventoryManagementSystem.View
         private void DisplayError(string errorMessage)
         {
             txtErrorName.Text = errorMessage;
-           
+
+        }
+
+        private void btnCancel_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                btnCancel_Click((object)sender, e);
+            }
         }
     }
 }

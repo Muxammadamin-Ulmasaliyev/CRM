@@ -7,7 +7,7 @@
       xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
       xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       
-      mc:Ignorable="d" 
+      mc:Ignorable="d" KeepAlive="True"
       d:DesignHeight="700" d:DesignWidth="1400" 
       Title="HomePage">
 
@@ -41,36 +41,44 @@
         <Rectangle Grid.Row="3" Grid.Column="1" Fill="#614ccb"/>
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-            <Button Name="btnViewCart"  Margin="20,0,0,0" Height="60" Width="100"
+            <Button Name="btnViewCart"  Margin="20,0,0,0" Height="70" Width="150"
               Click="btnViewCart_Click" Background="#6024ff">
                 <MaterialDesign:PackIcon Kind="Cart" Width="40" Height="40"/>
             </Button>
 
         </StackPanel>
+        
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-           
+            <StackPanel Orientation="Horizontal" Name="spCurrency" Visibility="Collapsed">
+                <TextBox x:Name="tbCurrencyRate" Text="" Width="175" Height="60" Margin="5,5,0,5" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Background="GhostWhite" FontSize="18" MaterialDesign:HintAssist.Hint="Currency . . ." />
+                <Button  x:Name="btnSaveCurrencyRate" FontSize="10" Height="58" Width="58" Margin="-2,0,0,0"
+                     Click="btnSaveCurrencyRate_Click" Background="#212db8" KeyDown="btnSaveCurrencyRate_KeyDown">
+                    <MaterialDesign:PackIcon Width="22" Height="22" Kind="TickCircle" Foreground="GhostWhite"/>
+                </Button>
+            </StackPanel>
             <TextBlock x:Name="txtCurrencyRate" Text="" Foreground="FloralWhite" Margin="15"  HorizontalAlignment="Right" 
                        VerticalAlignment="Center" FontSize="24" FontFamily="Cambria" Style="{StaticResource MaterialDesignTextBlock}"/>
-            <Button Name="btnEditCurrency" Click="btnEditCurrency_Click" Width="50" Height="50" Margin="10">
+            <Button Name="btnEditCurrency" Click="btnEditCurrency_Click" Width="60" Height="60" Margin="10,5,10,5">
                 <MaterialDesign:PackIcon Kind="Pencil" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Button>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
 
-            <TextBox x:Name="searchBar"  Width="220" Height="40" FontSize="18"  
-                      Margin="15,0,0,0" MaterialDesign:HintAssist.Hint=" Search . . ."
-                     Style="{StaticResource MaterialDesignTextBox}"
-                     HorizontalAlignment="Left" TextChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" Background="MintCream"/>
+            <TextBox x:Name="searchBar"  Width="220" Height="auto" FontSize="18"  
+                      Margin="15,0,0,0" MaterialDesign:HintAssist.Hint="Search . . ."
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     HorizontalAlignment="Left" TextChanged="searchBarTextChanged" Background="MintCream"/>
 
-           
+
             <Button  x:Name="btnClearSearchBar" Style="{StaticResource MaterialDesignToolButton}" 
                      Margin="-30,0,20,0" FontSize="10"
                       Click="btnClearSearchBar_Click">
                 <MaterialDesign:PackIcon Width="20" Height="20" Kind="ClearBox" Foreground="Gray"/>
             </Button>
-            
-          
+
+
 
             <ComboBox Margin="5" MinWidth="100" Width="auto" Name="cbCountry" DisplayMemberPath="Name" FontSize="15"
                         SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged"  Height="auto"
@@ -103,7 +111,7 @@
                  Content="Add Company"  Click="btnAddCompany_Click"/>
                 <Button Name="btnAddCarType" Width="auto"  Height="50" Margin="5" Background="#a47ce9" 
                  Content="Add Car"  Click="btnAddCarType_Click"/>
-               
+
             </StackPanel>
 
             <Button x:Name="btnAddProduct" Width="auto" Height ="50" Content="Mahsulot qo`shish" Background="#a47ce9" 
@@ -118,11 +126,11 @@
             <DataGrid x:Name="productDataGrid" FontSize="17" HeadersVisibility="Column" Background="GhostWhite"
                        ItemsSource="{Binding products}" SelectedItem="{Binding SelectedProduct}"
                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" 
-                       CellEditEnding="productDataGrid_CellEditEnding">
+                       CellEditEnding="productDataGrid_CellEditEnding" PreparingCellForEdit="productDataGrid_PreparingCellForEdit">
 
                 <DataGrid.Columns>
 
-                   <!-- <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>-->
+                    <!-- <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>-->
                     <DataGridTextColumn Header="Name" IsReadOnly="False" Binding="{Binding Name}" Width="Auto"/>
                     <DataGridTextColumn Header="Code" IsReadOnly="False" Binding="{Binding Code}" Width="Auto"/>
                     <DataGridTextColumn Header="Tannarx" IsReadOnly="False" Binding="{Binding RealPrice, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
@@ -132,8 +140,8 @@
                     <DataGridTextColumn Header="Zavod" IsReadOnly="True" Binding="{Binding Company.Name}" Width="Auto"/>
                     <DataGridTextColumn Header="Davlat" IsReadOnly="True" Binding="{Binding Country.Name}" Width="Auto"/>
                     <DataGridTextColumn Header="Mashina" IsReadOnly="True" Binding="{Binding CarType.Name}" Width="Auto"/>
-                    <DataGridTextColumn Header="$ tannarx" IsReadOnly="False" Binding="{Binding USDPrice,StringFormat={}{0:C0}}" Width="Auto"/>
-                    <DataGridTextColumn Header="$ sotish" IsReadOnly="False" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C0}}" Width="Auto"/>
+                    <DataGridTextColumn Header="$ tannarx" IsReadOnly="False" Binding="{Binding USDPrice,StringFormat={}{0:C0}, ConverterCulture='en-US'}" Width="Auto"/>
+                    <DataGridTextColumn Header="$ sotish" IsReadOnly="False" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C0}, ConverterCulture='en-US'}" Width="Auto"/>
 
                     <DataGridTemplateColumn  Header="" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
@@ -164,18 +172,20 @@
 
         <TextBlock x:Name="txtNumberOfProducts" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Jadvaldagi produktlar soni : " 
            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="WhiteSmoke" FontFamily="cambria"/>
-        
+
+        <TextBlock x:Name="txtNumberOfProductsInDb" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Bazada mavjud jami produktlar soni : " 
+           HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="WhiteSmoke" FontFamily="cambria"/>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0">
-            <Button  Click="PreviousPage_Click"  >
+            <Button x:Name="btnPrevious" Click="PreviousPage_Click" IsEnabled="False"  >
                 <MaterialDesign:PackIcon Kind="ArrowLeftBold" Width="20" Height="20"/>
             </Button>
             <TextBlock x:Name="currentPageText" VerticalAlignment="Center" Margin="10,0" Foreground="WhiteSmoke"
                        FontSize="16" FontFamily="Cambria" FontWeight="SemiBold"/>
-            <Button  Click="NextPage_Click" >
+            <Button x:Name="btnNext"  Click="NextPage_Click" >
                 <MaterialDesign:PackIcon Kind="ArrowRightBold" Width="20" Height="20"/>
             </Button>
         </StackPanel>
-        
+
         <notifications:NotificationArea Grid.RowSpan="4" Grid.ColumnSpan="2" x:Name="notificationArea" Position="BottomRight" MaxItems="3"/>
 
     </Grid>

@@ -22,6 +22,7 @@ namespace InventoryManagementSystem.View
             InitializeComponent();
             tbName.txtInput.Focus();
             KeyDown += btnAddCarType_KeyDown;
+            KeyDown += btnCancel_KeyDown;
 
         }
 
@@ -77,6 +78,14 @@ namespace InventoryManagementSystem.View
         private void DisplayError(string errorMessage)
         {
             txtErrorName.Text = errorMessage;
+        }
+
+        private void btnCancel_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                btnCancel_Click((object)sender, e);
+            }
         }
     }
 }

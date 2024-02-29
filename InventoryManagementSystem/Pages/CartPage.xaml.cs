@@ -1,5 +1,7 @@
-﻿using InventoryManagementSystem.Model;
+﻿using ControlzEx.Standard;
+using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
+using InventoryManagementSystem.View;
 using Notification.Wpf;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
@@ -33,16 +35,16 @@ namespace InventoryManagementSystem.Pages
             notificationManager = new();
             this.currentOrder = currentOrder;
             InitializeComponent();
+            SetupUserCustomizationsSettings();
             PopulateDataGrid();
             PopulateCustomersComboBox();
             CanSaveOrder();
             ShowTotalSums();
         }
 
-        private void DisplayCustomerName()
+        private void SetupUserCustomizationsSettings()
         {
-
-            txtCustomerName.Text = $"Mijoz : {(currentCustomer != null ? currentCustomer.Name : "-")}";
+            orderDetailsDataGrid.FontSize = Properties.Settings.Default.CartDataGridFontSize;
         }
         private void PopulateCustomersComboBox()
         {
@@ -69,9 +71,10 @@ namespace InventoryManagementSystem.Pages
                 btnSaveOrder.IsEnabled = false;
             }
         }
-        private void IncrementOrdersCountOfCustomer(int customerId)
+        private void UpdateOrdersCountAndDebtAmountOfCustomer(int customerId)
         {
             currentCustomer.TotalOrdersCount++;
+            currentCustomer.Debt += (currentOrder.TotalAmount - currentOrder.TotalPaidAmount);
             _customerService.Update(currentCustomer);
         }
         private void PopulateDataGrid()
@@ -89,16 +92,27 @@ namespace InventoryManagementSystem.Pages
             ShowTotalSums();
 
         }
-
+        /*//////////////////////////////////////////////////////////////////////////////////////*/
         private void btnSaveOrder_Click(object sender, RoutedEventArgs e)
         {
+            var incomeInputWindow = new IncomeInputWindow();
+            incomeInputWindow.ShowDialog();
+
+            if(!incomeInputWindow.IsResultSuccessful())
+            {
+                return;
+            }
+
+            currentOrder.TotalPaidAmount = incomeInputWindow.GetTotalPaidAmount();
+
+            var orderDetailsLocal = new List<OrderDetail>();
             var order = new Order()
             {
                 OrderDate = DateTime.Today,
                 TotalAmount = currentOrder.TotalAmount,
-                CustomerId = currentOrder.CustomerId
+                CustomerId = currentOrder.CustomerId,
+                TotalPaidAmount = currentOrder.TotalPaidAmount
             };
-
             var newOrder = _orderService.AddOrder(order);
 
             foreach (var orderDetail in orderDetails)
@@ -109,9 +123,15 @@ namespace InventoryManagementSystem.Pages
                     Quantity = orderDetail.Quantity,
                     OrderId = newOrder.Entity.Id,
                     ProductId = orderDetail.Product.Id,
+                    ProductName = orderDetail.ProductName,
+                    ProductCarType = orderDetail.ProductCarType,
+                    ProductCompany = orderDetail.ProductCompany,
+                    ProductCountry = orderDetail.ProductCountry,
+                    ProductSetType = orderDetail.ProductSetType,
                     Price = orderDetail.Price,
                 };
 
+                orderDetailsLocal.Add(orderDetailToAdd);
                 _orderDetailService.AddOrderDetail(orderDetailToAdd);
             }
             notificationManager.Show("Success", "Order saved successfully", NotificationType.Success);
@@ -119,9 +139,9 @@ namespace InventoryManagementSystem.Pages
 
             WithdrawalSoldProducts();
             OrderSaved();
-            IncrementOrdersCountOfCustomer(currentCustomer.Id);
+            UpdateOrdersCountAndDebtAmountOfCustomer(currentCustomer.Id);
             currentOrder.Id = newOrder.Entity.Id;
-
+            currentOrder.OrderDetails = orderDetailsLocal;
             GeneretePDFCheque(currentOrder);
 
             txtOrderTotalSumUzs.Text = string.Empty;
@@ -129,10 +149,12 @@ namespace InventoryManagementSystem.Pages
             currentOrder = null;
 
         }
+        /*//////////////////////////////////////////////////////////////////////////////////////*/
+
         private void GeneretePDFCheque(Order order)
         {
             QuestPDF.Settings.License = LicenseType.Community;
-            var filePath = $"D://{order.Customer.Name} {order.OrderDate.ToString("dd-MM-yyyy")}.pdf";
+            var filePath = $"{Properties.Settings.Default.OrderChequesDirectoryPath}/{order.Customer.Name} {order.OrderDate.ToString("dd-MM-yyyy")} {order.Id}.pdf";
             var model = order;
             var document = new ChequeDocument(model);
             document.GeneratePdf(filePath);
@@ -164,6 +186,8 @@ namespace InventoryManagementSystem.Pages
 
         }
 
+
+
         private void orderDetailsDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             var editedOrderDetail = e.Row.Item as OrderDetail;
@@ -175,25 +199,24 @@ namespace InventoryManagementSystem.Pages
             switch (propertyName)
             {
                 case "Price":
-                    if (double.TryParse(editedValue.ToString(), out double price))
+                    if (double.TryParse(StringHelper.TrimAllWhiteSpaces(editedValue), out double price))
                     {
-                        var orderDetail = currentOrder.OrderDetails.First(x => x.Id == editedOrderDetail.Id);
+                        var orderDetail = currentOrder.OrderDetails.First(x => x.ProductId == editedOrderDetail.ProductId);
                         orderDetail.Price = price;
+                        notificationManager.Show("Success", "Edited successfully", NotificationType.Success);
 
-                        //editedOrderDetail.Price = price;
                     }
                     else
                     {
-
                         notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
-                        (e.EditingElement as TextBox).Text = editedOrderDetail.Quantity.ToString();
+                        (e.EditingElement as TextBox).Text = editedOrderDetail.Price.ToString();
                         return;
                     }
                     break;
                 case "Quantity":
-                    if (int.TryParse(editedValue.ToString(), out int quantity))
+                    if (int.TryParse(StringHelper.TrimAllWhiteSpaces(editedValue), out int quantity))
                     {
-                        var orderDetail = currentOrder.OrderDetails.First(x => x.Id == editedOrderDetail.Id);
+                        var orderDetail = currentOrder.OrderDetails.First(x => x.ProductId == editedOrderDetail.ProductId);
 
                         var productId = orderDetail.Product.Id;
 
@@ -208,9 +231,6 @@ namespace InventoryManagementSystem.Pages
                         orderDetail.Quantity = quantity;
 
                         notificationManager.Show("Success", "Edited successfully", NotificationType.Success);
-
-
-                        //editedOrderDetail.Quantity = quantity;
                     }
                     else
                     {
@@ -249,8 +269,34 @@ namespace InventoryManagementSystem.Pages
             currentCustomer = (Customer)cbCurrentCustomer.SelectedItem;
             currentOrder.Customer = currentCustomer;
             currentOrder.CustomerId = currentCustomer.Id;
-            DisplayCustomerName();
             CanSaveOrder();
+        }
+
+        private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            var addCustomerWindow = new AddCustomerWindow();
+            this.Opacity = 0.4;
+            addCustomerWindow.ShowDialog();
+            this.Opacity = 1;
+
+            PopulateCustomersComboBox();
+
+        }
+        private void productDataGrid_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+        {
+
+            if (e.Column.Header.Equals("Price"))
+            {
+                if (e.EditingElement is TextBox textBox)
+                {
+                    string textWithoutSum = StringHelper.RemoveSumSignFromPrice(textBox.Text);
+                    textBox.Text = textWithoutSum;
+
+                    textBox.CaretIndex = textWithoutSum.Length;
+                }
+                return;
+            }
+
         }
     }
 }

@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
       xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       
-      mc:Ignorable="d"  Background="Aquamarine"
+      mc:Ignorable="d"  Background="#614ccb"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AdminPage">
     <Page.Resources>
@@ -20,13 +20,18 @@
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="75"/>
+            <RowDefinition Height="100"/>
             <RowDefinition Height="75"/>
             <RowDefinition Height="80*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Button x:Name="btnExportToExcel" Grid.Row="1" HorizontalAlignment="Left" Width="100" Height="45"
-                    Content="Export To Excel" Margin="10" Click="btnExportToExcel_Click"/>
+                    Content="Export To Excel" Margin="10" Click="btnExportToExcel_Click" />
+
+        <Button Name="btnChangePassword" Grid.Row="0" HorizontalAlignment="Right" Margin="20" Width="120" Height="40" 
+                Background="#a416c7" Click="btnChangePassword_Click">
+            <MaterialDesign:PackIcon Kind="PasswordAdd" Width="25" Height="25"/>
+        </Button>
 
 
     </Grid>

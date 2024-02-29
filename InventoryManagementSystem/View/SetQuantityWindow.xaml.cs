@@ -12,6 +12,7 @@ namespace InventoryManagementSystem.View
             InitializeComponent();
             tbQuantity.txtInput.Focus();
             KeyDown += btnSubmit_KeyDown;
+            KeyDown += btnCancel_KeyDown;
 
         }
 
@@ -55,6 +56,17 @@ namespace InventoryManagementSystem.View
                 if (tbQuantity.txtInput.IsFocused)
                 {
                     btnSubmit_Click((object)sender, e);
+                }
+            }
+        }
+
+        private void btnCancel_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                if (tbQuantity.txtInput.IsFocused)
+                {
+                    btnCancel_Click((object)sender, e);
                 }
             }
         }

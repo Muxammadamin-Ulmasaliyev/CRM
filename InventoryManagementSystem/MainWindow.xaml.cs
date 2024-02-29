@@ -14,9 +14,9 @@ namespace InventoryManagementSystem
 
         public MainWindow()
         {
-
             InitializeComponent();
             notificationManager = new();
+            sidebar.SelectedIndex = 0;
         }
 
 
@@ -46,8 +46,8 @@ namespace InventoryManagementSystem
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var choice = MessageBox.Show("Dasturni yopmoqchimisz","Warning",MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if(choice == MessageBoxResult.No)
+            var choice = MessageBox.Show("Dasturni yopmoqchimisz", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (choice == MessageBoxResult.No)
             {
                 // Cancel the closing event to prevent the window from closing
                 e.Cancel = true;

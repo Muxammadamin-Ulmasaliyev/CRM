@@ -12,6 +12,11 @@ namespace InventoryManagementSystem.Services
             this.dbContext = dbContext;
         }
 
+        public void Add(Customer customer)
+        {
+            dbContext.Customers.Add(customer);
+            dbContext.SaveChanges();
+        }
         public void Update(Customer customerToUpdate)
         {
             dbContext.Customers.Update(customerToUpdate);

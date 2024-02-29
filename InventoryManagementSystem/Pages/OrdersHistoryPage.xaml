@@ -37,11 +37,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="75"/>
             <RowDefinition />
+            <RowDefinition Height="50"/>
+
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="35*" />
+            <ColumnDefinition Width="40*" />
             <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="65*" />
+            <ColumnDefinition Width="60*" />
         </Grid.ColumnDefinitions>
 
         <Button x:Name="btnBack" Style="{StaticResource MaterialDesignToolButton}" Width="50" Height="50"
@@ -58,15 +60,17 @@
 
 
         <ScrollViewer x:Name="scrollViewer" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="1"
-               VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+               VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 
             <DataGrid x:Name="ordersDataGrid" FontSize="18" FontFamily="cambria" Background="GhostWhite"
-          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
+          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True"
+                      LoadingRow="ordersDataGrid_LoadingRow">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
-                    <DataGridTextColumn Header="OrderDate" Binding="{Binding OrderDate, StringFormat={}{0:dd-MM-yyyy}}" Width="Auto"/>
-                    <DataGridTextColumn Header="TotalAmountUzs" Binding="{Binding TotalAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
-                    <DataGridTemplateColumn Header="" Width="auto">
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="auto"/>
+                    <DataGridTextColumn Header="OrderDate" Binding="{Binding OrderDate, StringFormat={}{0:dd-MM-yyyy}}" Width="auto"/>
+                    <DataGridTextColumn Header="TotalAmount" Binding="{Binding TotalAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="auto"/>
+                    <DataGridTextColumn Header="TotalPaidAmount" Binding="{Binding TotalPaidAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="auto"/>
+                    <DataGridTemplateColumn Header="list" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="btnShowDetails"  Style="{StaticResource MaterialDesignToolButton}"
@@ -76,7 +80,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="" Width="auto">
+                    <DataGridTemplateColumn Header="chek" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="btnPrintPdfCheque"  Style="{StaticResource MaterialDesignToolButton}"
@@ -95,20 +99,44 @@
 
 
         <ScrollViewer x:Name="scrollViewer2" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="1" Grid.Column="2"
-        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="auto">
             <DataGrid  x:Name="orderDetailsDataGrid"  FontSize="18" Background="GhostWhite"
                 CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto" />-->
-                    <DataGridTextColumn Header="Product" Binding="{Binding Product.Name}" Width="Auto"/>
-                    <DataGridTextColumn Header="Car" Binding="{Binding Product.CarType.Name}" Width="Auto"/>
-                    <DataGridTextColumn Header="Company" Binding="{Binding Product.Company.Name}" Width="Auto"/>
-                    <DataGridTextColumn Header="Country" Binding="{Binding Product.Country.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="Auto"/>
+                    <DataGridTextColumn Header="Car" Binding="{Binding ProductCarType}" Width="Auto"/>
+                    <DataGridTextColumn Header="Company" Binding="{Binding ProductCompany}" Width="Auto"/>
+                    <DataGridTextColumn Header="Country" Binding="{Binding ProductCountry}" Width="Auto"/>
                     <DataGridTextColumn Header="Price" Binding="{Binding Price,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
                     <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto"/>
+                    <DataGridTextColumn Header="Settype" Binding="{Binding ProductSetType}" Width="Auto"/>
                     <DataGridTextColumn Header="SubTotal" Binding="{Binding SubTotal,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0">
+            <Button x:Name="btnPreviousOrderPage"  Click="PreviousPage_Click"  >
+                <MaterialDesign:PackIcon Kind="ArrowLeftBold" Width="20" Height="20"/>
+            </Button>
+            <TextBlock x:Name="currentPageText" VerticalAlignment="Center" Margin="10,0" Foreground="WhiteSmoke"
+       FontSize="16" FontFamily="Cambria" FontWeight="SemiBold"/>
+            <Button Name="btnNextOrderPage" Click="NextPage_Click" >
+                <MaterialDesign:PackIcon Kind="ArrowRightBold" Width="20" Height="20"/>
+            </Button>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0">
+            <Button x:Name="btnPreviousOrderDetailsPage"  Click="PreviousPage_Click2" IsEnabled="False"  >
+                <MaterialDesign:PackIcon Kind="ArrowLeftBold" Width="20" Height="20"/>
+            </Button>
+            <TextBlock x:Name="currentPageText2" VerticalAlignment="Center" Margin="10,0" Foreground="WhiteSmoke"
+       FontSize="16" FontFamily="Cambria" FontWeight="SemiBold"/>
+            <Button x:Name="btnNextOrderDetailsPage"  Click="NextPage_Click2" IsEnabled="False" >
+                <MaterialDesign:PackIcon Kind="ArrowRightBold" Width="20" Height="20"/>
+            </Button>
+        </StackPanel>
+        
     </Grid>
 </Page>

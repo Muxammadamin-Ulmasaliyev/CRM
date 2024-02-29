@@ -22,5 +22,11 @@ namespace InventoryManagementSystem.Pages
         {
             ChequeDocumentXlsx.ExportToExcel(_productService.GetAll(), $"{DateTime.Now.ToString("dd-MM-yyyy")}producst.xlsx");
         }
+
+        private void btnChangePassword_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var changePasswordWindow = new ChangePasswordWindow();
+            changePasswordWindow.ShowDialog();
+        }
     }
 }
