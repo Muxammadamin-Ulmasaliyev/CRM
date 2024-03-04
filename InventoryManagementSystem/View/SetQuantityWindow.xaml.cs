@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using InventoryManagementSystem.Services;
+using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
 
@@ -10,6 +11,8 @@ namespace InventoryManagementSystem.View
         public SetQuantityWindow()
         {
             InitializeComponent();
+            WindowStylingHelper.SetDefaultFontFamily(this);
+
             tbQuantity.txtInput.Focus();
             KeyDown += btnSubmit_KeyDown;
             KeyDown += btnCancel_KeyDown;
@@ -29,13 +32,13 @@ namespace InventoryManagementSystem.View
                 else
                 {
 
-                    txtError.Text = "* Son kiriting * ";
+                    txtError.Text = "* Сон киритинг * ";
                 }
 
             }
             else
             {
-                txtError.Text = "* Son kiriting * ";
+                txtError.Text = "* Сон киритинг * ";
             }
         }
 

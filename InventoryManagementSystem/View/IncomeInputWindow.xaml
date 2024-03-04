@@ -10,6 +10,7 @@
         ResizeMode="NoResize" WindowStyle="None"
         mc:Ignorable="d"
         Title="IncomeInputWindow" Height="160" Width="320">
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,18 +31,18 @@
         <Grid>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBox  x:Name="tbIncome"   TextChanged="tbName_PreviewTextInput" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                          MaterialDesign:HintAssist.Hint="Summa . . ."
+                          MaterialDesign:HintAssist.Hint="Сумма . . ."
                           Width="275" Height="auto" FontSize="20"/>
                 <TextBlock x:Name="txtErrorName" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                     <Button Name="btnCancel"  Width="100 " Height="40" Margin="7,9,7,0" 
                         Foreground="Red" BorderBrush="Red" Style="{StaticResource MaterialDesignOutlinedLightButton}"
-                     Content="Cancel"  Click="btnCancel_Click" KeyDown="btnCancel_KeyDown"/>
+                     Content="Ортга"  Click="btnCancel_Click" KeyDown="btnCancel_KeyDown"/>
 
                     <Button Name="btnConfirmOrder" Width="125" Height="40" Margin="7,9,7,0" 
                         Foreground="Green" BorderBrush="Green" 
-                     Content="Confirm"  Click="btnConfirmOrder_Click" KeyDown="btnConfirmOrder_KeyDown"
+                     Content="Тасдиклаш"  Click="btnConfirmOrder_Click" KeyDown="btnConfirmOrder_KeyDown"
                         Style="{StaticResource MaterialDesignOutlinedLightButton}"/>
 
 

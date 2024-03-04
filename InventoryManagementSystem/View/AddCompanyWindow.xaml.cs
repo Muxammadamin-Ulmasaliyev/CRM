@@ -18,6 +18,8 @@ namespace InventoryManagementSystem.View
             notificationManager = new();
             _companyService = new(new AppDbContext());
             InitializeComponent();
+            WindowStylingHelper.SetDefaultFontFamily(this);
+
             tbName.txtInput.Focus();
             KeyDown += btnAddCompany_KeyDown;
             KeyDown += btnCancel_KeyDown;
@@ -27,20 +29,17 @@ namespace InventoryManagementSystem.View
         {
             if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
             {
-                DisplayError("* Zavod nomini kiriting ! *");
+                DisplayError("* Завод номини киритинг *");
                 return;
             }
-            using (var dbContext = new AppDbContext())
+            if (_companyService.IsCompanyExists(companyName: tbName.txtInput.Text))
             {
-                if (_companyService.IsCompanyExists(companyName: tbName.txtInput.Text))
-                {
-                    DisplayError("* Shu nomli zavod bazada mavjud ! *");
-                    return;
-                }
-                _companyService.AddCompany(companyName: tbName.txtInput.Text);
+                DisplayError("* Шу номли завод базада мавжуд ! *");
+                return;
             }
+            _companyService.AddCompany(companyName: tbName.txtInput.Text);
 
-            notificationManager.Show("Success", "company added successfully", NotificationType.Success);
+            notificationManager.Show("Муваффакият", "Завод кушилди", NotificationType.Success);
             tbName.txtInput.Clear();
             CompanyAdded();
         }

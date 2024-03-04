@@ -1,13 +1,13 @@
 ﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Notification.Wpf;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace InventoryManagementSystem.Pages
 {
@@ -41,7 +41,7 @@ namespace InventoryManagementSystem.Pages
             LoadPage();
             PopulateNumberOfProductsTxt();
             notificationManager = new();
-            txtNumberOfProductsInDb.Text = $"Bazada mavjud jami produktlar soni : {products.Count}";
+            txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {products.Count}";
             KeyDown += btnSaveCurrencyRate_KeyDown;
 
         }
@@ -49,6 +49,7 @@ namespace InventoryManagementSystem.Pages
         private void SetupUserCustomizationsSettings()
         {
             productDataGrid.FontSize = Properties.Settings.Default.ProductsDataGridFontSize;
+            this.FontFamily = new FontFamily(Properties.Settings.Default.AppFontFamily);
         }
 
         private void SetupTimerSettings()
@@ -209,15 +210,23 @@ namespace InventoryManagementSystem.Pages
 
         private void PopulateNumberOfProductsTxt()
         {
+
             txtNumberOfProducts.Text = $"Жадвалдаги продуктлар сони : {productDataGrid.Items.Count}";
         }
 
         private void PopulateDataGrid()
         {
+            try
+            {
 
-            products = new ObservableCollection<Product>(_productService.GetAll());
+                products = new ObservableCollection<Product>(_productService.GetAll());
+                PopulateNumberOfProductsTxt();
+            }
+            catch (Exception)
+            {
 
-            PopulateNumberOfProductsTxt();
+            }
+
         }
 
         private bool IsFilteringDisabled()
@@ -235,7 +244,7 @@ namespace InventoryManagementSystem.Pages
             if (IsFilteringDisabled())
             {
                 LoadPage();
-                txtNumberOfProductsInDb.Text = $"Bazada mavjud jami produktlar soni : {products.Count}";
+                txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {products.Count}";
 
             }
             else
@@ -245,13 +254,13 @@ namespace InventoryManagementSystem.Pages
                 view.Filter = SearchFilter;
                 filteredProducts = new ObservableCollection<Product>(view.Cast<Product>().ToList());
                 LoadPage();
-                txtNumberOfProductsInDb.Text = $"Bazada mavjud jami produktlar soni : {filteredProducts.Count}";
+                txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {filteredProducts.Count}";
             }
 
 
         }
 
-        
+
 
         /******************************** OPTIMIZE ******************************************************************************/
         private bool SearchFilter(object item)
@@ -283,13 +292,15 @@ namespace InventoryManagementSystem.Pages
         {
             var addProductWindow = new AddProductWindow();
             addProductWindow.AddProductButtonClicked += AddProductWindow_AddProductButtonClicked;
-            addProductWindow.Show();
+            addProductWindow.ShowDialog();
         }
         private void AddProductWindow_AddProductButtonClicked(object? sender, EventArgs e)
         {
             PopulateDataGrid();
             PopulateDataGridComboboxes();
             LoadPage();
+            txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {products.Count}";
+
 
         }
 
@@ -327,7 +338,12 @@ namespace InventoryManagementSystem.Pages
             addCompanyWindow.AddCompanyButtonClicked += Window_AddSomeCategoryButtonClicked;
             addCompanyWindow.Show();
         }
-
+        private void btnAddSetType_Click(object sender, RoutedEventArgs e)
+        {
+            var addSetTypeWindow = new AddSetTypeWindow();
+            addSetTypeWindow.AddSetTypeButtonClicked += Window_AddSomeCategoryButtonClicked;
+            addSetTypeWindow.Show();
+        }
         private void btnAddCountry_Click(object sender, RoutedEventArgs e)
         {
             var addCountryWindow = new AddCountryWindow();
@@ -340,7 +356,7 @@ namespace InventoryManagementSystem.Pages
         {
             ResetFilters();
             LoadPage();
-            txtNumberOfProductsInDb.Text = $"Bazada mavjud jami produktlar soni : {products.Count}";
+            txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {products.Count}";
 
         }
 
@@ -362,18 +378,18 @@ namespace InventoryManagementSystem.Pages
         private void btnDeleteProduct_Click(object sender, RoutedEventArgs e)
         {
             Product product = (Product)productDataGrid.SelectedItem;
-            var choice = MessageBox.Show($"Are you sure to delete product : {product.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+            var choice = MessageBox.Show($"{product.Name} : продуктни учириб ташламокчимисиз ? ", "Огохлантириш !", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (choice == MessageBoxResult.Yes)
             {
                 if (_orderDetailService.ProductExists(product.Id))
                 {
-                    MessageBox.Show($"{product.Name} bu produkt avval sotilganligi uchun, o`chirb tashlash mumkin emas", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"{product.Name} продукт аввл сотилганлиги учун, учириб ташлаш мумкин емас !", "Хатолик !", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 _productService.Delete(product);
 
-                notificationManager.Show("Success", "product Deleted successfully", NotificationType.Success, areaName: "notificationArea");
+                notificationManager.Show("Муваффакият !", "Продукт учириб ташланди !", NotificationType.Success, areaName: "notificationArea");
 
                 PopulateDataGrid();
                 LoadPage();
@@ -399,7 +415,7 @@ namespace InventoryManagementSystem.Pages
                 }
                 if (quantity > selectedProduct.Quantity)
                 {
-                    notificationManager.Show("Error", "No sufficient quantity in store", NotificationType.Error, "notificationArea");
+                    notificationManager.Show("Хатолик !", $"Бу товардан {quantity} та дан кам колган, кичикрок сон киритинг !", NotificationType.Error, "notificationArea");
                     return;
                 }
 
@@ -414,6 +430,9 @@ namespace InventoryManagementSystem.Pages
                     Price = (double)(selectedProduct.Price > 0 ?
                                 (selectedProduct.Price) :
                                 (selectedProduct.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate)),
+                    RealPrice = (double)(selectedProduct.RealPrice > 0 ?
+                                (selectedProduct.RealPrice) :
+                                (selectedProduct.USDPrice * Properties.Settings.Default.CurrencyRate)),
                     ProductName = selectedProduct.Name,
                     ProductCarType = selectedProduct.CarType.Name,
                     ProductCompany = selectedProduct.Company.Name,
@@ -424,7 +443,7 @@ namespace InventoryManagementSystem.Pages
 
                 currentOrder.OrderDetails.Add(orderDetail);
                 CalculateOrderTotals();
-                notificationManager.Show("Success", "Item added to cart successfully", NotificationType.Success, "notificationArea");
+                notificationManager.Show("Муваффакият !", "Товар корзинага кушилди !", NotificationType.Success, "notificationArea");
             }
 
 
@@ -472,6 +491,9 @@ namespace InventoryManagementSystem.Pages
                     editedProduct.Code = editedValue.ToString();
 
                     break;
+                case "Barcode":
+                    editedProduct.Barcode = editedValue.ToString();
+                    break;
                 case "Quantity":
                     if (int.TryParse(StringHelper.TrimAllWhiteSpaces(editedValue), out int quantity))
                     {
@@ -480,7 +502,7 @@ namespace InventoryManagementSystem.Pages
                     else
                     {
 
-                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        notificationManager.Show("Хатолик !", "Сон киритинг !", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = editedProduct.Quantity.ToString();
                         return;
                     }
@@ -488,7 +510,7 @@ namespace InventoryManagementSystem.Pages
                 case "RealPrice":
                     if (editedProduct.RealPrice == null || editedProduct.Price == null)
                     {
-                        notificationManager.Show("Error", "Bu mahsulot $ sotiladi.", NotificationType.Error);
+                        notificationManager.Show("Хатолик !", "Бу махсулот $ да", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = null;
                         return;
 
@@ -499,7 +521,7 @@ namespace InventoryManagementSystem.Pages
                     }
                     else
                     {
-                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        notificationManager.Show("Хатолик !", "Сон киритинг !", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = editedProduct.RealPrice.ToString();
                         return;
                     }
@@ -507,7 +529,7 @@ namespace InventoryManagementSystem.Pages
                 case "Price":
                     if (editedProduct.RealPrice == null || editedProduct.Price == null)
                     {
-                        notificationManager.Show("Error", "Bu mahsulot $ sotiladi.", NotificationType.Error);
+                        notificationManager.Show("Error", "Бу махсулот $ да", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = null;
                         return;
 
@@ -518,7 +540,7 @@ namespace InventoryManagementSystem.Pages
                     }
                     else
                     {
-                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        notificationManager.Show("Хатолик !", "Сон киритинг !", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = editedProduct.Price.ToString();
                         return;
 
@@ -528,7 +550,7 @@ namespace InventoryManagementSystem.Pages
                 case "USDPrice":
                     if (editedProduct.USDPrice == null || editedProduct.USDPriceForCustomer == null)
                     {
-                        notificationManager.Show("Error", "Bu mahsulot so`mda sotiladi.", NotificationType.Error);
+                        notificationManager.Show("Error", "Бу махсулот сумда", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = null;
                         return;
 
@@ -539,7 +561,7 @@ namespace InventoryManagementSystem.Pages
                     }
                     else
                     {
-                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        notificationManager.Show("Хатолик !", "Сон киритинг !", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = editedProduct.USDPrice.ToString();
                         return;
 
@@ -548,7 +570,7 @@ namespace InventoryManagementSystem.Pages
                 case "USDPriceForCustomer":
                     if (editedProduct.USDPrice == null || editedProduct.USDPriceForCustomer == null)
                     {
-                        notificationManager.Show("Error", "Bu mahsulot so`mda sotiladi.", NotificationType.Error);
+                        notificationManager.Show("Error", "Бу махсулот сумда", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = null;
                         return;
 
@@ -559,7 +581,7 @@ namespace InventoryManagementSystem.Pages
                     }
                     else
                     {
-                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        notificationManager.Show("Хатолик !", "Сон киритинг !", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = editedProduct.USDPriceForCustomer.ToString();
                         return;
                     }
@@ -570,7 +592,7 @@ namespace InventoryManagementSystem.Pages
             }
 
             _productService.Update(editedProduct);
-            notificationManager.Show("Success", $"{propertyName} changed successfully", NotificationType.Success);
+            notificationManager.Show("Муваффакият !", $"Товар янгиланди!", NotificationType.Success);
 
 
 
@@ -590,17 +612,17 @@ namespace InventoryManagementSystem.Pages
         }
 
 
-       
+
 
         private void productDataGrid_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
         {
-            if (e.Column.Header.Equals("$ tannarx") || e.Column.Header.Equals("$ sotish"))
+            if (e.Column.Header.Equals("$ таннарх") || e.Column.Header.Equals("$ сотиш"))
             {
                 // Remove the "$" sign temporarily for editing
                 if (e.EditingElement is TextBox textBox)
                 {
                     // Remove the "$" sign for editing
-                    string textWithoutDollar = StringHelper.RemoveDollarSignFromPrice(textBox.Text); 
+                    string textWithoutDollar = StringHelper.RemoveDollarSignFromPrice(textBox.Text);
                     textBox.Text = textWithoutDollar;
 
                     // Set the cursor at the end of the text
@@ -608,12 +630,12 @@ namespace InventoryManagementSystem.Pages
                 }
                 return;
             }
-            if (e.Column.Header.Equals("Tannarx") || e.Column.Header.Equals("Sotish narx"))
+            if (e.Column.Header.Equals("Таннарх") || e.Column.Header.Equals("Сотиш нарх"))
             {
                 if (e.EditingElement is TextBox textBox)
                 {
                     // Remove the "$" sign for editing
-                   
+
                     string textWithoutSum = StringHelper.RemoveSumSignFromPrice(textBox.Text);
                     textBox.Text = textWithoutSum;
 
@@ -627,15 +649,15 @@ namespace InventoryManagementSystem.Pages
 
         private void btnSaveCurrencyRate_Click(object sender, RoutedEventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(tbCurrencyRate.Text))
+            if (string.IsNullOrWhiteSpace(tbCurrencyRate.Text))
             {
-                notificationManager.Show("Error", "son kiriting", NotificationType.Error);
+                notificationManager.Show("Хатолик !", "Сон киритинг !", NotificationType.Error);
 
                 return;
             }
-            if(!double.TryParse(StringHelper.TrimAllWhiteSpaces(tbCurrencyRate.Text), out double currencyRate))
+            if (!double.TryParse(StringHelper.TrimAllWhiteSpaces(tbCurrencyRate.Text), out double currencyRate))
             {
-                notificationManager.Show("Error", "son kiriting", NotificationType.Error);
+                notificationManager.Show("Хатолик !", "Сон киритинг !", NotificationType.Error);
                 return;
             }
             else
@@ -648,7 +670,7 @@ namespace InventoryManagementSystem.Pages
             spCurrency.Visibility = Visibility.Collapsed;
             txtCurrencyRate.Visibility = Visibility.Visible;
             btnEditCurrency.IsEnabled = true;
-            notificationManager.Show("Success", " changed successfully", NotificationType.Success);
+            notificationManager.Show("Муваффакият !", "Курс янгиланди", NotificationType.Success);
 
 
         }

@@ -5,10 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
       xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+
       
-      mc:Ignorable="d"  Background="#e6e6e6" FontFamily="calibri"
+      mc:Ignorable="d"  Background="#e6e6e6" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingsPage">
+
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,7 +20,6 @@
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="TextBlock" >
                 <Setter Property="FontSize" Value="15"/>
-                <Setter Property="FontFamily" Value="calibri"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="Margin" Value="5,10,5,0"/>
@@ -31,6 +32,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0" />
             <RowDefinition/>
+           
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="33*"/>
@@ -39,167 +41,195 @@
         </Grid.ColumnDefinitions>
 
 
-        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top"  Margin="25">
+
+     
+        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top"  Margin="25" HorizontalAlignment="Center">
+            <TextBlock Text="" HorizontalAlignment="Center" FontSize="18" Foreground="#614ccb"/>
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Курс : " />
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbCurrencyRate" Style="{StaticResource MaterialDesignOutlinedTextBox}" Width="200" Height="auto" Background="LightGray"
                               FontSize="16" IsEnabled="False"/>
-                    <Button Name="btnEditCurrencyRate" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditCurrencyRate_Click" IsEnabled="True">
+                    <Button Name="btnEditCurrencyRate" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditCurrencyRate_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnsaveCurrencyRate" Background="#111fdd" Margin="0" MinHeight="50" Click="btnsaveCurrencyRate_Click" IsEnabled="False">
-                        <MaterialDesign:PackIcon Kind="ContentSave" Foreground="ghostWhite" Width="20" Height="20" />
+                    <Button Name="btnsaveCurrencyRate" Background="#09aa09"  BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnsaveCurrencyRate_Click" IsEnabled="False" Visibility="Hidden">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
 
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="Cheques directory : "/>
+                <TextBlock Text="Чеклар папкаси"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbChequesDirectory" MinWidth="200"   FontSize="16" IsEnabled="False"
                         Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button Name="btnEditChequesDirectory" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditChequesDirectory_Click" IsEnabled="True">
+                    <Button Name="btnEditChequesDirectory" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditChequesDirectory_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Шрифт тури"/>
+                <ComboBox MinWidth="200" Width="auto" Height="auto"  Name="cbFontFamilies" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      SelectionChanged="cbFontFamilies_SelectionChanged"  Background="LightGray"/>
+            </StackPanel>
+
         </StackPanel>
 
-        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top"  Margin="25">
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top"  Margin="25" HorizontalAlignment="Center" >
 
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Produkt number per page : " />
+            <TextBlock Text="Бир сахифадаги маълумотлар сони" HorizontalAlignment="Center" FontSize="18" Foreground="#614ccb"/>
+
+            <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" >
+                <TextBlock Text="Товарлар" />
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbProductsPerPage" MinWidth="200"   FontSize="16" IsEnabled="False"
                      Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button Name="btnEditProductsPerPage" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditProductsPerPage_Click" IsEnabled="True">
+                    <Button Name="btnEditProductsPerPage" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditProductsPerPage_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveProductsPerPage" Background="#111fdd" Margin="0" MinHeight="50" Click="btnSaveProductsPerPage_Click" IsEnabled="False">
-                        <MaterialDesign:PackIcon Kind="ContentSave" Foreground="ghostWhite" Width="20" Height="20" />
+                    <Button Name="btnSaveProductsPerPage" Background="#09aa09"  Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveProductsPerPage_Click" IsEnabled="False">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical"  HorizontalAlignment="Center">
 
-                <TextBlock Text="customer number per page : "/>
+                <TextBlock Text="Мижозлар"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbCustomersPerPage" MinWidth="200"     FontSize="16" IsEnabled="False"
                          Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button Name="btnEditCustomersPerPage" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditCustomersPerPage_Click" IsEnabled="True">
+                    <Button Name="btnEditCustomersPerPage" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditCustomersPerPage_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveCustomersPerPage" Background="#111fdd" Margin="0" MinHeight="50" Click="btnSaveCustomersPerPage_Click" IsEnabled="False">
-                        <MaterialDesign:PackIcon Kind="ContentSave" Foreground="ghostWhite" Width="20" Height="20" />
+                    <Button Name="btnSaveCustomersPerPage" Background="#09aa09"  Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCustomersPerPage_Click" IsEnabled="False">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical"  HorizontalAlignment="Center">
 
-                <TextBlock Text="orders number per page : " />
+                <TextBlock Text="Заказлар" />
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbOrdersPerPage" MinWidth="200"     FontSize="16" IsEnabled="False"
              Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button Name="btnEditOrdersPerPage" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditOrdersPerPage_Click" IsEnabled="True">
+                    <Button Name="btnEditOrdersPerPage" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditOrdersPerPage_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveOrdersPerPage" Background="#111fdd" Margin="0" MinHeight="50" Click="btnSaveOrdersPerPage_Click" IsEnabled="False">
-                        <MaterialDesign:PackIcon Kind="ContentSave" Foreground="ghostWhite" Width="20" Height="20" />
+                    <Button Name="btnSaveOrdersPerPage" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrdersPerPage_Click" IsEnabled="False">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical"  HorizontalAlignment="Center">
 
-                <TextBlock Text="Order details number per page : " />
+                <TextBlock Text="Спискадаги товарлар" />
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbOrderDetailsPerPage" MinWidth="200"     FontSize="16" IsEnabled="False"
                         Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button Name="btnEditOrderDetailsPerPage" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditOrderDetailsPerPage_Click" IsEnabled="True">
+                    <Button Name="btnEditOrderDetailsPerPage" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditOrderDetailsPerPage_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveOrderDetailsPerPage" Background="#111fdd" Margin="0" MinHeight="50" Click="btnSaveOrderDetailsPerPage_Click" IsEnabled="False">
-                        <MaterialDesign:PackIcon Kind="ContentSave" Foreground="ghostWhite" Width="20" Height="20" />
+                    <Button Name="btnSaveOrderDetailsPerPage" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrderDetailsPerPage_Click" IsEnabled="False">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
 
 
         </StackPanel>
-        <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top"  Margin="25">
 
-            <StackPanel Grid.Column="2" Orientation="Vertical">
+        <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top"  Margin="25" HorizontalAlignment="Center">
+            <TextBlock Text="Жадвал шрифт улчамлари" HorizontalAlignment="Center" FontSize="18" Foreground="#614ccb"/>
 
-                <TextBlock Text="productDataGird fontsize : "/>
+            <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center">
+
+                <TextBlock Text="Товарлар"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbProductDataGridFontSize" MinWidth="200"     FontSize="16" IsEnabled="False"
                          Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button Name="btnEditProductDataGridFontSize" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditProductDataGridFontSize_Click" IsEnabled="True">
+                    <Button Name="btnEditProductDataGridFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditProductDataGridFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveProductDataGridFontSize" Background="#111fdd" Margin="0" MinHeight="50" Click="btnSaveProductDataGridFontSize_Click" IsEnabled="False">
-                        <MaterialDesign:PackIcon Kind="ContentSave" Foreground="ghostWhite" Width="20" Height="20" />
+                    <Button Name="btnSaveProductDataGridFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveProductDataGridFontSize_Click" IsEnabled="False">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
 
             <StackPanel Grid.Column="2" Orientation="Vertical">
 
-                <TextBlock Text="customersdatagird fontsize : "/>
+                <TextBlock Text="Мижозлар"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbCustomerDataGridFontSize" MinWidth="200" FontSize="16" IsEnabled="False"
              Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button Name="btnEditCustomerDataGridFontSize" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditCustomerDataGridFontSize_Click" IsEnabled="True">
+                    <Button Name="btnEditCustomerDataGridFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditCustomerDataGridFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveCustomerDataGridFontSize" Background="#111fdd" Margin="0" MinHeight="50" Click="btnSaveCustomerDataGridFontSize_Click" IsEnabled="False">
-                        <MaterialDesign:PackIcon Kind="ContentSave" Foreground="ghostWhite" Width="20" Height="20" />
+                    <Button Name="btnSaveCustomerDataGridFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCustomerDataGridFontSize_Click" IsEnabled="False">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
 
             <StackPanel Grid.Column="2" Orientation="Vertical">
 
-                <TextBlock Text="orderDataGird fontsize : "/>
+                <TextBlock Text="Заказлар"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbOrderDataGridFontSize" MinWidth="200"     FontSize="16" IsEnabled="False"
              Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button Name="btnEditOrderDataGridFontSize" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditOrderDataGridFontSize_Click" IsEnabled="True">
+                    <Button Name="btnEditOrderDataGridFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditOrderDataGridFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveOrderDataGridFontSize" Background="#111fdd" Margin="0" MinHeight="50" Click="btnSaveOrderDataGridFontSize_Click" IsEnabled="False">
-                        <MaterialDesign:PackIcon Kind="ContentSave" Foreground="ghostWhite" Width="20" Height="20" />
+                    <Button Name="btnSaveOrderDataGridFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrderDataGridFontSize_Click" IsEnabled="False">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
 
 
             <StackPanel Grid.Column="2" Orientation="Vertical">
-                <TextBlock Text="order detials DataGird fontsize : "/>
+                <TextBlock Text="Спискадаги товарлар"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbOrderDetailsDataGridFontSize" MinWidth="200"     FontSize="16" IsEnabled="False"
                         Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button Name="btnEditOrderDetailsDataGridFontSize" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditOrderDetailsDataGridFontSize_Click" IsEnabled="True">
+                    <Button Name="btnEditOrderDetailsDataGridFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditOrderDetailsDataGridFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveOrderDetailsDataGridFontSize" Background="#111fdd" Margin="0" MinHeight="50" Click="btnSaveOrderDetailsDataGridFontSize_Click" IsEnabled="False">
-                        <MaterialDesign:PackIcon Kind="ContentSave" Foreground="ghostWhite" Width="20" Height="20" />
+                    <Button Name="btnSaveOrderDetailsDataGridFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrderDetailsDataGridFontSize_Click" IsEnabled="False">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
 
             <StackPanel Grid.Column="2" Orientation="Vertical">
 
-                <TextBlock Text="cart page DataGird fontsize : "/>
+                <TextBlock Text="Корзинадаги товарлар"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="tbCartDataGridFontSize" MinWidth="200"     FontSize="16" IsEnabled="False"
                         Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button Name="btnEditCartDataGridFontSize" Background="#111fdd" Margin="0" MinHeight="50" Click="btnEditCartDataGridFontSize_Click" IsEnabled="True">
+                    <Button Name="btnEditCartDataGridFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditCartDataGridFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveCartDataGridFontSize" Background="#111fdd" Margin="0" MinHeight="50" Click="btnSaveCartDataGridFontSize_Click" IsEnabled="False">
-                        <MaterialDesign:PackIcon Kind="ContentSave" Foreground="ghostWhite" Width="20" Height="20" />
+                    <Button Name="btnSaveCartDataGridFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCartDataGridFontSize_Click" IsEnabled="False">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            
+            <StackPanel Grid.Column="2" Orientation="Vertical">
+
+                <TextBlock Text="Категориялар"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="tbCategoriesFontSize" MinWidth="200"     FontSize="16" IsEnabled="False"
+            Height="auto" Width="auto"  Background="LightGray" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                    <Button Name="btnEditCategoriesFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditCategoriesFontSize_Click" IsEnabled="True">
+                        <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
+                    </Button>
+                    <Button Name="btnSaveCategoriesFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCategoriesFontSize_Click" IsEnabled="False">
+                        <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>

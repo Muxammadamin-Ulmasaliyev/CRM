@@ -1,19 +1,48 @@
 ﻿using Notification.Wpf;
 using Ookii.Dialogs.Wpf;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace InventoryManagementSystem.Pages
 {
     public partial class SettingsPage : Page
     {
         private NotificationManager _notificationManager;
+        private FontFamily _fontFamily;
         public SettingsPage()
         {
+            _fontFamily = new FontFamily(Properties.Settings.Default.AppFontFamily);
             _notificationManager = new();
             InitializeComponent();
+            SetupUserCustomizationsSettings();
             PopulateTextBoxes();
-        }
 
+            PopulateFontFamilyComboBoxes();
+
+        }
+       
+        private void SetupUserCustomizationsSettings()
+        {
+            this.FontFamily = new FontFamily(Properties.Settings.Default.AppFontFamily);
+        }
+        private void PopulateFontFamilyComboBoxes()
+        {
+
+            cbFontFamilies.ItemsSource = Fonts.SystemFontFamilies;
+            cbFontFamilies.SelectedItem = _fontFamily;
+
+        }
+        private void cbFontFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedFont = cbFontFamilies.SelectedItem as FontFamily;
+            if (selectedFont != null)
+            {
+                Properties.Settings.Default.AppFontFamily = selectedFont.Source;
+                Properties.Settings.Default.Save();
+            }
+            //var parentWindow = this.Parent as Window;
+        }
         private void SaveChanges()
         {
             Properties.Settings.Default.Save();
@@ -30,18 +59,21 @@ namespace InventoryManagementSystem.Pages
             tbOrderDataGridFontSize.Text = Properties.Settings.Default.OrderHistoryDataGridFontSize.ToString();
             tbCustomerDataGridFontSize.Text = Properties.Settings.Default.CustomersDataGridFontSize.ToString();
             tbCartDataGridFontSize.Text = Properties.Settings.Default.CartDataGridFontSize.ToString();
+            tbCategoriesFontSize.Text = Properties.Settings.Default.CategoriesDataGridFontSize.ToString();
             tbChequesDirectory.Text = Properties.Settings.Default.OrderChequesDirectoryPath;
         }
 
-       
+
         private void btnsaveCurrencyRate_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (double.TryParse(tbCurrencyRate.Text, out var currencyRate))
             {
                 Properties.Settings.Default.CurrencyRate = currencyRate;
-                _notificationManager.Show("Success", "Muvaffaqiyat", NotificationType.Success);
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
                 tbCurrencyRate.IsEnabled = false;
                 btnEditCurrencyRate.IsEnabled = true;
+
+                btnsaveCurrencyRate.Visibility = Visibility.Hidden;
                 btnsaveCurrencyRate.IsEnabled = false;
                 SaveChanges();
             }
@@ -49,7 +81,7 @@ namespace InventoryManagementSystem.Pages
             {
                 tbCurrencyRate.Text = Properties.Settings.Default.CurrencyRate.ToString();
                 tbCurrencyRate.Focus();
-                _notificationManager.Show("Error", "Son kiriting", NotificationType.Error);
+                _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
             }
         }
 
@@ -57,7 +89,9 @@ namespace InventoryManagementSystem.Pages
         {
             tbCurrencyRate.IsEnabled = true;
             btnsaveCurrencyRate.IsEnabled = true;
+            btnsaveCurrencyRate.Visibility = Visibility.Visible;
             btnEditCurrencyRate.IsEnabled = false;
+
         }
 
         private void btnEditChequesDirectory_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -81,6 +115,8 @@ namespace InventoryManagementSystem.Pages
         {
             tbProductsPerPage.IsEnabled = true;
             btnSaveProductsPerPage.IsEnabled = true;
+            btnSaveProductsPerPage.Visibility = Visibility.Visible;
+
             btnEditProductsPerPage.IsEnabled = false;
         }
 
@@ -91,9 +127,11 @@ namespace InventoryManagementSystem.Pages
 
                 Properties.Settings.Default.ProductsPerPage = productsPerPage;
 
-                _notificationManager.Show("Success", "Muvaffaqiyat", NotificationType.Success);
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
                 tbProductsPerPage.IsEnabled = false;
                 btnEditProductsPerPage.IsEnabled = true;
+
+                btnSaveProductsPerPage.Visibility = Visibility.Hidden;
                 btnSaveProductsPerPage.IsEnabled = false;
 
                 SaveChanges();
@@ -103,7 +141,7 @@ namespace InventoryManagementSystem.Pages
             {
                 tbProductsPerPage.Text = Properties.Settings.Default.ProductsPerPage.ToString();
                 tbProductsPerPage.Focus();
-                _notificationManager.Show("Error", "Son kiriting", NotificationType.Error);
+                _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
             }
         }
 
@@ -111,6 +149,8 @@ namespace InventoryManagementSystem.Pages
         {
             tbCustomersPerPage.IsEnabled = true;
             btnSaveCustomersPerPage.IsEnabled = true;
+            btnSaveCustomersPerPage.Visibility = Visibility.Visible;
+
             btnEditCustomersPerPage.IsEnabled = false;
         }
 
@@ -121,9 +161,11 @@ namespace InventoryManagementSystem.Pages
 
                 Properties.Settings.Default.CustomersPerPage = customersPerPage;
 
-                _notificationManager.Show("Success", "Muvaffaqiyat", NotificationType.Success);
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
                 tbCustomersPerPage.IsEnabled = false;
                 btnEditCustomersPerPage.IsEnabled = true;
+                btnSaveCustomersPerPage.Visibility = Visibility.Hidden;
+
                 btnSaveCustomersPerPage.IsEnabled = false;
 
                 SaveChanges();
@@ -133,7 +175,7 @@ namespace InventoryManagementSystem.Pages
             {
                 tbCustomersPerPage.Text = Properties.Settings.Default.CustomersPerPage.ToString();
                 tbCustomersPerPage.Focus();
-                _notificationManager.Show("Error", "Son kiriting", NotificationType.Error);
+                _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
             }
         }
 
@@ -141,6 +183,8 @@ namespace InventoryManagementSystem.Pages
         {
             tbOrdersPerPage.IsEnabled = true;
             btnSaveOrdersPerPage.IsEnabled = true;
+            btnSaveOrdersPerPage.Visibility = Visibility.Visible;
+
             btnEditOrdersPerPage.IsEnabled = false;
         }
 
@@ -151,10 +195,12 @@ namespace InventoryManagementSystem.Pages
 
                 Properties.Settings.Default.OrdersPerPage = ordersPerPage;
 
-                _notificationManager.Show("Success", "Muvaffaqiyat", NotificationType.Success);
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
                 tbOrdersPerPage.IsEnabled = false;
                 btnEditOrdersPerPage.IsEnabled = true;
                 btnSaveOrdersPerPage.IsEnabled = false;
+                btnSaveOrdersPerPage.Visibility = Visibility.Hidden;
+
 
                 SaveChanges();
 
@@ -163,11 +209,11 @@ namespace InventoryManagementSystem.Pages
             {
                 tbOrdersPerPage.Text = Properties.Settings.Default.OrdersPerPage.ToString();
                 tbOrdersPerPage.Focus();
-                _notificationManager.Show("Error", "Son kiriting", NotificationType.Error);
+                _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
             }
         }
 
-       
+
 
         private void btnSaveOrderDetailsPerPage_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -176,10 +222,12 @@ namespace InventoryManagementSystem.Pages
 
                 Properties.Settings.Default.OrderDetailsPerPage = orderDetailsPerPage;
 
-                _notificationManager.Show("Success", "Muvaffaqiyat", NotificationType.Success);
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
                 tbOrderDetailsPerPage.IsEnabled = false;
                 btnEditOrderDetailsPerPage.IsEnabled = true;
                 btnSaveOrderDetailsPerPage.IsEnabled = false;
+                btnSaveOrderDetailsPerPage.Visibility = Visibility.Hidden;
+
 
                 SaveChanges();
 
@@ -188,7 +236,7 @@ namespace InventoryManagementSystem.Pages
             {
                 tbOrderDetailsPerPage.Text = Properties.Settings.Default.OrderDetailsPerPage.ToString();
                 tbOrderDetailsPerPage.Focus();
-                _notificationManager.Show("Error", "Son kiriting", NotificationType.Error);
+                _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
             }
         }
 
@@ -196,6 +244,8 @@ namespace InventoryManagementSystem.Pages
         {
             tbOrderDetailsPerPage.IsEnabled = true;
             btnSaveOrderDetailsPerPage.IsEnabled = true;
+            btnSaveOrderDetailsPerPage.Visibility = Visibility.Visible;
+
             btnEditOrderDetailsPerPage.IsEnabled = false;
         }
 
@@ -203,6 +253,8 @@ namespace InventoryManagementSystem.Pages
         {
             tbProductDataGridFontSize.IsEnabled = true;
             btnSaveProductDataGridFontSize.IsEnabled = true;
+            btnSaveProductDataGridFontSize.Visibility = Visibility.Visible;
+
             btnEditProductDataGridFontSize.IsEnabled = false;
         }
 
@@ -213,10 +265,11 @@ namespace InventoryManagementSystem.Pages
 
                 Properties.Settings.Default.ProductsDataGridFontSize = productsDataGridFontSize;
 
-                _notificationManager.Show("Success", "Muvaffaqiyat", NotificationType.Success);
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
                 tbProductDataGridFontSize.IsEnabled = false;
                 btnEditProductDataGridFontSize.IsEnabled = true;
                 btnSaveProductDataGridFontSize.IsEnabled = false;
+                btnSaveProductDataGridFontSize.Visibility = Visibility.Hidden;
 
                 SaveChanges();
 
@@ -225,7 +278,7 @@ namespace InventoryManagementSystem.Pages
             {
                 tbProductDataGridFontSize.Text = Properties.Settings.Default.ProductsDataGridFontSize.ToString();
                 tbProductDataGridFontSize.Focus();
-                _notificationManager.Show("Error", "Son kiriting", NotificationType.Error);
+                _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
             }
         }
 
@@ -236,10 +289,11 @@ namespace InventoryManagementSystem.Pages
 
                 Properties.Settings.Default.CustomersDataGridFontSize = customersDataGridFontSize;
 
-                _notificationManager.Show("Success", "Muvaffaqiyat", NotificationType.Success);
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
                 tbCustomerDataGridFontSize.IsEnabled = false;
                 btnEditCustomerDataGridFontSize.IsEnabled = true;
                 btnSaveCustomerDataGridFontSize.IsEnabled = false;
+                btnSaveCustomerDataGridFontSize.Visibility = Visibility.Hidden;
 
                 SaveChanges();
 
@@ -248,7 +302,7 @@ namespace InventoryManagementSystem.Pages
             {
                 tbCustomerDataGridFontSize.Text = Properties.Settings.Default.CustomersDataGridFontSize.ToString();
                 tbCustomerDataGridFontSize.Focus();
-                _notificationManager.Show("Error", "Son kiriting", NotificationType.Error);
+                _notificationManager.Show("Error", "Сон киритинг", NotificationType.Error);
             }
         }
 
@@ -256,6 +310,8 @@ namespace InventoryManagementSystem.Pages
         {
             tbCustomerDataGridFontSize.IsEnabled = true;
             btnSaveCustomerDataGridFontSize.IsEnabled = true;
+            btnSaveCustomerDataGridFontSize.Visibility = Visibility.Visible;
+
             btnEditCustomerDataGridFontSize.IsEnabled = false;
         }
 
@@ -263,6 +319,8 @@ namespace InventoryManagementSystem.Pages
         {
             tbOrderDataGridFontSize.IsEnabled = true;
             btnSaveOrderDataGridFontSize.IsEnabled = true;
+            btnSaveOrderDataGridFontSize.Visibility = Visibility.Visible;
+
             btnEditOrderDataGridFontSize.IsEnabled = false;
         }
 
@@ -273,10 +331,11 @@ namespace InventoryManagementSystem.Pages
 
                 Properties.Settings.Default.OrderHistoryDataGridFontSize = ordersDataGridFontSize;
 
-                _notificationManager.Show("Success", "Muvaffaqiyat", NotificationType.Success);
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
                 tbOrderDataGridFontSize.IsEnabled = false;
                 btnEditOrderDataGridFontSize.IsEnabled = true;
                 btnSaveOrderDataGridFontSize.IsEnabled = false;
+                btnSaveOrderDataGridFontSize.Visibility = Visibility.Hidden;
 
                 SaveChanges();
 
@@ -285,7 +344,7 @@ namespace InventoryManagementSystem.Pages
             {
                 tbOrderDataGridFontSize.Text = Properties.Settings.Default.OrderHistoryDataGridFontSize.ToString();
                 tbOrderDataGridFontSize.Focus();
-                _notificationManager.Show("Error", "Son kiriting", NotificationType.Error);
+                _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
             }
         }
 
@@ -293,6 +352,8 @@ namespace InventoryManagementSystem.Pages
         {
             tbOrderDetailsDataGridFontSize.IsEnabled = true;
             btnSaveOrderDetailsDataGridFontSize.IsEnabled = true;
+            btnSaveOrderDetailsDataGridFontSize.Visibility = Visibility.Visible;
+
             btnEditOrderDetailsDataGridFontSize.IsEnabled = false;
         }
 
@@ -303,10 +364,12 @@ namespace InventoryManagementSystem.Pages
 
                 Properties.Settings.Default.OrderHistoryDetailsDataGridFontSize = orderDetailsDataGridFontSize;
 
-                _notificationManager.Show("Success", "Muvaffaqiyat", NotificationType.Success);
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
                 tbOrderDetailsDataGridFontSize.IsEnabled = false;
                 btnEditOrderDetailsDataGridFontSize.IsEnabled = true;
+
                 btnSaveOrderDetailsDataGridFontSize.IsEnabled = false;
+                btnSaveOrderDetailsDataGridFontSize.Visibility = Visibility.Hidden;
 
                 SaveChanges();
 
@@ -315,7 +378,7 @@ namespace InventoryManagementSystem.Pages
             {
                 tbOrderDetailsDataGridFontSize.Text = Properties.Settings.Default.OrderHistoryDetailsDataGridFontSize.ToString();
                 tbOrderDetailsDataGridFontSize.Focus();
-                _notificationManager.Show("Error", "Son kiriting", NotificationType.Error);
+                _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
             }
         }
 
@@ -323,6 +386,8 @@ namespace InventoryManagementSystem.Pages
         {
             tbCartDataGridFontSize.IsEnabled = true;
             btnSaveCartDataGridFontSize.IsEnabled = true;
+            btnSaveCartDataGridFontSize.Visibility = Visibility.Visible;
+
             btnEditCartDataGridFontSize.IsEnabled = false;
         }
 
@@ -333,10 +398,12 @@ namespace InventoryManagementSystem.Pages
 
                 Properties.Settings.Default.CartDataGridFontSize = cartDataGridFontSize;
 
-                _notificationManager.Show("Success", "Muvaffaqiyat", NotificationType.Success);
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
                 tbCartDataGridFontSize.IsEnabled = false;
                 btnEditCartDataGridFontSize.IsEnabled = true;
                 btnSaveCartDataGridFontSize.IsEnabled = false;
+                btnSaveCartDataGridFontSize.Visibility = Visibility.Hidden;
+
 
                 SaveChanges();
 
@@ -345,9 +412,41 @@ namespace InventoryManagementSystem.Pages
             {
                 tbCartDataGridFontSize.Text = Properties.Settings.Default.CartDataGridFontSize.ToString();
                 tbCartDataGridFontSize.Focus();
-                _notificationManager.Show("Error", "Son kiriting", NotificationType.Error);
+                _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
             }
         }
 
+        private void btnEditCategoriesFontSize_Click(object sender, RoutedEventArgs e)
+        {
+            tbCategoriesFontSize.IsEnabled = true;
+            btnSaveCategoriesFontSize.IsEnabled = true;
+            btnSaveCategoriesFontSize.Visibility = Visibility.Visible;
+
+            btnEditCategoriesFontSize.IsEnabled = false;
+        }
+
+        private void btnSaveCategoriesFontSize_Click(object sender, RoutedEventArgs e)
+        {
+            if (double.TryParse(tbCategoriesFontSize.Text, out var categoriesFontSize))
+            {
+
+                Properties.Settings.Default.CategoriesDataGridFontSize = categoriesFontSize;
+
+                _notificationManager.Show("Муваффакият", "", NotificationType.Success);
+                tbCategoriesFontSize.IsEnabled = false;
+                btnEditCategoriesFontSize.IsEnabled = true;
+                btnSaveCategoriesFontSize.IsEnabled = false;
+                btnSaveCategoriesFontSize.Visibility = Visibility.Hidden;
+
+                SaveChanges();
+
+            }
+            else
+            {
+                tbCategoriesFontSize.Text = Properties.Settings.Default.CategoriesDataGridFontSize.ToString();
+                tbCategoriesFontSize.Focus();
+                _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
+            }
+        }
     }
 }

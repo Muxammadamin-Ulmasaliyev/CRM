@@ -6,6 +6,7 @@ using NPOI.SS.Formula.Functions;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -42,6 +43,8 @@ namespace InventoryManagementSystem.Pages
         }
         private void SetupUserCustomizationsSettings()
         {
+            this.FontFamily = new FontFamily(Properties.Settings.Default.AppFontFamily);
+
             ordersDataGrid.FontSize = Properties.Settings.Default.OrderHistoryDataGridFontSize;
             orderDetailsDataGrid.FontSize = Properties.Settings.Default.OrderHistoryDetailsDataGridFontSize;
         }
@@ -62,7 +65,7 @@ namespace InventoryManagementSystem.Pages
         {
             Order order = (Order)(sender as Button).DataContext;
             PopulateOrderDetailsDataGrid(order.Id);
-            txtOrderDetailsTitle.Text = $"OrderDetails -> Id : {order.Id}";
+            txtOrderDetailsTitle.Text = $"Списка заказ - {order.Id}";
             LoadPageOrderDetails();
 
         }
@@ -76,11 +79,36 @@ namespace InventoryManagementSystem.Pages
 
             GeneretePDFCheque(order);
 
-            notificationManager.Show("Success", "Cheque created successfully", NotificationType.Success);
+            notificationManager.Show("Муваффакият !", "Чек яратилди !", NotificationType.Success, onClick: () => OpenChequesFolder());
 
 
         }
+        private void OpenChequesFolder()
+        {
 
+            var folderPath = Properties.Settings.Default.OrderChequesDirectoryPath;
+            // Check if the folder exists before attempting to open it
+            if (System.IO.Directory.Exists(folderPath))
+            {
+                try
+                {
+                    // Start the process with specific information
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = "explorer.exe",  // Explorer is used to open folders
+                        Arguments = folderPath,     // Path to the folder
+                        UseShellExecute = true      // Use the shell to execute (open with default application)
+                    };
+
+                    Process.Start(psi);
+                }
+                catch (Exception ex)
+                {
+                    // Handle any exceptions that may occur
+                    MessageBox.Show($"Papkani ochishda xatolik : {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
         private void GeneretePDFCheque(Order order)
         {
             QuestPDF.Settings.License = LicenseType.Community;

@@ -41,5 +41,17 @@
     <Setting Name="OrderHistoryDetailsDataGridFontSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">16</Value>
     </Setting>
+    <Setting Name="AppFontFamily" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Calibri</Value>
+    </Setting>
+    <Setting Name="CategoriesDataGridFontSize" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">16</Value>
+    </Setting>
+    <Setting Name="NumberOfTopProducts" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="NumberOfTopCustomers" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

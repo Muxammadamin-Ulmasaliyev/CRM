@@ -9,6 +9,7 @@
         Background="Transparent" AllowsTransparency="True"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" WindowStyle="None"
         Title="AddCustomerWindow" Height="400" Width="400">
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,7 +19,6 @@
                 <Setter Property="Width" Value="275"/>
                 <Setter Property="Margin" Value="15"/>
                 <Setter Property="Height" Value="40"/>
-                <Setter Property="FontFamily" Value="Cambria"/>
             </Style>
             
             
@@ -27,7 +27,6 @@
                 <Setter Property="Foreground" Value="Red"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="Text" Value=""/>
-                <Setter Property="FontFamily" Value="Cambria"/>
             </Style>
 
         </ResourceDictionary>
@@ -43,18 +42,18 @@
 
 
             <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <userControls:ClearableTextBox Placeholder="Klient FIO" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput"/>
+                <userControls:ClearableTextBox Placeholder="Клиент ФИО" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput"/>
                 <TextBlock x:Name="txtErrorName" />
-                <userControls:ClearableTextBox Placeholder="Telefon nomer" x:Name="tbPhone" PreviewTextInput="tbName_PreviewTextInput"/>
+                <userControls:ClearableTextBox Placeholder="Телефон номер" x:Name="tbPhone" PreviewTextInput="tbName_PreviewTextInput"/>
                 <TextBlock x:Name="txtErrorPhone" />
-                <userControls:ClearableTextBox Placeholder="Address (ixtiyoriy)" x:Name="tbAddress" />
+                <userControls:ClearableTextBox Placeholder="Адрес (ихтиёрий)" x:Name="tbAddress" />
 
                 <Button Name="btnAddCustomer" Width="275" Height="40" Margin="15" Style="{StaticResource MaterialDesignOutlinedButton}"
-                 Content="Add Customer" IsEnabled="True" Click="btnAddCustomer_Click" KeyDown="btnAddCustomer_KeyDown"  BorderBrush="Blue"/>
+                 Content="Кушиш" IsEnabled="True" Click="btnAddCustomer_Click" KeyDown="btnAddCustomer_KeyDown"  BorderBrush="Blue"/>
                 
                 <Button Name="btnCancel"  VerticalAlignment="Bottom" Width="275" Height="40" Margin="0,0,0,-40" Style="{StaticResource MaterialDesignOutlinedButton}"
                      Foreground="DarkRed" BorderBrush="DarkRed"
-                     Content="Cancel"  Click="btnCancel_Click" KeyDown="btnCancel_KeyDown"/>
+                     Content="Ортга"  Click="btnCancel_Click" KeyDown="btnCancel_KeyDown"/>
             </StackPanel>
 
 

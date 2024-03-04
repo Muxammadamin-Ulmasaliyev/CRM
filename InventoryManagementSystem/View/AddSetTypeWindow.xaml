@@ -1,14 +1,14 @@
-﻿<Window x:Class="InventoryManagementSystem.View.AddCountryWindow"
+﻿<Window x:Class="InventoryManagementSystem.View.AddSetTypeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryManagementSystem.View"
         xmlns:userControls="clr-namespace:InventoryManagementSystem.UserControls"
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen" 
+        
         AllowsTransparency="True" Background="Transparent"
-        ResizeMode="NoResize"  WindowStyle="None"
-        Title="AddCountryWindow" Height="160" Width="320" >
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None"
+        Title="AddSetTypeWindow" Height="160" Width="320" >
 
     <Window.Resources>
         <ResourceDictionary>
@@ -25,21 +25,23 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <Border Background="White" BorderBrush="#614ccb" BorderThickness="2" CornerRadius="25">
+
         <Grid>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <userControls:ClearableTextBox Placeholder="Давлат номи" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput" />
+                <userControls:ClearableTextBox Placeholder="Урам номи" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput" />
                 <TextBlock x:Name="txtErrorName" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                    <Button Name="btnCancel"  Width="100 " Height="40" Style="{StaticResource MaterialDesignOutlinedLightButton}"
-                            Margin="7,9,7,0" Foreground="Red" BorderBrush="Red" KeyDown="btnCancel_KeyDown"
-                             Content="Ортга"  Click="btnCancel_Click"/>
+                    <Button Name="btnCancel"  Width="100 " Height="40" Margin="7,9,7,0" 
+                        Foreground="Red" BorderBrush="Red" Style="{StaticResource MaterialDesignOutlinedLightButton}"
+                     Content="Ортга"  Click="btnCancel_Click" KeyDown="btnCancel_KeyDown"/>
 
-                    <Button Name="btnAddCountry" Width="125" Height="40" Style="{StaticResource MaterialDesignOutlinedLightButton}"
-                            Margin="7,9,7,0" Foreground="Green" BorderBrush="Green" 
-                             Content="Кушиш"  Click="btnAddCountry_Click" KeyDown="btnAddCountry_KeyDown"/>
+                    <Button Name="btnAddSetType" Width="125" Height="40" Margin="7,9,7,0" 
+                        Foreground="Green" BorderBrush="Green" 
+                     Content="Кушиш"  Click="btnAddSetType_Click" KeyDown="btnAddSetType_KeyDown"
+                        Style="{StaticResource MaterialDesignOutlinedLightButton}"/>
 
 
                 </StackPanel>

@@ -1,14 +1,15 @@
-﻿using ControlzEx.Standard;
-using InventoryManagementSystem.Model;
+﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
 using Notification.Wpf;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace InventoryManagementSystem.Pages
 {
@@ -16,7 +17,6 @@ namespace InventoryManagementSystem.Pages
     {
         private Order currentOrder;
         private Customer currentCustomer;
-
         public ObservableCollection<OrderDetail> orderDetails;
         private NotificationManager notificationManager;
         public event EventHandler OrderSavedButtonClicked;
@@ -40,25 +40,112 @@ namespace InventoryManagementSystem.Pages
             PopulateCustomersComboBox();
             CanSaveOrder();
             ShowTotalSums();
+
+            tbBarcode.Focus();
+            KeyDown += btnSeachWithBarcode_KeyDown;
         }
+        private void btnSeachWithBarcode_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+
+            if (tbBarcode.IsFocused)
+            {
+                if (e.Key == System.Windows.Input.Key.Enter)
+                {
+                    AddProductToCartAfterScanning(tbBarcode.Text);
+                    tbBarcode.Text = string.Empty;
+                    tbBarcode.Focus();
+                }
+            }
+        }
+
+        private void AddProductToCartAfterScanning(string barcode)
+        {
+            OrderDetail? listedOrderDetail = orderDetails.FirstOrDefault(od => od.Product.Barcode == barcode);
+            if (listedOrderDetail != null)
+            {
+                if (listedOrderDetail.Product.Quantity > listedOrderDetail.Quantity)
+                {
+                    listedOrderDetail.Quantity++;
+                    PopulateDataGrid();
+                }
+                else
+                {
+
+                    notificationManager.Show("Хатолик!", "Бу товардан колмаган !", NotificationType.Error);
+                    return;
+                }
+            }
+            else
+            {
+                var product = _productService.GetProductByBarcode(barcode);
+                if (product == null)
+                {
+                    notificationManager.Show("Хатолик!", "Товар топилмади !", NotificationType.Error);
+                    return;
+                }
+                var orderDetail = new OrderDetail
+                {
+                    ProductId = product.Id,
+                    Product = product,
+                    Quantity = 1,
+                    SubTotal = (double)(product.Price > 0 ?
+                                (1 * (product.Price)) :
+                                (1 * product.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate)),
+                    Price = (double)(product.Price > 0 ?
+                                (product.Price) :
+                                (product.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate)),
+                    RealPrice = (double)(product.RealPrice > 0 ?
+                                (product.RealPrice) :
+                                (product.USDPrice * Properties.Settings.Default.CurrencyRate)),
+
+                    ProductName = product.Name,
+                    ProductCarType = product.CarType.Name,
+                    ProductCompany = product.Company.Name,
+                    ProductCountry = product.Country.Name,
+                    ProductSetType = product.SetType.Name,
+
+                };
+
+                orderDetails.Add(orderDetail);
+                currentOrder.OrderDetails.Add(orderDetail);
+            }
+
+            CalculateSubTotals();
+            CalculateOrderTotals();
+            ShowTotalSums();
+            tbBarcode.Text = string.Empty;
+            tbBarcode.Focus();
+
+            CanSaveOrder();
+
+        }
+
+
+
+
 
         private void SetupUserCustomizationsSettings()
         {
             orderDetailsDataGrid.FontSize = Properties.Settings.Default.CartDataGridFontSize;
+            this.FontFamily = new FontFamily(Properties.Settings.Default.AppFontFamily);
+
         }
         private void PopulateCustomersComboBox()
         {
             cbCurrentCustomer.ItemsSource = _customerService.GetAll();
         }
 
-
         private void ShowTotalSums()
         {
-            txtOrderTotalSumUzs.Text = $"Jami Sum : {currentOrder.TotalAmount.ToString("c0", new CultureInfo("uz-UZ"))}";
+            txtOrderTotalSumUzs.Text = $"Жами сумма : {currentOrder.TotalAmount.ToString("c0", new CultureInfo("uz-UZ"))}";
+            tbBarcode.Focus();
+
         }
         private void CalculateOrderTotals()
         {
             currentOrder.TotalAmount = currentOrder.OrderDetails.Sum(od => od.SubTotal);
+            tbBarcode.Focus();
+
         }
         private void CanSaveOrder()
         {
@@ -70,17 +157,29 @@ namespace InventoryManagementSystem.Pages
             {
                 btnSaveOrder.IsEnabled = false;
             }
+            tbBarcode.Focus();
+
         }
         private void UpdateOrdersCountAndDebtAmountOfCustomer(int customerId)
         {
             currentCustomer.TotalOrdersCount++;
             currentCustomer.Debt += (currentOrder.TotalAmount - currentOrder.TotalPaidAmount);
             _customerService.Update(currentCustomer);
+            tbBarcode.Focus();
+
         }
         private void PopulateDataGrid()
         {
-            orderDetails = new ObservableCollection<OrderDetail>(currentOrder.OrderDetails);
-            orderDetailsDataGrid.ItemsSource = orderDetails;
+            try
+            {
+
+                orderDetails = new ObservableCollection<OrderDetail>(currentOrder.OrderDetails);
+                orderDetailsDataGrid.ItemsSource = orderDetails;
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
         private void btnDeleteOrderDetail_Click(object sender, RoutedEventArgs e)
         {
@@ -90,22 +189,21 @@ namespace InventoryManagementSystem.Pages
             CanSaveOrder();
             CalculateOrderTotals();
             ShowTotalSums();
+            tbBarcode.Focus();
 
         }
-        /*//////////////////////////////////////////////////////////////////////////////////////*/
         private void btnSaveOrder_Click(object sender, RoutedEventArgs e)
         {
             var incomeInputWindow = new IncomeInputWindow();
             incomeInputWindow.ShowDialog();
 
-            if(!incomeInputWindow.IsResultSuccessful())
+            if (!incomeInputWindow.IsResultSuccessful())
             {
                 return;
             }
 
             currentOrder.TotalPaidAmount = incomeInputWindow.GetTotalPaidAmount();
 
-            var orderDetailsLocal = new List<OrderDetail>();
             var order = new Order()
             {
                 OrderDate = DateTime.Today,
@@ -128,28 +226,57 @@ namespace InventoryManagementSystem.Pages
                     ProductCompany = orderDetail.ProductCompany,
                     ProductCountry = orderDetail.ProductCountry,
                     ProductSetType = orderDetail.ProductSetType,
+
                     Price = orderDetail.Price,
+                    RealPrice = orderDetail.RealPrice,
                 };
 
-                orderDetailsLocal.Add(orderDetailToAdd);
                 _orderDetailService.AddOrderDetail(orderDetailToAdd);
             }
-            notificationManager.Show("Success", "Order saved successfully", NotificationType.Success);
 
 
             WithdrawalSoldProducts();
             OrderSaved();
             UpdateOrdersCountAndDebtAmountOfCustomer(currentCustomer.Id);
             currentOrder.Id = newOrder.Entity.Id;
-            currentOrder.OrderDetails = orderDetailsLocal;
+            // currentOrder.OrderDetails = orderDetailsLocal;
             GeneretePDFCheque(currentOrder);
+
+            notificationManager.Show("Муваффакият !", "Товарлар сотилди ва чек яратилди !", NotificationType.Success, onClick: () => OpenChequesFolder());
 
             txtOrderTotalSumUzs.Text = string.Empty;
             orderDetails.Clear();
             currentOrder = null;
+            tbBarcode.Focus();
 
         }
-        /*//////////////////////////////////////////////////////////////////////////////////////*/
+        private void OpenChequesFolder()
+        {
+
+            var folderPath = Properties.Settings.Default.OrderChequesDirectoryPath;
+            // Check if the folder exists before attempting to open it
+            if (System.IO.Directory.Exists(folderPath))
+            {
+                try
+                {
+                    // Start the process with specific information
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = "explorer.exe",  // Explorer is used to open folders
+                        Arguments = folderPath,     // Path to the folder
+                        UseShellExecute = true      // Use the shell to execute (open with default application)
+                    };
+
+                    Process.Start(psi);
+                }
+                catch (Exception ex)
+                {
+                    // Handle any exceptions that may occur
+                    MessageBox.Show($"Error : {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
 
         private void GeneretePDFCheque(Order order)
         {
@@ -171,8 +298,11 @@ namespace InventoryManagementSystem.Pages
             {
                 var productToUpdate = _productService.GetProduct(item.Product.Id);
                 productToUpdate.Quantity -= item.Quantity;
+                productToUpdate.QuantitySold += item.Quantity;
                 _productService.UpdateQuantity(productToUpdate);
             }
+            tbBarcode.Focus();
+
         }
 
         protected virtual void OrderSaved()
@@ -203,12 +333,12 @@ namespace InventoryManagementSystem.Pages
                     {
                         var orderDetail = currentOrder.OrderDetails.First(x => x.ProductId == editedOrderDetail.ProductId);
                         orderDetail.Price = price;
-                        notificationManager.Show("Success", "Edited successfully", NotificationType.Success);
+                        notificationManager.Show("Муваффакият !", "Нарх янгиланди !", NotificationType.Success);
 
                     }
                     else
                     {
-                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        notificationManager.Show("Хатолик !", "Сон киритинг !", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = editedOrderDetail.Price.ToString();
                         return;
                     }
@@ -222,7 +352,7 @@ namespace InventoryManagementSystem.Pages
 
                         if (!IsSufficientQuantityInDb(productId, quantity))
                         {
-                            notificationManager.Show("Error", "No sufficient amount in store", NotificationType.Error);
+                            notificationManager.Show("Хатолик !", $"Бу товардан {quantity} та дан кам колган, кичикрок сон киритинг !", NotificationType.Error);
                             (e.EditingElement as TextBox).Text = editedOrderDetail.Quantity.ToString();
 
                             return;
@@ -230,12 +360,12 @@ namespace InventoryManagementSystem.Pages
 
                         orderDetail.Quantity = quantity;
 
-                        notificationManager.Show("Success", "Edited successfully", NotificationType.Success);
+                        notificationManager.Show("Муваффакият !", "Микдор янгиланди !", NotificationType.Success);
                     }
                     else
                     {
 
-                        notificationManager.Show("Error", "Insert number pls", NotificationType.Error);
+                        notificationManager.Show("Хатолик !", "Сон киритинг !", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = editedOrderDetail.Quantity.ToString();
                         return;
                     }
@@ -247,6 +377,8 @@ namespace InventoryManagementSystem.Pages
             CanSaveOrder();
             ShowTotalSums();
             PopulateDataGrid();
+            tbBarcode.Focus();
+
         }
 
         private bool IsSufficientQuantityInDb(int productId, int quantity)
@@ -270,6 +402,8 @@ namespace InventoryManagementSystem.Pages
             currentOrder.Customer = currentCustomer;
             currentOrder.CustomerId = currentCustomer.Id;
             CanSaveOrder();
+            tbBarcode.Focus();
+
         }
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
@@ -280,12 +414,13 @@ namespace InventoryManagementSystem.Pages
             this.Opacity = 1;
 
             PopulateCustomersComboBox();
+            tbBarcode.Focus();
 
         }
         private void productDataGrid_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
         {
 
-            if (e.Column.Header.Equals("Price"))
+            if (e.Column.Header.Equals("Нарх"))
             {
                 if (e.EditingElement is TextBox textBox)
                 {
@@ -298,5 +433,7 @@ namespace InventoryManagementSystem.Pages
             }
 
         }
+
     }
 }
+

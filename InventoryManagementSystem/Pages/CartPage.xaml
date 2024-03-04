@@ -7,8 +7,9 @@
       xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       
       mc:Ignorable="d"  Background="#614ccb"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="800" 
       Title="CartPage">
+    
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,53 +31,56 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition />
+            <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center">
 
             <Button x:Name="btnBack" Style="{StaticResource MaterialDesignToolButton}" Width="50" Height="50"
-                Click="btnBack_Click" HorizontalAlignment="Left" Margin="0,0,0,0">
+                Click="btnBack_Click" HorizontalAlignment="Left" Margin="0,0,0,0" ToolTip="Ортга">
                 <MaterialDesign:PackIcon Kind="ArrowBackCircle" Width="35" Height="35" Foreground="GhostWhite" />
             </Button>
            
             <ComboBox MinWidth="100" Width="auto" Height="auto" Name="cbCurrentCustomer"  Background="MintCream" 
                       FontSize="18" Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      MaterialDesign:HintAssist.Hint="Мижоз " Margin="10"
+                      MaterialDesign:HintAssist.Hint="Мижоз " Margin="10" SelectedIndex="0" ToolTip="Мижоз танланг"
                       DisplayMemberPath="Name" SelectionChanged="cbCurrentCustomer_SelectionChanged"/>
 
-            <Button  x:Name="btnAddCustomer" Height="55" Width="125" 
+            <Button  x:Name="btnAddCustomer" Height="55" Width="125" ToolTip="Мижоз кушиш"
                   Margin="20,0,0,0"   Background="#4024ff" 
                   Click="btnAddCustomer_Click">
                 <MaterialDesign:PackIcon Kind="PersonAdd" Foreground="WhiteSmoke" Width="35" Height="35"/>
+                
             </Button>
 
+            
+            
         </StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
-
-            <TextBlock Name="txtOrderTotalSumUzs" Text="Jami Sum : "  FontSize="18" Foreground="GhostWhite"
-                      FontFamily="cambria" FontWeight="Bold" VerticalAlignment="Center" Margin="15" />
-            <Button x:Name="btnSaveOrder"  Width="150" Height="60" Background="#291b93"
+            <TextBlock Name="txtOrderTotalSumUzs" Text="Жами сумма : "  FontSize="18" Foreground="GhostWhite"
+                       FontWeight="Bold" VerticalAlignment="Center" Margin="15" />
+            <Button x:Name="btnSaveOrder"  Width="150" Height="60" Background="#291b93" ToolTip="Сотиш"
                       HorizontalAlignment="Right" Margin="15,5,15,5" Click="btnSaveOrder_Click">
                 <MaterialDesign:PackIcon Kind="AccountCash" Width="40" Height="40" />
             </Button>
         </StackPanel>
 
-        <DataGrid  Background="GhostWhite" Style="{StaticResource MaterialDesignDataGrid}" x:Name="orderDetailsDataGrid" Grid.Row="2" FontSize="18" CellEditEnding="orderDetailsDataGrid_CellEditEnding"
+        <DataGrid  Background="GhostWhite" Style="{StaticResource MaterialDesignDataGrid}" x:Name="orderDetailsDataGrid" Grid.Row="1" CellEditEnding="orderDetailsDataGrid_CellEditEnding"
                 ItemsSource="{Binding OrderDetails}" SelectedItem="{Binding SelectedOrderDetail}" PreparingCellForEdit="productDataGrid_PreparingCellForEdit"
                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
             <DataGrid.Columns>
-                <DataGridTextColumn  IsReadOnly="True" Header="Product" Binding="{Binding ProductName}" Width="15*"/>
-                <DataGridTextColumn  IsReadOnly="True" Header="car" Binding="{Binding ProductCarType}" Width="8*"/>
-                <DataGridTextColumn  IsReadOnly="True" Header="company" Binding="{Binding ProductCompany}" Width="8*"/>
-                <DataGridTextColumn  IsReadOnly="True" Header="country" Binding="{Binding ProductCountry}" Width="8*"/>
-                <DataGridTextColumn  IsReadOnly="False" Header="Price" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="12*"/>
-                <DataGridTextColumn  IsReadOnly="False" Header="Quantity" Binding="{Binding Quantity}" Width="10*"/>
-                <DataGridTextColumn  IsReadOnly="True" Header="Settype" Binding="{Binding ProductSetType}" Width="10*"/>
-                <DataGridTextColumn  IsReadOnly="True" Header="SubTotal" Binding="{Binding SubTotal, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="18*"/>
-                <DataGridTemplateColumn Header="" Width="auto">
+                <DataGridTextColumn  IsReadOnly="True" Header="Товар номи" Binding="{Binding ProductName}" Width="15*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Машина" Binding="{Binding ProductCarType}" Width="8*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Завод" Binding="{Binding ProductCompany}" Width="8*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Давлат" Binding="{Binding ProductCountry}" Width="8*"/>
+                <DataGridTextColumn  IsReadOnly="False" Header="Нарх" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="12*"/>
+                <DataGridTextColumn  IsReadOnly="False" Header="Сони" Binding="{Binding Quantity}" Width="10*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Урам" Binding="{Binding ProductSetType}" Width="10*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Сумма" Binding="{Binding SubTotal, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="18*"/>
+                <DataGridTemplateColumn Header="" Width="4*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="btnDeleteOrderDetail" Style="{StaticResource MaterialDesignToolButton}"
+                            <Button x:Name="btnDeleteOrderDetail" Style="{StaticResource MaterialDesignToolButton}" ToolTip="Учириш"
                                     Click="btnDeleteOrderDetail_Click">
                                 <MaterialDesign:PackIcon Kind="TrashCan"  Foreground="red"/>
 
@@ -87,5 +91,9 @@
 
             </DataGrid.Columns>
         </DataGrid>
+
+        <TextBox Grid.Row="2" Width="125" Height="40" Visibility="Visible" Name="tbBarcode" Margin="5" Background="#614ccb" HorizontalAlignment="Right" />
+        <Button Grid.Row="2" Width="10" Height="10" Visibility="Hidden" Name="btnSeachWithBarcode" KeyDown="btnSeachWithBarcode_KeyDown" HorizontalAlignment="Right"/>
+
     </Grid>
 </Page>

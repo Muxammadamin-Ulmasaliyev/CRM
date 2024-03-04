@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="35.4.0" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.3.0" />
@@ -25,6 +26,7 @@
     <PackageReference Include="QuestPDF" Version="2023.12.4" />
     <PackageReference Include="ShowMeTheXAML" Version="2.0.0" />
     <PackageReference Include="ShowMeTheXAML.MSBuild" Version="2.0.0" />
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,26 +5,27 @@ using Notification.Wpf;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-
+using System.Windows.Media.Animation;
 namespace InventoryManagementSystem.View
 {
     public partial class AddProductWindow : Window
     {
         private NotificationManager notificationManager;
         public event EventHandler AddProductButtonClicked;
-        private readonly ProductService _productService;
-
+        private ProductService _productService;
         public AddProductWindow()
         {
+
             notificationManager = new();
             _productService = new(new AppDbContext());
             InitializeComponent();
+            WindowStylingHelper.SetDefaultFontFamily(this);
+
             rbUzs.IsChecked = true;
             PopulateComboboxes();
-
-            KeyDown += btnAddProduct_KeyDown;
+            // KeyDown += btnAddProduct_KeyDown;
         }
+
         private void PopulateComboboxes()
         {
             using (var dbContext = new AppDbContext())
@@ -39,6 +40,7 @@ namespace InventoryManagementSystem.View
         protected virtual void ProductAdded()
         {
             AddProductButtonClicked?.Invoke(this, EventArgs.Empty);
+
         }
 
 
@@ -51,6 +53,7 @@ namespace InventoryManagementSystem.View
                 {
                     Name = tbName.txtInput.Text,
                     Code = tbCode.txtInput.Text,
+                    Barcode = tbBarcode.txtInput.Text,
                     RealPrice = double.TryParse(tbRealPrice.txtInput.Text, out var realPrice) ? realPrice : null,
                     Price = double.TryParse(tbPrice.txtInput.Text, out var price) ? price : null,
                     USDPrice = double.TryParse(tbUsdPrice.txtInput.Text, out var UsdPrice) ? UsdPrice : null,
@@ -64,21 +67,25 @@ namespace InventoryManagementSystem.View
 
 
 
-                if (_productService.IsProductCodeExists(productToAdd.Code, out var productFromDb))
+                if (_productService.IsProductCodeExists(productToAdd.Code, productToAdd.Barcode, out var productFromDb))
                 {
                     productFromDb.Quantity += productToAdd.Quantity;
-                    _productService.UpdateQuantity(productFromDb);
+                    using (var dbContext = new AppDbContext())
+                    {
+                        _productService.UpdateQuantity(productFromDb);
+                    }
 
-                    notificationManager.Show("info", "Product already exists, quantity incremented", NotificationType.Information);
+                    notificationManager.Show("Муваффакият", "Бу товар базада борлиги учун, уни сони оширилди", NotificationType.Information);
+
                 }
                 else
                 {
                     _productService.AddProduct(productToAdd);
-                    notificationManager.Show("Success", "Product added successfully", NotificationType.Success);
+                    notificationManager.Show("Муваффакият", "Товар кушилди", NotificationType.Success);
+                    ProductAdded();
                 }
 
                 ClearTextBoxesAndComboBoxes();
-                ProductAdded();
             }
         }
 
@@ -112,7 +119,7 @@ namespace InventoryManagementSystem.View
 
             if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
             {
-                DisplayErrorTextBox(errorMessage: "* Mahsulot nomini kiriting! *", tbName, txtErrorName, thickness);
+                DisplayErrorTextBox(errorMessage: "* Товар номини киритинг! *", tbName, txtErrorName, thickness);
                 result = result && false;
             }
             else
@@ -127,7 +134,7 @@ namespace InventoryManagementSystem.View
 
                 if (string.IsNullOrWhiteSpace(tbRealPrice.txtInput.Text))
                 {
-                    DisplayErrorTextBox(errorMessage: "* Mahsulot tannarxini kiriting! *", tbRealPrice, txtErrorRealPrice, thickness);
+                    DisplayErrorTextBox(errorMessage: "* Таннархни киритинг! *", tbRealPrice, txtErrorRealPrice, thickness);
                     result = result && false;
                 }
                 else
@@ -139,7 +146,7 @@ namespace InventoryManagementSystem.View
 
                 if (string.IsNullOrWhiteSpace(tbPrice.txtInput.Text))
                 {
-                    DisplayErrorTextBox(errorMessage: "* Mahsulot narxini kiriting! *", tbPrice, txtErrorPrice, thickness);
+                    DisplayErrorTextBox(errorMessage: "* Сотиш нархини киритинг! *", tbPrice, txtErrorPrice, thickness);
                     result = result && false;
                 }
                 else
@@ -153,7 +160,7 @@ namespace InventoryManagementSystem.View
 
                 if (string.IsNullOrWhiteSpace(tbUsdPrice.txtInput.Text))
                 {
-                    DisplayErrorTextBox(errorMessage: "* Mahsulot $ tannarxini kiriting! *", tbUsdPrice, txtErrorUsdPrice, thickness);
+                    DisplayErrorTextBox(errorMessage: "* $ таннархини киритинг! *", tbUsdPrice, txtErrorUsdPrice, thickness);
                     result = result && false;
                 }
                 else
@@ -164,7 +171,7 @@ namespace InventoryManagementSystem.View
 
                 if (string.IsNullOrWhiteSpace(tbUsdPrice2.txtInput.Text))
                 {
-                    DisplayErrorTextBox(errorMessage: "* Mahsulot $ narxini kiriting! *", tbUsdPrice2, txtErrorUsdPrice2, thickness);
+                    DisplayErrorTextBox(errorMessage: "* $ сотиш нархини киритинг! *", tbUsdPrice2, txtErrorUsdPrice2, thickness);
                     result = result && false;
                 }
                 else
@@ -176,7 +183,7 @@ namespace InventoryManagementSystem.View
 
             if (string.IsNullOrWhiteSpace(tbQuantity.txtInput.Text))
             {
-                DisplayErrorTextBox(errorMessage: "* Miqdorni kiriting! *", tbQuantity, txtErrorQuantity, thickness);
+                DisplayErrorTextBox(errorMessage: "* Сонини киритинг! *", tbQuantity, txtErrorQuantity, thickness);
                 result = result && false;
             }
             else
@@ -186,7 +193,7 @@ namespace InventoryManagementSystem.View
             }
             if (cbCountry.SelectedItem == null)
             {
-                DisplayErrorComboBox(errorMessage: "* Davlatni tanlang!! *", txtErrorCountry);
+                DisplayErrorComboBox(errorMessage: "* Давлатни танланг! *", txtErrorCountry);
                 result = result && false;
             }
             else
@@ -198,7 +205,7 @@ namespace InventoryManagementSystem.View
 
             if (cbCarType.SelectedItem == null)
             {
-                DisplayErrorComboBox(errorMessage: "* Mashinani tanlang!! *", txtErrorCarType);
+                DisplayErrorComboBox(errorMessage: "* Машинани танланг! *", txtErrorCarType);
                 result = result && false;
 
             }
@@ -211,7 +218,7 @@ namespace InventoryManagementSystem.View
 
             if (cbCompany.SelectedItem == null)
             {
-                DisplayErrorComboBox(errorMessage: "* Zavodni tanlang!! *", txtErrorCompany);
+                DisplayErrorComboBox(errorMessage: "* Заводни танланг! *", txtErrorCompany);
                 result = result && false;
 
             }
@@ -223,7 +230,7 @@ namespace InventoryManagementSystem.View
 
             if (cbSetType.SelectedItem == null)
             {
-                DisplayErrorComboBox(errorMessage: "*  O`ramni  tanlang!! *", txtErrorSetType);
+                DisplayErrorComboBox(errorMessage: "*  Урамни танланг! *", txtErrorSetType);
                 result = result && false;
 
             }
@@ -272,6 +279,7 @@ namespace InventoryManagementSystem.View
         {
             tbName.txtInput.Clear();
             tbCode.txtInput.Clear();
+            tbBarcode.txtInput.Clear();
             tbPrice.txtInput.Clear();
             tbRealPrice.txtInput.Clear();
             tbQuantity.txtInput.Clear();
@@ -296,19 +304,19 @@ namespace InventoryManagementSystem.View
 
                 if (!double.TryParse(tbRealPrice.txtInput.Text, out _))
                 {
-                    DisplayErrorTextBox(errorMessage: "* Son kiriting! *", tbRealPrice, txtErrorRealPrice, thickness);
+                    DisplayErrorTextBox(errorMessage: "* Сон киритинг! *", tbRealPrice, txtErrorRealPrice, thickness);
                     result = result && false;
                 }
                 if (!double.TryParse(tbPrice.txtInput.Text, out _))
                 {
-                    DisplayErrorTextBox(errorMessage: "* Son kiriting! *", tbPrice, txtErrorPrice, thickness);
+                    DisplayErrorTextBox(errorMessage: "* Сон киритинг! *", tbPrice, txtErrorPrice, thickness);
                     result = result && false;
 
                 }
             }
             if (!int.TryParse(tbQuantity.txtInput.Text, out _))
             {
-                DisplayErrorTextBox(errorMessage: "* Son kiriting! *", tbQuantity, txtErrorQuantity, thickness);
+                DisplayErrorTextBox(errorMessage: "* Сон киритинг! *", tbQuantity, txtErrorQuantity, thickness);
                 result = result && false;
 
             }
@@ -317,13 +325,13 @@ namespace InventoryManagementSystem.View
 
                 if (!double.TryParse(tbUsdPrice.txtInput.Text, out _))
                 {
-                    DisplayErrorTextBox(errorMessage: "* Son kiriting! *", tbUsdPrice, txtErrorUsdPrice, thickness);
+                    DisplayErrorTextBox(errorMessage: "* Сон киритинг! *", tbUsdPrice, txtErrorUsdPrice, thickness);
                     result = result && false;
 
                 }
                 if (!double.TryParse(tbUsdPrice2.txtInput.Text, out _))
                 {
-                    DisplayErrorTextBox(errorMessage: "* Son kiriting! *", tbUsdPrice2, txtErrorUsdPrice2, thickness);
+                    DisplayErrorTextBox(errorMessage: "* Сон киритинг! *", tbUsdPrice2, txtErrorUsdPrice2, thickness);
                     result = result && false;
 
                 }
@@ -355,7 +363,7 @@ namespace InventoryManagementSystem.View
 
         private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ComboBox comboBox = sender as ComboBox;
+            System.Windows.Controls.ComboBox comboBox = sender as System.Windows.Controls.ComboBox;
             string comboBoxName = comboBox.Name;
             switch (comboBoxName)
             {
@@ -402,8 +410,9 @@ namespace InventoryManagementSystem.View
             }
         }
 
-        private void btnAddProduct_KeyDown(object sender, KeyEventArgs e)
+        private void btnAddProduct_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+
             if (e.Key == Key.Enter)
             {
                 btnAddProduct_Click((object)sender, e);

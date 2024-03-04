@@ -9,6 +9,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CustomersPage">
+
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -37,11 +38,11 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0"  HorizontalAlignment="Left">
 
             <TextBox x:Name="searchBar"  Width="220" Height="auto" FontSize="18"  
-                     MaterialDesign:HintAssist.Hint="Search . . ."  
+                     MaterialDesign:HintAssist.Hint="Кидириш . . ."  
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"
                       HorizontalAlignment="Left" TextChanged="searchBar_TextChanged" Background="MintCream"/>
             <Button  x:Name="btnClearSearchBar" BorderThickness="0" Style="{StaticResource MaterialDesignToolButton}" 
-                     Margin="-30,0,20,0" FontSize="10"
+                     Margin="-30,0,20,0" FontSize="10" 
                      Click="btnClearSearchBar_Click">
                 <MaterialDesign:PackIcon Width="20" Height="20" Kind="ClearBox" Foreground="Gray"/>
             </Button>
@@ -49,13 +50,13 @@
         </StackPanel>
 
             <Button  x:Name="btnAddCustomer" Height="60" Width="150" 
-                      Margin="0,0,20,0"   Background="#4024ff"
+                      Margin="0,0,20,0"   Background="#4024ff" ToolTip="Мижоз кушиш"
                      Click="btnAddCustomer_Click" HorizontalAlignment="Right">
                 <MaterialDesign:PackIcon Kind="PersonAdd" Foreground="WhiteSmoke" Width="35" Height="35"/>
             </Button>
 
 
-        <DataGrid Style="{StaticResource MaterialDesignDataGrid}" x:Name="customerDataGrid" Grid.Row="1" FontSize="18" FontFamily="Cambria"
+        <DataGrid Style="{StaticResource MaterialDesignDataGrid}" x:Name="customerDataGrid" Grid.Row="1" CanUserSortColumns="False"
         ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" Background="GhostWhite"
          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" 
                   LoadingRow="customerDataGrid_LoadingRow"
@@ -63,17 +64,17 @@
             <DataGrid.Columns>
 
                 <DataGridTextColumn IsReadOnly="True" Header="Id" Binding="{Binding Id}" Width="Auto"/>
-                <DataGridTextColumn IsReadOnly="False" Header="FIO" Binding="{Binding Name}" Width="15*"/>
-                <DataGridTextColumn IsReadOnly="False" Header="Telefon raqam" Binding="{Binding Phone}" Width="10*"/>
-                <DataGridTextColumn IsReadOnly="False" Header="Address" Binding="{Binding Address}" Width="10*"/>
+                <DataGridTextColumn IsReadOnly="False" Header="ФИО" Binding="{Binding Name}" Width="15*"/>
+                <DataGridTextColumn IsReadOnly="False" Header="Телефон" Binding="{Binding Phone}" Width="10*"/>
+                <DataGridTextColumn IsReadOnly="False" Header="Аддрес" Binding="{Binding Address}" Width="10*"/>
 
-                <DataGridTextColumn IsReadOnly="True" Header="Qarz" Binding="{Binding Debt,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
-                <DataGridTextColumn IsReadOnly="True" Header="Jami zakazlar soni" Binding="{Binding TotalOrdersCount}" Width="10*"/>
+                <DataGridTextColumn IsReadOnly="True" Header="Карз" Binding="{Binding Debt,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
+                <DataGridTextColumn IsReadOnly="True" Header="Жами заказлар" Binding="{Binding TotalOrdersCount}" Width="10*"/>
 
                 <DataGridTemplateColumn Header="" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="btnHistory"  Style="{StaticResource MaterialDesignToolButton}"
+                            <Button x:Name="btnHistory"  Style="{StaticResource MaterialDesignToolButton}" ToolTip="Заказлар тарихи"
                     Click="btnHistory_Click">
                                 <MaterialDesign:PackIcon Kind="History"
                                          Foreground="Blue"/>
@@ -85,7 +86,7 @@
                 <DataGridTemplateColumn Header="" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="btnPayDebt"  Style="{StaticResource MaterialDesignToolButton}"
+                            <Button x:Name="btnPayDebt"  Style="{StaticResource MaterialDesignToolButton}" ToolTip="Карзни тулаш"
                                     Click="btnPayDebt_Click">
                                 <MaterialDesign:PackIcon Kind="Money"  Foreground="ForestGreen"/>
 
@@ -99,7 +100,7 @@
                 <DataGridTemplateColumn  Header="" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="btnDeleteCustomer" Style="{StaticResource MaterialDesignToolButton}"
+                            <Button x:Name="btnDeleteCustomer" Style="{StaticResource MaterialDesignToolButton}" ToolTip="Учириш"
                                     Click="btnDeleteCustomer_Click"  >
                                 <MaterialDesign:PackIcon Kind="TrashCan"  Foreground="Red"/>
                             </Button>
@@ -109,17 +110,17 @@
                 
             </DataGrid.Columns>
         </DataGrid>
-        <TextBlock x:Name="txtNumberOfCustomers" FontSize="16" FontWeight="bold" FontFamily="cambria" Grid.Row="2"  Text="Jadvaldagi mijozlar soni : " 
+        <TextBlock x:Name="txtNumberOfCustomers" FontSize="16" FontWeight="bold"  Grid.Row="2"  Text="Жадвалдаги мижозлар сони : " 
                     HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="GhostWhite" />
-        <TextBlock x:Name="txtNumberOfCustomersInDb" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Bazada mavjud jami mijozlar soni : " 
-             HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="WhiteSmoke" FontFamily="cambria"/>
+        <TextBlock x:Name="txtNumberOfCustomersInDb" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Базада мавжуд жами мижозлар сони : " 
+             HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="WhiteSmoke" />
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0">
-            <Button x:Name="btnPrevious"  Click="PreviousPage_Click"  >
+            <Button x:Name="btnPrevious"  Click="PreviousPage_Click" ToolTip="Олдинги сахифа"  >
                 <MaterialDesign:PackIcon Kind="ArrowLeftBold" Width="20" Height="20"/>
             </Button>
             <TextBlock x:Name="currentPageText" VerticalAlignment="Center" Margin="10,0" Foreground="WhiteSmoke"
-               FontSize="16" FontFamily="Cambria" FontWeight="SemiBold"/>
-            <Button x:Name="btnNext"  Click="NextPage_Click" >
+               FontSize="16"  FontWeight="SemiBold"/>
+            <Button x:Name="btnNext"  Click="NextPage_Click" ToolTip="Кейинги сахифа" >
                 <MaterialDesign:PackIcon Kind="ArrowRightBold" Width="20" Height="20"/>
             </Button>
         </StackPanel>

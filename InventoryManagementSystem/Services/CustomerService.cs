@@ -44,5 +44,16 @@ namespace InventoryManagementSystem.Services
                 dbContext.SaveChanges();
             }
         }
+
+       /* public double CalculateDebtAmount()
+        {
+            return dbContext.Customers.Where(c => c.Debt < 0).Sum(c => Math.Abs(c.Debt));
+        }*/
+
+        public double CalculateDebtAmountOfCustomers()
+        {
+           // return dbContext.Customers.Where(c => c.Debt > 0).Sum(c => c.Debt);
+            return dbContext.Customers.Sum(c => c.Debt);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.CustomControls;
+using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +12,7 @@ namespace InventoryManagementSystem.View
         private NotificationManager notificationManager;
         private Frame navframe;
         private NavButton navButton;
-
+        private bool _isPasswordCorrect = false;
 
         public PasswordWindow(Frame navframe, NavButton navButton)
         {
@@ -20,9 +21,16 @@ namespace InventoryManagementSystem.View
 
             notificationManager = new();
             InitializeComponent();
+            WindowStylingHelper.SetDefaultFontFamily(this);
+
             passwordBox.Focus();
 
             KeyDown += btnSubmit_KeyDown;
+        }
+
+        public bool IsPasswordCorrect()
+        {
+            return _isPasswordCorrect;
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
@@ -30,12 +38,13 @@ namespace InventoryManagementSystem.View
             if (passwordBox.Password == Properties.Settings.Default.AdminPassword || passwordBox.Password == Properties.Settings.Default.AdminRecoveryPassword)
             {
                 this.Close();
-                notificationManager.Show("Success", "Xush kelibsiz", NotificationType.Success);
+                notificationManager.Show("Муваффакият", "Хуш келибсиз", NotificationType.Success);
+                _isPasswordCorrect = true;
                 navframe.Navigate(navButton.NavLink);
             }
             else
             {
-                notificationManager.Show("Error", "Parol xato! Qayta urinib ko`ring", NotificationType.Error);
+                notificationManager.Show("Хатолик", "Пароль хато !", NotificationType.Error);
                 passwordBox.Clear();
             }
         }

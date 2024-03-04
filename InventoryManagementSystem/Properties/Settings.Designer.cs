@@ -175,5 +175,53 @@ namespace InventoryManagementSystem.Properties {
                 this["OrderHistoryDetailsDataGridFontSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Calibri")]
+        public string AppFontFamily {
+            get {
+                return ((string)(this["AppFontFamily"]));
+            }
+            set {
+                this["AppFontFamily"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        public double CategoriesDataGridFontSize {
+            get {
+                return ((double)(this["CategoriesDataGridFontSize"]));
+            }
+            set {
+                this["CategoriesDataGridFontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int NumberOfTopProducts {
+            get {
+                return ((int)(this["NumberOfTopProducts"]));
+            }
+            set {
+                this["NumberOfTopProducts"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int NumberOfTopCustomers {
+            get {
+                return ((int)(this["NumberOfTopCustomers"]));
+            }
+            set {
+                this["NumberOfTopCustomers"] = value;
+            }
+        }
     }
 }

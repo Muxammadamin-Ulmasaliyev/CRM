@@ -41,8 +41,8 @@
         <Rectangle Grid.Row="3" Grid.Column="1" Fill="#614ccb"/>
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-            <Button Name="btnViewCart"  Margin="20,0,0,0" Height="70" Width="150"
-              Click="btnViewCart_Click" Background="#6024ff">
+            <Button Name="btnViewCart"  Margin="20,0,0,0" Height="70" Width="150" ToolTip="Корзинани куриш"
+                  Click="btnViewCart_Click" Background="#6024ff">
                 <MaterialDesign:PackIcon Kind="Cart" Width="40" Height="40"/>
             </Button>
 
@@ -51,23 +51,23 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal" Name="spCurrency" Visibility="Collapsed">
                 <TextBox x:Name="tbCurrencyRate" Text="" Width="175" Height="60" Margin="5,5,0,5" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     Background="GhostWhite" FontSize="18" MaterialDesign:HintAssist.Hint="Currency . . ." />
+                     Background="GhostWhite" FontSize="18" MaterialDesign:HintAssist.Hint="Валюта . . ." />
                 <Button  x:Name="btnSaveCurrencyRate" FontSize="10" Height="58" Width="58" Margin="-2,0,0,0"
                      Click="btnSaveCurrencyRate_Click" Background="#212db8" KeyDown="btnSaveCurrencyRate_KeyDown">
                     <MaterialDesign:PackIcon Width="22" Height="22" Kind="TickCircle" Foreground="GhostWhite"/>
                 </Button>
             </StackPanel>
             <TextBlock x:Name="txtCurrencyRate" Text="" Foreground="FloralWhite" Margin="15"  HorizontalAlignment="Right" 
-                       VerticalAlignment="Center" FontSize="24" FontFamily="Cambria" Style="{StaticResource MaterialDesignTextBlock}"/>
-            <Button Name="btnEditCurrency" Click="btnEditCurrency_Click" Width="60" Height="60" Margin="10,5,10,5">
+                       VerticalAlignment="Center" FontSize="24"  Style="{StaticResource MaterialDesignTextBlock}"/>
+            <Button Name="btnEditCurrency" Click="btnEditCurrency_Click" Width="60" Height="60" Margin="10,5,10,5" ToolTip="Курсни узгартириш">
                 <MaterialDesign:PackIcon Kind="Pencil" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Button>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
 
-            <TextBox x:Name="searchBar"  Width="220" Height="auto" FontSize="18"  
-                      Margin="15,0,0,0" MaterialDesign:HintAssist.Hint="Search . . ."
+            <TextBox x:Name="searchBar"  Width="220" Height="auto" FontSize="18" 
+                      Margin="15,0,0,0" MaterialDesign:HintAssist.Hint="Кидириш . . ."
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      HorizontalAlignment="Left" TextChanged="searchBarTextChanged" Background="MintCream"/>
 
@@ -82,40 +82,45 @@
 
             <ComboBox Margin="5" MinWidth="100" Width="auto" Name="cbCountry" DisplayMemberPath="Name" FontSize="15"
                         SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged"  Height="auto"
-                      MaterialDesign:HintAssist.Hint="Country"
+                      MaterialDesign:HintAssist.Hint="Давлат"
                       Style="{StaticResource MaterialDesignOutlinedComboBox}" Background="MintCream"/>
 
             <ComboBox Margin="5" MinWidth="100" Width="auto" Height="auto" Name="cbCompany"  
-                      MaterialDesign:HintAssist.Hint="Company" FontSize="15"
+                      MaterialDesign:HintAssist.Hint="Завод" FontSize="15"
                       DisplayMemberPath="Name" Style="{StaticResource MaterialDesignOutlinedComboBox}"  Background="MintCream"
                SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
 
             <ComboBox Margin="5" MinWidth="100" Width="auto" Height="auto"  Name="cbCarType"    
-                      DisplayMemberPath="Name" MaterialDesign:HintAssist.Hint="Car" FontSize="15"
+                      DisplayMemberPath="Name" MaterialDesign:HintAssist.Hint="Машина" FontSize="15"
                       Style="{StaticResource MaterialDesignOutlinedComboBox}"  Background="MintCream"
                          SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
 
             <ComboBox Margin="5" MinWidth="100" Width="auto" Height="auto" FontSize="15"
-                      Name="cbSetType"  MaterialDesign:HintAssist.Hint="SetType"
+                      Name="cbSetType"  MaterialDesign:HintAssist.Hint="Урам"
                       DisplayMemberPath="Name" Style="{StaticResource MaterialDesignOutlinedComboBox}"  Background="MintCream"
                      SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                 <Button Name="btnResetFilter" Width="auto"  Height="50" Margin="5" Background="#6113b6" 
-                Content="Reset Filters "  Click="btnResetFilter_Click"/>
+                  Click="btnResetFilter_Click">
+                    <MaterialDesign:PackIcon Kind="CircleArrows" Height="25" Width="25"/>
+                </Button>
 
                 <Button Name="btnAddCountry" Width="auto"  Height="50" Margin="5" Background="#a47ce9" 
-                 Content="Add Country"  Click="btnAddCountry_Click"/>
+                 Content="Давлат кушиш"  Click="btnAddCountry_Click"/>
                 <Button Name="btnAddCompany" Width="auto"  Height="50" Margin="5" Background="#a47ce9" 
-                 Content="Add Company"  Click="btnAddCompany_Click"/>
+                 Content="Завод кушиш"  Click="btnAddCompany_Click"/>
                 <Button Name="btnAddCarType" Width="auto"  Height="50" Margin="5" Background="#a47ce9" 
-                 Content="Add Car"  Click="btnAddCarType_Click"/>
+                 Content="Машина кушиш"  Click="btnAddCarType_Click"/>
+                <Button Name="btnSetTypeCarType" Width="auto"  Height="50" Margin="5" Background="#a47ce9" 
+                    Content="Урам  кушиш"  Click="btnAddSetType_Click"/>
 
             </StackPanel>
 
-            <Button x:Name="btnAddProduct" Width="auto" Height ="50" Content="Mahsulot qo`shish" Background="#a47ce9" 
-        HorizontalAlignment="Right" Margin="0,0,20,0" Click="btnAddProduct_Click"/>
+            <!-- Change color of addProduct button-->
+            <Button x:Name="btnAddProduct" Width="auto" Height ="50" Content="Товар кушиш" Background="#a47ce9" 
+                  HorizontalAlignment="Right" Margin="0,0,20,0" Click="btnAddProduct_Click"/>
 
         </StackPanel>
 
@@ -123,7 +128,7 @@
         <ScrollViewer x:Name="scrollViewer" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="2" Grid.Column="2" 
                       VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
-            <DataGrid x:Name="productDataGrid" FontSize="17" HeadersVisibility="Column" Background="GhostWhite"
+            <DataGrid x:Name="productDataGrid" HeadersVisibility="Column" Background="GhostWhite" CanUserSortColumns="False"
                        ItemsSource="{Binding products}" SelectedItem="{Binding SelectedProduct}"
                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" 
                        CellEditEnding="productDataGrid_CellEditEnding" PreparingCellForEdit="productDataGrid_PreparingCellForEdit">
@@ -131,22 +136,23 @@
                 <DataGrid.Columns>
 
                     <!-- <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>-->
-                    <DataGridTextColumn Header="Name" IsReadOnly="False" Binding="{Binding Name}" Width="Auto"/>
-                    <DataGridTextColumn Header="Code" IsReadOnly="False" Binding="{Binding Code}" Width="Auto"/>
-                    <DataGridTextColumn Header="Tannarx" IsReadOnly="False" Binding="{Binding RealPrice, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
-                    <DataGridTextColumn Header="Sotish narx" IsReadOnly="False" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
-                    <DataGridTextColumn Header="To`plam turi" IsReadOnly="True" Binding="{Binding SetType.Name}" Width="Auto"/>
-                    <DataGridTextColumn Header="Soni" IsReadOnly="False" Binding="{Binding Quantity}" Width="Auto" />
-                    <DataGridTextColumn Header="Zavod" IsReadOnly="True" Binding="{Binding Company.Name}" Width="Auto"/>
-                    <DataGridTextColumn Header="Davlat" IsReadOnly="True" Binding="{Binding Country.Name}" Width="Auto"/>
-                    <DataGridTextColumn Header="Mashina" IsReadOnly="True" Binding="{Binding CarType.Name}" Width="Auto"/>
-                    <DataGridTextColumn Header="$ tannarx" IsReadOnly="False" Binding="{Binding USDPrice,StringFormat={}{0:C0}, ConverterCulture='en-US'}" Width="Auto"/>
-                    <DataGridTextColumn Header="$ sotish" IsReadOnly="False" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C0}, ConverterCulture='en-US'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Товар номи" IsReadOnly="False" Binding="{Binding Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Код" IsReadOnly="False" Binding="{Binding Code}" Width="Auto"/>
+                    <DataGridTextColumn Header="Штрих код" IsReadOnly="False" Binding="{Binding Barcode}" Width="Auto"/>
+                    <DataGridTextColumn Header="Таннарх" IsReadOnly="False" Binding="{Binding RealPrice, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Сотиш нарх" IsReadOnly="False" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Урам" IsReadOnly="True" Binding="{Binding SetType.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Сони" IsReadOnly="False" Binding="{Binding Quantity}" Width="Auto" />
+                    <DataGridTextColumn Header="Завод" IsReadOnly="True" Binding="{Binding Company.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Давлат" IsReadOnly="True" Binding="{Binding Country.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="Машина" IsReadOnly="True" Binding="{Binding CarType.Name}" Width="Auto"/>
+                    <DataGridTextColumn Header="$ таннарх" IsReadOnly="False" Binding="{Binding USDPrice,StringFormat={}{0:C0}, ConverterCulture='en-US'}" Width="Auto"/>
+                    <DataGridTextColumn Header="$ сотиш" IsReadOnly="False" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C0}, ConverterCulture='en-US'}" Width="Auto"/>
 
                     <DataGridTemplateColumn  Header="" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button x:Name="btnAddToCart" Style="{StaticResource MaterialDesignToolButton}" Click="btnAddToCart_Click">
+                                <Button x:Name="btnAddToCart" Style="{StaticResource MaterialDesignToolButton}" Click="btnAddToCart_Click" ToolTip="Корзинага кушиш">
                                     <MaterialDesign:PackIcon Kind="CartArrowDown" Width="25" Height="25" Foreground="Blue"/>
                                 </Button>
                             </DataTemplate>
@@ -156,7 +162,7 @@
                     <DataGridTemplateColumn Header="" Width="60">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button x:Name="btnDeleteProduct" Style="{StaticResource MaterialDesignToolButton}" Click="btnDeleteProduct_Click">
+                                <Button x:Name="btnDeleteProduct" Style="{StaticResource MaterialDesignToolButton}" Click="btnDeleteProduct_Click" ToolTip="Учириш">
                                     <MaterialDesign:PackIcon Kind="TrashCan" Width="25" Height="25" Foreground="Red"/>
 
                                 </Button>
@@ -170,18 +176,18 @@
         </ScrollViewer>
 
 
-        <TextBlock x:Name="txtNumberOfProducts" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Jadvaldagi produktlar soni : " 
-           HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="WhiteSmoke" FontFamily="cambria"/>
+        <TextBlock x:Name="txtNumberOfProducts" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Жадвалдаги продуктлар сони : " 
+           HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="WhiteSmoke" />
 
-        <TextBlock x:Name="txtNumberOfProductsInDb" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Bazada mavjud jami produktlar soni : " 
-           HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="WhiteSmoke" FontFamily="cambria"/>
+        <TextBlock x:Name="txtNumberOfProductsInDb" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Базада мавжуд жами продуктлар сони :  " 
+           HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="WhiteSmoke"/>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0">
-            <Button x:Name="btnPrevious" Click="PreviousPage_Click" IsEnabled="False"  >
+            <Button x:Name="btnPrevious" Click="PreviousPage_Click" IsEnabled="False" ToolTip="Олдинги сахифа"  >
                 <MaterialDesign:PackIcon Kind="ArrowLeftBold" Width="20" Height="20"/>
             </Button>
             <TextBlock x:Name="currentPageText" VerticalAlignment="Center" Margin="10,0" Foreground="WhiteSmoke"
-                       FontSize="16" FontFamily="Cambria" FontWeight="SemiBold"/>
-            <Button x:Name="btnNext"  Click="NextPage_Click" >
+                       FontSize="16"  FontWeight="SemiBold"/>
+            <Button x:Name="btnNext"  Click="NextPage_Click" ToolTip="Кейинги сахифа" >
                 <MaterialDesign:PackIcon Kind="ArrowRightBold" Width="20" Height="20"/>
             </Button>
         </StackPanel>

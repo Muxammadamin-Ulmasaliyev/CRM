@@ -9,6 +9,7 @@
       mc:Ignorable="d" Background="#614ccb"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="OrdersHistoryPage">
+
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -54,37 +55,37 @@
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock x:Name="txtCustomerName" Grid.Column="0" Text="" Margin="0,0,20,0"/>
-            <TextBlock Grid.Column="0" Text="Orders"/>
+            <TextBlock Grid.Column="0" Text="Заказлар"/>
         </StackPanel>
-        <TextBlock x:Name="txtOrderDetailsTitle" Grid.Column="2" Text="OrderDetails -> Id : "/>
+        <TextBlock x:Name="txtOrderDetailsTitle" Grid.Column="2" Text="Списка заказ - "/>
 
 
         <ScrollViewer x:Name="scrollViewer" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="1"
                VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 
-            <DataGrid x:Name="ordersDataGrid" FontSize="18" FontFamily="cambria" Background="GhostWhite"
+            <DataGrid x:Name="ordersDataGrid"   Background="GhostWhite"
           CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True"
                       LoadingRow="ordersDataGrid_LoadingRow">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="auto"/>
-                    <DataGridTextColumn Header="OrderDate" Binding="{Binding OrderDate, StringFormat={}{0:dd-MM-yyyy}}" Width="auto"/>
-                    <DataGridTextColumn Header="TotalAmount" Binding="{Binding TotalAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="auto"/>
-                    <DataGridTextColumn Header="TotalPaidAmount" Binding="{Binding TotalPaidAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="auto"/>
-                    <DataGridTemplateColumn Header="list" Width="auto">
+                    <DataGridTextColumn Header="Сана" Binding="{Binding OrderDate, StringFormat={}{0:dd-MM-yyyy}}" Width="auto"/>
+                    <DataGridTextColumn Header="Жами сумма" Binding="{Binding TotalAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="auto"/>
+                    <DataGridTextColumn Header="Туланган сумма" Binding="{Binding TotalPaidAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="auto"/>
+                    <DataGridTemplateColumn Header="Списка" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="btnShowDetails"  Style="{StaticResource MaterialDesignToolButton}"
-                                         Click="btnShowDetails_Click" >
+                                         Click="btnShowDetails_Click" ToolTip="Списка" >
                                     <MaterialDesign:PackIcon Kind="ViewList"  Foreground="Blue"/>
                                 </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="chek" Width="auto">
+                    <DataGridTemplateColumn Header="Чек" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="btnPrintPdfCheque"  Style="{StaticResource MaterialDesignToolButton}"
-                                        Click="btnPrintPdfCheque_Click" >
+                                        Click="btnPrintPdfCheque_Click" ToolTip="Чек" >
                                     <MaterialDesign:PackIcon Kind="File" Foreground="Purple"/>
                                 </Button>
                             </DataTemplate>
@@ -100,40 +101,40 @@
 
         <ScrollViewer x:Name="scrollViewer2" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="1" Grid.Column="2"
         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="auto">
-            <DataGrid  x:Name="orderDetailsDataGrid"  FontSize="18" Background="GhostWhite"
+            <DataGrid  x:Name="orderDetailsDataGrid"   Background="GhostWhite"
                 CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto" />-->
-                    <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="Auto"/>
-                    <DataGridTextColumn Header="Car" Binding="{Binding ProductCarType}" Width="Auto"/>
-                    <DataGridTextColumn Header="Company" Binding="{Binding ProductCompany}" Width="Auto"/>
-                    <DataGridTextColumn Header="Country" Binding="{Binding ProductCountry}" Width="Auto"/>
-                    <DataGridTextColumn Header="Price" Binding="{Binding Price,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
-                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto"/>
-                    <DataGridTextColumn Header="Settype" Binding="{Binding ProductSetType}" Width="Auto"/>
-                    <DataGridTextColumn Header="SubTotal" Binding="{Binding SubTotal,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}" Width="Auto"/>
+                    <DataGridTextColumn Header="Машина" Binding="{Binding ProductCarType}" Width="Auto"/>
+                    <DataGridTextColumn Header="Завод" Binding="{Binding ProductCompany}" Width="Auto"/>
+                    <DataGridTextColumn Header="Давлат" Binding="{Binding ProductCountry}" Width="Auto"/>
+                    <DataGridTextColumn Header="Нарх" Binding="{Binding Price,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Сони" Binding="{Binding Quantity}" Width="Auto"/>
+                    <DataGridTextColumn Header="Урам" Binding="{Binding ProductSetType}" Width="Auto"/>
+                    <DataGridTextColumn Header="Сумма" Binding="{Binding SubTotal,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0">
-            <Button x:Name="btnPreviousOrderPage"  Click="PreviousPage_Click"  >
+            <Button x:Name="btnPreviousOrderPage"  Click="PreviousPage_Click" ToolTip="Олдинги сахифа"   >
                 <MaterialDesign:PackIcon Kind="ArrowLeftBold" Width="20" Height="20"/>
             </Button>
             <TextBlock x:Name="currentPageText" VerticalAlignment="Center" Margin="10,0" Foreground="WhiteSmoke"
-       FontSize="16" FontFamily="Cambria" FontWeight="SemiBold"/>
-            <Button Name="btnNextOrderPage" Click="NextPage_Click" >
+       FontSize="16"  FontWeight="SemiBold"/>
+            <Button Name="btnNextOrderPage" Click="NextPage_Click" ToolTip="Кейинги сахифа" >
                 <MaterialDesign:PackIcon Kind="ArrowRightBold" Width="20" Height="20"/>
             </Button>
         </StackPanel>
 
         <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0">
-            <Button x:Name="btnPreviousOrderDetailsPage"  Click="PreviousPage_Click2" IsEnabled="False"  >
+            <Button x:Name="btnPreviousOrderDetailsPage"  Click="PreviousPage_Click2" IsEnabled="False" ToolTip="Олдинги сахифа"  >
                 <MaterialDesign:PackIcon Kind="ArrowLeftBold" Width="20" Height="20"/>
             </Button>
             <TextBlock x:Name="currentPageText2" VerticalAlignment="Center" Margin="10,0" Foreground="WhiteSmoke"
-       FontSize="16" FontFamily="Cambria" FontWeight="SemiBold"/>
-            <Button x:Name="btnNextOrderDetailsPage"  Click="NextPage_Click2" IsEnabled="False" >
+       FontSize="16"  FontWeight="SemiBold"/>
+            <Button x:Name="btnNextOrderDetailsPage"  Click="NextPage_Click2" IsEnabled="False" ToolTip="Кейинги сахифа" >
                 <MaterialDesign:PackIcon Kind="ArrowRightBold" Width="20" Height="20"/>
             </Button>
         </StackPanel>

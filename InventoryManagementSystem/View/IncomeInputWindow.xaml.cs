@@ -18,6 +18,8 @@ namespace InventoryManagementSystem.View
         {
             _notificationManager = new();
             InitializeComponent();
+            WindowStylingHelper.SetDefaultFontFamily(this);
+
             tbIncome.Focus();
             KeyDown += btnConfirmOrder_KeyDown;
             KeyDown += btnCancel_KeyDown;
@@ -57,13 +59,13 @@ namespace InventoryManagementSystem.View
         {
             if (string.IsNullOrWhiteSpace(tbIncome.Text))
             {
-                txtErrorName.Text = "* Son kiriting *";
+                txtErrorName.Text = "* Сон киритинг *";
                 isSuccess = false;
                 return;
             }
             if (!double.TryParse(StringHelper.TrimAllWhiteSpaces(tbIncome.Text), out var income))
             {
-                txtErrorName.Text = "* Son kiriting *";
+                txtErrorName.Text = "* Сон киритинг *";
                 isSuccess = false;
 
                 return;

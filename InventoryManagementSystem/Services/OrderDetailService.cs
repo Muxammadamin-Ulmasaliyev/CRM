@@ -1,5 +1,4 @@
 ﻿using InventoryManagementSystem.Model;
-using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagementSystem.Services
 {
@@ -25,19 +24,19 @@ namespace InventoryManagementSystem.Services
         }
         public List<OrderDetail> GetOrderDetailsByOrderId(int orderId)
         {
-            /*return dbContext.OrderDetails
-                         .Include(o => o.Product)
-                         .ThenInclude(p => p.Company)
-                         .Include(o => o.Product)
-                         .ThenInclude(p => p.CarType)
-                         .Include(o => o.Product)
-                         .ThenInclude(p => p.Country)
-                         .Where(o => o.OrderId == orderId)
-                         .ToList();*/
-
             return dbContext.OrderDetails
                         .Where(o => o.OrderId == orderId)
                         .ToList();
+        }
+
+
+        public double CalculateAverageIncomePercentage()
+        {
+            if (dbContext.OrderDetails.Count() > 0)
+            {
+                return dbContext.OrderDetails.Select(od => (od.Price / od.RealPrice) - 1).Average();
+            }
+            return 0;
         }
 
 

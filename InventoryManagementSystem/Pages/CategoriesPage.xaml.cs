@@ -1,9 +1,12 @@
-﻿using InventoryManagementSystem.Model;
+﻿using Bogus.DataSets;
+using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using Company = InventoryManagementSystem.Model.Company;
 
 namespace InventoryManagementSystem.Pages
 {
@@ -28,23 +31,38 @@ namespace InventoryManagementSystem.Pages
             _companyService = new(new AppDbContext());
             _carTypeService = new(new AppDbContext());
             _countryService = new(new AppDbContext());
-          
+            SetupUserCustomizationsSettings();
             PopulateDataGrids();
         }
-
+        private void SetupUserCustomizationsSettings()
+        {
+            companyDataGrid.FontSize = Properties.Settings.Default.CategoriesDataGridFontSize;
+            countryDataGrid.FontSize = Properties.Settings.Default.CategoriesDataGridFontSize;
+            carTypeDataGrid.FontSize = Properties.Settings.Default.CategoriesDataGridFontSize;
+            setTypeDataGrid.FontSize = Properties.Settings.Default.CategoriesDataGridFontSize;
+            this.FontFamily = new FontFamily(Properties.Settings.Default.AppFontFamily);
+        }
         private void PopulateDataGrids()
         {
-            using (var dbContext = new AppDbContext())
+            try
             {
-                companies = new ObservableCollection<Company>(dbContext.Companies.ToList());
-                carTypes = new ObservableCollection<CarType>(dbContext.CarTypes.ToList());
-                countries = new ObservableCollection<Country>(dbContext.Countries.ToList());
-                setTypes = new ObservableCollection<SetType>(dbContext.SetTypes.ToList());
+                using (var dbContext = new AppDbContext())
+                {
+                    companies = new ObservableCollection<Company>(dbContext.Companies.ToList());
+                    carTypes = new ObservableCollection<CarType>(dbContext.CarTypes.ToList());
+                    countries = new ObservableCollection<Country>(dbContext.Countries.ToList());
+                    setTypes = new ObservableCollection<SetType>(dbContext.SetTypes.ToList());
+                }
+                companyDataGrid.ItemsSource = companies;
+                countryDataGrid.ItemsSource = countries;
+                carTypeDataGrid.ItemsSource = carTypes;
+                setTypeDataGrid.ItemsSource = setTypes;
             }
-            companyDataGrid.ItemsSource = companies;
-            countryDataGrid.ItemsSource = countries;
-            carTypeDataGrid.ItemsSource = carTypes;
-            setTypeDataGrid.ItemsSource = setTypes;
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
 
@@ -97,12 +115,12 @@ namespace InventoryManagementSystem.Pages
             {
                 if (button.DataContext is Company company)
                 {
-                    var choice = MessageBox.Show($"Every product of this company will be deleted. Are you sure to delete company : {company.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                    var choice = MessageBox.Show($"Бу заводга тегишли барча товарлар учиб кетади. ' {company.Name} ' : номли заводни учириб ташламокчимисиз ? ", "Огохлантириш !", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
 
                     if (choice == MessageBoxResult.Yes)
                     {
                         _companyService.Delete(company);
-                        notificationManager.Show("Success", "company Deleted successfully", NotificationType.Success);
+                        notificationManager.Show("Муваффакият !", "Завод учирилди !", NotificationType.Success);
 
                     }
                 }
@@ -120,14 +138,14 @@ namespace InventoryManagementSystem.Pages
                 var editedValue = (e.EditingElement as TextBox).Text;
                 if (string.IsNullOrWhiteSpace(editedValue))
                 {
-                    notificationManager.Show("Error", "Company name cant be null", NotificationType.Error);
+                    notificationManager.Show("Хатолик !", "Завод номини киритинг !", NotificationType.Error);
                     (e.EditingElement as TextBox).Text = editedCompany.Name;
                     return;
                 }
 
                 editedCompany.Name = editedValue;
                 _companyService.Update(editedCompany);
-                notificationManager.Show("Success", "company edited successfully", NotificationType.Success);
+                notificationManager.Show("Муваффакият !", "Завод номи янгиланди !", NotificationType.Success);
             }
         }
 
@@ -140,13 +158,13 @@ namespace InventoryManagementSystem.Pages
             {
                 if (button.DataContext is Country country)
                 {
-                    var choice = MessageBox.Show($"Every product of this country will be deleted. Are you sure to delete country : {country.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                    var choice = MessageBox.Show($"Бу давлатга тегишли барча товарлар учиб кетади. ' {country.Name} ' : номли давлатни учириб ташламокчимисиз ? ", "Огохлантириш !", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
 
                     if (choice == MessageBoxResult.Yes)
                     {
                         _countryService.Delete(country);
 
-                        notificationManager.Show("Success", "country Deleted successfully", NotificationType.Success);
+                        notificationManager.Show("Муваффакият !", "Давлат учирилди !", NotificationType.Success);
 
                     }
                 }
@@ -162,7 +180,7 @@ namespace InventoryManagementSystem.Pages
                 var editedValue = (e.EditingElement as TextBox).Text;
                 if (string.IsNullOrWhiteSpace(editedValue))
                 {
-                    notificationManager.Show("Error", "country name cant be null", NotificationType.Error);
+                    notificationManager.Show("Хатолик !", "Давлат номини киритинг !", NotificationType.Error);
                     (e.EditingElement as TextBox).Text = editedCountry.Name;
                     return;
                 }
@@ -171,7 +189,7 @@ namespace InventoryManagementSystem.Pages
 
                 _countryService.Update(editedCountry);
 
-                notificationManager.Show("Success", "country edited successfully", NotificationType.Success);
+                notificationManager.Show("Муваффакият !", "Давлат номи янгиланди !", NotificationType.Success);
 
 
             }
@@ -185,14 +203,14 @@ namespace InventoryManagementSystem.Pages
             {
                 if (button.DataContext is CarType carType)
                 {
-                    var choice = MessageBox.Show($"Every product of this car will be deleted. Are you sure to delete car : {carType.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                    var choice = MessageBox.Show($"Бу машинага тегишли барча товарлар учиб кетади. ' {carType.Name} ' : номли машинани учириб ташламокчимисиз ? ", "Огохлантириш !", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
 
                     if (choice == MessageBoxResult.Yes)
                     {
 
                         _carTypeService.Delete(carType);
 
-                        notificationManager.Show("Success", "car Deleted successfully", NotificationType.Success);
+                        notificationManager.Show("Муваффакият !", "Машина учирилди !", NotificationType.Success);
 
                     }
                 }
@@ -209,7 +227,7 @@ namespace InventoryManagementSystem.Pages
                 var editedValue = (e.EditingElement as TextBox).Text;
                 if (string.IsNullOrWhiteSpace(editedValue))
                 {
-                    notificationManager.Show("Error", "car name cant be null", NotificationType.Error);
+                    notificationManager.Show("Хатолик !", "Машина номини киритинг !", NotificationType.Error);
                     (e.EditingElement as TextBox).Text = editedCarType.Name;
                     return;
                 }
@@ -218,7 +236,7 @@ namespace InventoryManagementSystem.Pages
 
                 _carTypeService.Update(editedCarType);
 
-                notificationManager.Show("Success", "car edited successfully", NotificationType.Success);
+                notificationManager.Show("Муваффакият !", "Машина номи янгиланди !", NotificationType.Success);
 
 
             }
@@ -231,7 +249,7 @@ namespace InventoryManagementSystem.Pages
             {
                 if (button.DataContext is SetType setType)
                 {
-                    var choice = MessageBox.Show($"Every product of this setType will be deleted. Are you sure to delete setType : {setType.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                    var choice = MessageBox.Show($"Бу урамга тегишли барча товарлар учиб кетади. ' {setType.Name} ' : номли урамни учириб ташламокчимисиз ? ", "Огохлантириш !", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
 
                     if (choice == MessageBoxResult.Yes)
                     {
@@ -240,7 +258,7 @@ namespace InventoryManagementSystem.Pages
                             dbContext.SetTypes.Remove(setType);
                             dbContext.SaveChanges();
                         }
-                        notificationManager.Show("Success", "settype Deleted successfully", NotificationType.Success);
+                        notificationManager.Show("Муваффакият !", "Урам учирилди !", NotificationType.Success);
 
                     }
                 }
@@ -257,7 +275,7 @@ namespace InventoryManagementSystem.Pages
                 var editedValue = (e.EditingElement as TextBox).Text;
                 if (string.IsNullOrWhiteSpace(editedValue))
                 {
-                    notificationManager.Show("Error", "settype name cant be null", NotificationType.Error);
+                    notificationManager.Show("Хатолик !", "Урам номини киритинг !", NotificationType.Error);
 
                     (e.EditingElement as TextBox).Text = editedSetType.Name;
                     return;
@@ -271,7 +289,7 @@ namespace InventoryManagementSystem.Pages
                     dbContext.SaveChanges();
 
                 }
-                notificationManager.Show("Success", "settype edited successfully", NotificationType.Success);
+                notificationManager.Show("Муваффакият !", "Урам номи янгиланди !", NotificationType.Success);
             }
         }
         #endregion

@@ -17,8 +17,11 @@ namespace InventoryManagementSystem.View
         public AddCustomerWindow()
         {
             _customerService = new(new AppDbContext());
+
             notificationManager = new();
             InitializeComponent();
+            WindowStylingHelper.SetDefaultFontFamily(this);
+
             KeyDown += btnAddCustomer_KeyDown;
             KeyDown += btnCancel_KeyDown;
         }
@@ -40,7 +43,7 @@ namespace InventoryManagementSystem.View
             };
            
             _customerService.Add(customerToAdd);
-            notificationManager.Show("Success", "Customer added successfully", NotificationType.Success);
+            notificationManager.Show("Муваффакият", "Мижоз кушилди", NotificationType.Success);
 
             ClearTextBoxes();
             CustomerAdded();
@@ -50,11 +53,11 @@ namespace InventoryManagementSystem.View
         {
             if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
             {
-                txtErrorName.Text = "* Klient FIO ni kiriting! *";
+                txtErrorName.Text = "* Клиент ФИО ни киритинг! *";
             }
             if (string.IsNullOrWhiteSpace(tbPhone.txtInput.Text))
             {
-                txtErrorPhone.Text = "* Klient telefon raqamini  kiriting! *";
+                txtErrorPhone.Text = "* Телефон ракамни киритинг! *";
             }
         }
         private void tbName_PreviewTextInput(object sender, TextCompositionEventArgs e)

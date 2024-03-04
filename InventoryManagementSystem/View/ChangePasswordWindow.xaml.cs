@@ -1,4 +1,5 @@
-﻿using Notification.Wpf;
+﻿using InventoryManagementSystem.Services;
+using Notification.Wpf;
 using System.Windows;
 using System.Windows.Input;
 
@@ -13,6 +14,8 @@ namespace InventoryManagementSystem.View
             KeyDown += btnCancel_KeyDown;
             _notificationManager = new();
             InitializeComponent();
+            WindowStylingHelper.SetDefaultFontFamily(this);
+
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -24,18 +27,18 @@ namespace InventoryManagementSystem.View
         {
             if (!IsPasswordsAreSame())
             {
-                txtError.Text = "* Passwords must be same *";
+                txtError.Text = "* Пароллар бир хил булиши керак *";
                 return;
             }
             if (!ValidatePasswordLengths())
             {
-                txtError.Text = "* Passwords must be at least 4 char length *";
+                txtError.Text = "* Узунрок пароль куйинг! *";
                 return;
             }
 
             Properties.Settings.Default.AdminPassword = pbInput.Password;
             Properties.Settings.Default.Save();
-            _notificationManager.Show("Success", "password changed successfully", NotificationType.Success);
+            _notificationManager.Show("Муваффакият", "Пароль узгартирилди", NotificationType.Success);
 
             Close();
 

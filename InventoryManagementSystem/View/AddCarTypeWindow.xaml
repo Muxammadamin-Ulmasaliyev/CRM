@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryManagementSystem.View"
         xmlns:userControls="clr-namespace:InventoryManagementSystem.UserControls"
+        xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        
         AllowsTransparency="True" Background="Transparent"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None"
-        Title="AddCarTypeWindow" Height="160" Width="320" FontFamily="cambria">
+        Title="AddCarTypeWindow" Height="160" Width="320" >
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -28,18 +31,19 @@
 
         <Grid>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <userControls:ClearableTextBox Placeholder="Mashina nomi" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput" />
+                <userControls:ClearableTextBox Placeholder="Машина номи" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput" />
                 <TextBlock x:Name="txtErrorName" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                     <Button Name="btnCancel"  Width="100 " Height="40" Margin="7,9,7,0" 
                             Foreground="Red" BorderBrush="Red" Style="{StaticResource MaterialDesignOutlinedLightButton}"
-                         Content="Cancel"  Click="btnCancel_Click" KeyDown="btnCancel_KeyDown"/>
+                         Content="Ортга"  Click="btnCancel_Click" KeyDown="btnCancel_KeyDown"/>
 
                     <Button Name="btnAddCarType" Width="125" Height="40" Margin="7,9,7,0" 
                             Foreground="Green" BorderBrush="Green" 
-                         Content="Add Car"  Click="btnAddCarType_Click" KeyDown="btnAddCarType_KeyDown"
-                            Style="{StaticResource MaterialDesignOutlinedLightButton}"/>
+                         Content="Кушиш"  Click="btnAddCarType_Click" KeyDown="btnAddCarType_KeyDown"
+                            Style="{StaticResource MaterialDesignOutlinedLightButton}">
+                    </Button>
 
 
                 </StackPanel>

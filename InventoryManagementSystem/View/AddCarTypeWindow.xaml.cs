@@ -2,9 +2,7 @@
 using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace InventoryManagementSystem.View
 {
@@ -20,6 +18,7 @@ namespace InventoryManagementSystem.View
             notificationManager = new();
             _carTypeService = new(new AppDbContext());
             InitializeComponent();
+            WindowStylingHelper.SetDefaultFontFamily(this);
             tbName.txtInput.Focus();
             KeyDown += btnAddCarType_KeyDown;
             KeyDown += btnCancel_KeyDown;
@@ -31,19 +30,16 @@ namespace InventoryManagementSystem.View
 
             if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
             {
-                DisplayError("* Mashina nomini kiriting ! *");
+                DisplayError("* Машина номини киритинг ! *");
                 return;
             }
-            using (var dbContext = new AppDbContext())
+            if (_carTypeService.IsCarTypeExists(carTypeName: tbName.txtInput.Text))
             {
-                if (_carTypeService.IsCarTypeExists(carTypeName: tbName.txtInput.Text))
-                {
-                    DisplayError("* Shu nomli mashina bazada mavjud ! *");
-                    return;
-                }
-                _carTypeService.AddCarType(carTypeName: tbName.txtInput.Text);
+                DisplayError("* Шу номли машина базада мавжуд ! *");
+                return;
             }
-            notificationManager.Show("Success", "Car added successfully", NotificationType.Success);
+            _carTypeService.AddCarType(carTypeName: tbName.txtInput.Text);
+            notificationManager.Show("Муваффакият !", "Машина кушилди", NotificationType.Success);
             tbName.txtInput.Clear();
             CarTypeAdded();
         }

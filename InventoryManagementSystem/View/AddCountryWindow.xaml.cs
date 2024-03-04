@@ -16,6 +16,8 @@ namespace InventoryManagementSystem.View
             _notificationManager = new();
             _countryService = new(new AppDbContext());
             InitializeComponent();
+            WindowStylingHelper.SetDefaultFontFamily(this);
+
             tbName.txtInput.Focus();
             KeyDown += btnAddCountry_KeyDown;
             KeyDown += btnCancel_KeyDown;
@@ -26,22 +28,19 @@ namespace InventoryManagementSystem.View
 
             if (string.IsNullOrWhiteSpace(tbName.txtInput.Text))
             {
-                DisplayError("* Davlat nomini kiriting ! *");
+                DisplayError("* Давлат номини киритинг ! *");
                 return;
             }
-            using (var dbContext = new AppDbContext())
+            if (_countryService.IsCountryExists(countryName: tbName.txtInput.Text))
             {
-                if (_countryService.IsCountryExists(countryName: tbName.txtInput.Text))
-                {
-                    DisplayError("* Shu nomli davlat bazada mavjud ! *");
-                    return;
-                }
-
-                _countryService.AddCountry(countryName: tbName.txtInput.Text);
-
+                DisplayError("* Шу номли Давлат базада мавжуд ! *");
+                return;
             }
 
-            _notificationManager.Show("Success", "country added successfully", NotificationType.Success);
+            _countryService.AddCountry(countryName: tbName.txtInput.Text);
+
+
+            _notificationManager.Show("Муваффакият", "Давлат кушилди", NotificationType.Success);
             tbName.txtInput.Clear();
             CountryAdded();
 

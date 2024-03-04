@@ -3,6 +3,7 @@ using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Notification.Wpf;
+using NPOI.SS.Formula.Functions;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,11 +32,13 @@ namespace InventoryManagementSystem.Pages
             LoadPage();
             PopulateNumberOfCustomersTxt();
             notificationManager = new();
-            txtNumberOfCustomersInDb.Text = $"Bazada mavjud jami mijozlar soni : {customers.Count}";
+            txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами мижозлар сони : {customers.Count}";
 
         }
         private void SetupUserCustomizationsSettings()
         {
+            this.FontFamily = new FontFamily(Properties.Settings.Default.AppFontFamily);
+
             customerDataGrid.FontSize = Properties.Settings.Default.CustomersDataGridFontSize;
         }
         private void SetupTimerSettings()
@@ -47,7 +50,7 @@ namespace InventoryManagementSystem.Pages
         }
         private void PopulateNumberOfCustomersTxt()
         {
-            txtNumberOfCustomers.Text = $"Жадвалдаги Mijozlar сони : {customerDataGrid.Items.Count}";
+            txtNumberOfCustomers.Text = $"Жадвалдаги мижозлар сони : {customerDataGrid.Items.Count}";
         }
         private void DebounceTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
@@ -61,13 +64,21 @@ namespace InventoryManagementSystem.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Xatolik", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.ToString(), "Хатолик !", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void PopulateDataGrid()
         {
-            customers = new ObservableCollection<Customer>(_customerService.GetAll());
-            PopulateNumberOfCustomersTxt();
+            try
+            {
+                customers = new ObservableCollection<Customer>(_customerService.GetAll());
+                PopulateNumberOfCustomersTxt();
+
+            }
+            catch (Exception)
+            {
+
+            }
         }
         private bool IsFilteringDisabled()
         {
@@ -205,13 +216,19 @@ namespace InventoryManagementSystem.Pages
             {
                 if (button.DataContext is Customer customer)
                 {
-                    var choice = MessageBox.Show($"Are you sure to delete customer : {customer.Name} ", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                    var choice = MessageBox.Show($"{customer.Name} исмли мижозни учириб ташламокчимисиз ?", "Огохлантириш !", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
                     if (choice == MessageBoxResult.Yes)
                     {
 
+                        if(customer.TotalOrdersCount > 0)
+                        {
+                            MessageBox.Show($"{customer.Name} : мижоз аввал товар сотиб олгани учун, учириб ташлаш мумкин емас !", "Хатолик !", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+
                         _customerService.Delete(customer);
 
-                        notificationManager.Show("Success", "Customer Deleted successfully", NotificationType.Success);
+                        notificationManager.Show("Муваффакият !", "Мижоз учирилди !", NotificationType.Success);
 
                         PopulateDataGrid();
                         LoadPage();
@@ -237,7 +254,7 @@ namespace InventoryManagementSystem.Pages
             if (IsFilteringDisabled())
             {
                 LoadPage();
-                txtNumberOfCustomersInDb.Text = $"Bazada mavjud jami mijozlar soni : {customers.Count}";
+                txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами мижозлар сони : {customers.Count}";
 
             }
             else
@@ -247,7 +264,7 @@ namespace InventoryManagementSystem.Pages
                 view.Filter = SearchFilter;
                 filteredCustomers = new ObservableCollection<Customer>(view.Cast<Customer>().ToList());
                 LoadPage();
-                txtNumberOfCustomersInDb.Text = $"Bazada mavjud jami mijozlar soni : {filteredCustomers.Count}";
+                txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами мижозлар сони : {filteredCustomers.Count}";
             }
 
 
@@ -278,7 +295,7 @@ namespace InventoryManagementSystem.Pages
         {
             searchBar.Clear();
             LoadPage();
-            txtNumberOfCustomersInDb.Text = $"Bazada mavjud jami mijozlar soni : {customers.Count}";
+            txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами мижозлар сони : {customers.Count}";
         }
 
         private void btnHistory_Click(object sender, RoutedEventArgs e)
@@ -302,29 +319,35 @@ namespace InventoryManagementSystem.Pages
                 case "Name":
                     if (string.IsNullOrWhiteSpace(editedValue.ToString()))
                     {
-                        notificationManager.Show("Error", "Bu bosh joy bo`lishi mumknimas.", NotificationType.Error);
+                        notificationManager.Show("Хатолик !", "ФИО киритинг !", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = editedCustomer.Name.ToString();
                         return;
                     }
                     else
                     {
                         editedCustomer.Name = editedValue.ToString();
+                        notificationManager.Show("Муваффакият !", "Мижоз исми янгиланди", NotificationType.Success);
+
                     }
                     break;
                 case "Address":
                     // Address is optional property
                     editedCustomer.Address = editedValue.ToString();
+                    notificationManager.Show("Муваффакият !", "Мижоз аддреси янгиланди", NotificationType.Success);
+
                     break;
                 case "Phone":
                     if (string.IsNullOrWhiteSpace(editedValue.ToString()))
                     {
-                        notificationManager.Show("Error", "Bu bosh joy bo`lishi mumknimas.", NotificationType.Error);
+                        notificationManager.Show("Хатолик !", "Телефон номерни киритинг !", NotificationType.Error);
                         (e.EditingElement as TextBox).Text = editedCustomer.Phone.ToString();
                         return;
                     }
                     else
                     {
                         editedCustomer.Phone = editedValue.ToString();
+                        notificationManager.Show("Муваффакият !", "Мижоз телефон номери янгиланди", NotificationType.Success);
+
                     }
                     break;
 
@@ -333,7 +356,6 @@ namespace InventoryManagementSystem.Pages
             }
 
             _customerService.Update(editedCustomer);
-            notificationManager.Show("Success", $"{propertyName} changed successfully", NotificationType.Success);
         }
 
         private void customerDataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -366,7 +388,7 @@ namespace InventoryManagementSystem.Pages
             Customer customer = (Customer)(sender as Button).DataContext;
             customer.Debt -= incomeInputWindow.GetTotalPaidAmount();
             _customerService.Update(customer);
-            notificationManager.Show("Success", "Debt changed successfully", NotificationType.Success);
+            notificationManager.Show("Муваффакият !", "Карз туланди", NotificationType.Success);
             LoadPage();
         }
     }

@@ -1,4 +1,5 @@
-﻿using InventoryManagementSystem.Model;
+﻿using ControlzEx.Standard;
+using InventoryManagementSystem.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagementSystem.Services
@@ -12,7 +13,7 @@ namespace InventoryManagementSystem.Services
             this.dbContext = dbContext;
         }
 
-       
+
 
         public void AddProducts(List<Product> products)
         {
@@ -27,6 +28,14 @@ namespace InventoryManagementSystem.Services
             dbContext.SaveChanges();
         }
 
+        public double CalculateNetWorth()
+        {
+            double sum = 0, sumUsd = 0;
+            sum = (double)dbContext.Products.Take(5).Sum(p => p.Quantity * p.RealPrice);
+            sumUsd = (double)dbContext.Products.Take(5).Sum(p => p.Quantity * p.USDPrice * Properties.Settings.Default.CurrencyRate);
+
+            return sum + sumUsd;
+        }
 
         public Product GetProduct(int id)
         {
@@ -59,12 +68,23 @@ namespace InventoryManagementSystem.Services
         public List<Product> GetAll()
         {
             return dbContext.Products.Include(p => p.Company).Include(p => p.Country).Include(p => p.CarType).Include(p => p.SetType).ToList();
+        }
+
+        public List<Product> GetTopSoldProducts(int numberOfProducts)
+        {
+            return dbContext.Products
+                    .Include(p => p.Company)
+                    .Include(p => p.Country)
+                    .Include(p => p.CarType)
+                    .OrderByDescending(p => p.QuantitySold)
+                    .Take(numberOfProducts)
+                    .ToList();
 
         }
 
-        public bool IsProductCodeExists(string productCode, out Product? product)
+        public bool IsProductCodeExists(string productCode, string barcode, out Product? product)
         {
-            product = dbContext.Products.FirstOrDefault(p => p.Code == productCode);
+            product = dbContext.Products.FirstOrDefault(p => p.Code == productCode || p.Barcode == barcode);
             if (product != null)
             {
                 return true;
@@ -72,16 +92,11 @@ namespace InventoryManagementSystem.Services
             return false;
         }
 
-        public List<Product> GetProductsByCategories(List<Country> selectedCountries)
+       
+
+        public Product GetProductByBarcode(string barcode)
         {
-            var selectedCountryIds = selectedCountries.Select(c => c.Id).ToArray();
-
-            List<Product> products = new();   
-
-            products.AddRange(dbContext.Products.Where(p => selectedCountryIds.Contains(p.Id)));
-
-            return products;
-
+            return dbContext.Products.Include(p => p.Company).Include(p => p.Country).Include(p => p.CarType).Include(p => p.SetType).FirstOrDefault(p => p.Barcode == barcode);
 
         }
     }

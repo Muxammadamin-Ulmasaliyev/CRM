@@ -10,6 +10,7 @@ namespace InventoryManagementSystem.Model
         public double SubTotal { get; set; } = 0;
         public int Quantity { get; set; }
         public double Price { get; set; }
+        public double RealPrice { get; set; }
 
         public int OrderId { get; set; }
         public Order Order { get; set; }

@@ -3,23 +3,23 @@ using System.Windows.Controls;
 using Notification.Wpf;
 using InventoryManagementSystem.CustomControls;
 using InventoryManagementSystem.View;
-using InventoryManagementSystem.Model;
-using InventoryManagementSystem.Pages;
 namespace InventoryManagementSystem
 {
     public partial class MainWindow : Window
     {
 
         private NotificationManager notificationManager;
-
+        private int sidebarPreviousSelectedIndex = 0;
         public MainWindow()
         {
             InitializeComponent();
             notificationManager = new();
             sidebar.SelectedIndex = 0;
+
         }
 
 
+      
         private void sidebar_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = sidebar.SelectedItem as NavButton;
@@ -42,6 +42,7 @@ namespace InventoryManagementSystem
             this.Opacity = 0.4;
             passwordWindow.ShowDialog();
             this.Opacity = 1.0;
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -54,5 +55,7 @@ namespace InventoryManagementSystem
             }
 
         }
+
+        
     }
 }

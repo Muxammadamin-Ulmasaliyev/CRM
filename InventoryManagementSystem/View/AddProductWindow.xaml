@@ -7,7 +7,7 @@
         xmlns:userControls="clr-namespace:InventoryManagementSystem.UserControls"
         xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" 
-        Title="AddProductWindow" Height="525" Width="700" ResizeMode="NoResize">
+        Title="AddProductWindow" Height="575" Width="700" ResizeMode="NoResize">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -47,24 +47,25 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <userControls:ClearableTextBox Placeholder="Tovar nomi" x:Name="tbName" PreviewTextInput="textBox_PreviewTextInput" />
+            <userControls:ClearableTextBox Placeholder="Товар номи" x:Name="tbName" PreviewTextInput="textBox_PreviewTextInput" />
             <TextBlock x:Name="txtErrorName" />
-            <userControls:ClearableTextBox Placeholder="Kodi (ixtiyoriy)" x:Name="tbCode"/>
+            <userControls:ClearableTextBox Placeholder="Код (ихтиёрий)" x:Name="tbCode"/>
+            <userControls:ClearableTextBox Placeholder="Штрих код (ихтиёрий)" x:Name="tbBarcode"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <RadioButton Style="{StaticResource MaterialDesignChoiceChipAccentOutlineRadioButton}" BorderThickness="2" x:Name="rbUzs" Content="Сум"
                              FontSize="16" Checked="RadioButton_Checked" Margin="15" FontWeight="SemiBold"/>
                 <RadioButton Style="{StaticResource MaterialDesignChoiceChipAccentOutlineRadioButton}" BorderThickness="2" x:Name="rbUsd" Content="$"
                              FontSize="16" Checked="RadioButton_Checked" Margin="15" FontWeight="SemiBold"/>
             </StackPanel>
-            <userControls:ClearableTextBox Placeholder="Tannarx" x:Name="tbRealPrice" PreviewTextInput="textBox_PreviewTextInput"   />
+            <userControls:ClearableTextBox Placeholder="Таннарх" x:Name="tbRealPrice" PreviewTextInput="textBox_PreviewTextInput"   />
             <TextBlock x:Name="txtErrorRealPrice" />
-            <userControls:ClearableTextBox Placeholder="Donabay narx" x:Name="tbPrice"  PreviewTextInput="textBox_PreviewTextInput"/>
+            <userControls:ClearableTextBox Placeholder="Сотиш нарх" x:Name="tbPrice"  PreviewTextInput="textBox_PreviewTextInput"/>
             <TextBlock x:Name="txtErrorPrice" />
 
 
-            <userControls:ClearableTextBox Placeholder="$ tannarx" x:Name="tbUsdPrice" PreviewTextInput="textBox_PreviewTextInput"/>
+            <userControls:ClearableTextBox Placeholder="$ Таннарх" x:Name="tbUsdPrice" PreviewTextInput="textBox_PreviewTextInput"/>
             <TextBlock x:Name="txtErrorUsdPrice"  />
-            <userControls:ClearableTextBox Placeholder="$ donabay narx" x:Name="tbUsdPrice2" PreviewTextInput="textBox_PreviewTextInput"/>
+            <userControls:ClearableTextBox Placeholder="$ Сотиш нарх" x:Name="tbUsdPrice2" PreviewTextInput="textBox_PreviewTextInput"/>
             <TextBlock x:Name="txtErrorUsdPrice2" Margin="0,-5,0,0" />
             <userControls:ClearableTextBox Margin="5"  Placeholder="Miqdori" x:Name="tbQuantity" PreviewTextInput="textBox_PreviewTextInput"/>
             <TextBlock x:Name="txtErrorQuantity" Margin="0,-2,0,0" />
@@ -100,7 +101,7 @@
 
             <Button Name="btnAddProduct" Width="275" Height="40" 
                     Margin="15"  Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Content="Add Product" Click="btnAddProduct_Click" KeyDown="btnAddProduct_KeyDown"/>
+                    Content="Кушиш" Click="btnAddProduct_Click" KeyDown="btnAddProduct_KeyDown"/>
             <!--
             <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button Name="btnAddCountry" Width="80"  Height="40" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}" 

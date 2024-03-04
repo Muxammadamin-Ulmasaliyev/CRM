@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:InventoryManagementSystem.Pages"
       xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       
-      mc:Ignorable="d"  Background="AliceBlue" FontFamily="cambria"
+      mc:Ignorable="d"  Background="AliceBlue" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CategoriesPage">
     <Page.Resources>
@@ -44,24 +44,24 @@
         </Grid.ColumnDefinitions>
 
 
-        <Rectangle Fill="Gray" Grid.Row="0" Grid.ColumnSpan="2"/>
-        <Rectangle Fill="Gray" Grid.Row="2" Grid.ColumnSpan="2"/>
-        <Rectangle Fill="Gray" Grid.Row="4" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="#eaeaea" Grid.Row="0" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="#eaeaea" Grid.Row="2" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="#eaeaea" Grid.Row="4" Grid.ColumnSpan="2"/>
 
         <ScrollViewer Grid.Row="1" Grid.Column="0"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
 
             <Expander Background="#614ccb" Header="Companies" x:Name="companiesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
-                    <DataGrid CellEditEnding="companyDataGrid_CellEditEnding" x:Name="companyDataGrid" FontSize="18"
+                    <DataGrid CellEditEnding="companyDataGrid_CellEditEnding" x:Name="companyDataGrid" CanUserSortColumns="False"
                                      ItemsSource="{Binding Companies}" SelectedItem="{Binding SelectedCompany}"
                                     CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
+                            <DataGridTextColumn Header="Номи" Binding="{Binding Name}" Width="15*"/>
                             <DataGridTemplateColumn Header="" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="btnDeleteCompany" 
+                                        <Button x:Name="btnDeleteCompany" ToolTip="Учириш"
                                                 Style="{StaticResource MaterialDesignToolButton}"
                                                 Click="btnDeleteCompany_Click">
                                             <MaterialDesign:PackIcon />
@@ -80,16 +80,16 @@
 
             <Expander Background="#614ccb"  Header="Countries" x:Name="countriesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
-                    <DataGrid  CellEditEnding="countryDataGrid_CellEditEnding" x:Name="countryDataGrid" FontSize="18"
+                    <DataGrid  CellEditEnding="countryDataGrid_CellEditEnding" x:Name="countryDataGrid"  CanUserSortColumns="False"
                      ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}"
                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
+                            <DataGridTextColumn Header="Номи" Binding="{Binding Name}" Width="15*"/>
                             <DataGridTemplateColumn Header="" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="btnDeleteCountry" Style="{StaticResource MaterialDesignToolButton}"
+                                        <Button x:Name="btnDeleteCountry" Style="{StaticResource MaterialDesignToolButton}" ToolTip="Учириш"
                                                 Click="btnDeleteCountry_Click">
                                             <MaterialDesign:PackIcon />
 
@@ -107,16 +107,16 @@
         <ScrollViewer Grid.Row="3" Grid.Column="0"  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Auto">
             <Expander  Background="#614ccb" Header="Car Types"  x:Name="carTypesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
-                    <DataGrid CellEditEnding="carTypeDataGrid_CellEditEnding" x:Name="carTypeDataGrid" FontSize="18"
+                    <DataGrid CellEditEnding="carTypeDataGrid_CellEditEnding" x:Name="carTypeDataGrid" CanUserSortColumns="False"
                     ItemsSource="{Binding CarTypes}" SelectedItem="{Binding SelectedCarType}"
                      CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
+                            <DataGridTextColumn Header="Номи" Binding="{Binding Name}" Width="15*"/>
                             <DataGridTemplateColumn Header="" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="btnDeleteCarType" Style="{StaticResource MaterialDesignToolButton}"
+                                        <Button x:Name="btnDeleteCarType" Style="{StaticResource MaterialDesignToolButton}" ToolTip="Учириш"
                                                 Click="btnDeleteCarType_Click">
                                             <MaterialDesign:PackIcon />
 
@@ -135,16 +135,16 @@
 
             <Expander Background="#614ccb"  Header="Set Types"  x:Name="setTypesExpander" ExpandDirection="Down" IsExpanded="True">
                 <StackPanel>
-                    <DataGrid  x:Name="setTypeDataGrid" FontSize="18" IsReadOnly="True"
+                    <DataGrid  x:Name="setTypeDataGrid" IsReadOnly="True" CanUserSortColumns="False"
                     ItemsSource="{Binding SetTypes}" SelectedItem="{Binding SelectedSetType}"
                     CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="15*"/>
+                            <DataGridTextColumn Header="Номи" Binding="{Binding Name}" Width="15*"/>
                             <DataGridTemplateColumn Header="" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="btnDeleteSetType"  Style="{StaticResource MaterialDesignToolButton}"
+                                        <Button x:Name="btnDeleteSetType"  Style="{StaticResource MaterialDesignToolButton}" ToolTip="Учириш"
                                                 IsEnabled="False" Click="btnDeleteSetType_Click">
                                             <MaterialDesign:PackIcon />
 
