@@ -1,6 +1,7 @@
 ﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
+using MethodTimer;
 using Notification.Wpf;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
@@ -40,9 +41,22 @@ namespace InventoryManagementSystem.Pages
             PopulateCustomersComboBox();
             CanSaveOrder();
             ShowTotalSums();
-
             tbBarcode.Focus();
             KeyDown += btnSeachWithBarcode_KeyDown;
+            IsCartEmpty();
+
+        }
+        private void IsCartEmpty()
+        {
+            if (currentOrder.OrderDetails.Count > 0)
+            {
+                Shared.Shared.IsCartEmpty = false;
+            }
+            else
+            {
+                Shared.Shared.IsCartEmpty = true;
+
+            }
         }
         private void btnSeachWithBarcode_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
@@ -58,6 +72,8 @@ namespace InventoryManagementSystem.Pages
             }
         }
 
+
+        [Time]
         private void AddProductToCartAfterScanning(string barcode)
         {
             OrderDetail? listedOrderDetail = orderDetails.FirstOrDefault(od => od.Product.Barcode == barcode);
@@ -117,6 +133,8 @@ namespace InventoryManagementSystem.Pages
             tbBarcode.Focus();
 
             CanSaveOrder();
+            IsCartEmpty();
+
 
         }
 
@@ -137,7 +155,9 @@ namespace InventoryManagementSystem.Pages
 
         private void ShowTotalSums()
         {
-            txtOrderTotalSumUzs.Text = $"Жами сумма : {currentOrder.TotalAmount.ToString("c0", new CultureInfo("uz-UZ"))}";
+            var uzCulture = new CultureInfo("uz-UZ");
+            uzCulture.NumberFormat.CurrencySymbol = "сум";
+            txtOrderTotalSumUzs.Text = $"Жами сумма : {currentOrder.TotalAmount.ToString("c0", uzCulture)}";
             tbBarcode.Focus();
 
         }
@@ -189,6 +209,7 @@ namespace InventoryManagementSystem.Pages
             CanSaveOrder();
             CalculateOrderTotals();
             ShowTotalSums();
+            IsCartEmpty();
             tbBarcode.Focus();
 
         }
@@ -277,7 +298,7 @@ namespace InventoryManagementSystem.Pages
             }
         }
 
-
+        [Time]
         private void GeneretePDFCheque(Order order)
         {
             QuestPDF.Settings.License = LicenseType.Community;

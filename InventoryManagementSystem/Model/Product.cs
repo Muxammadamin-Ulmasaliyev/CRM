@@ -9,6 +9,8 @@ namespace InventoryManagementSystem.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public string? Code { get; set; }
+
+        [MaxLength(128)]
         public string? Barcode { get; set; }
         public double? RealPrice { get; set; } // tannarx
         public double? Price { get; set; } // sotich narx

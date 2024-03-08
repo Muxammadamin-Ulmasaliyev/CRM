@@ -18,11 +18,11 @@ namespace InventoryManagementSystem.Services
             dbContext.SaveChanges();
         }
 
-        public bool ProductExists(int productId)
+        public bool IsProductSoldAtLeastOneTime(int productId)
         {
             return dbContext.OrderDetails.Any(od => od.ProductId == productId);
         }
-        public List<OrderDetail> GetOrderDetailsByOrderId(int orderId)
+        public List<OrderDetail> GetAllOrderDetailsByOrderId(int orderId)
         {
             return dbContext.OrderDetails
                         .Where(o => o.OrderId == orderId)

@@ -54,7 +54,7 @@
                     <Button Name="btnEditCurrencyRate" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditCurrencyRate_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnsaveCurrencyRate" Background="#09aa09"  BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnsaveCurrencyRate_Click" IsEnabled="False" Visibility="Hidden">
+                    <Button Name="btnsaveCurrencyRate" Background="#09aa09"   BorderBrush="DarkGreen" Margin="0" KeyDown="btnSave_KeyDown" MinHeight="50" Click="btnsaveCurrencyRate_Click" IsEnabled="False" Visibility="Hidden">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
@@ -80,7 +80,7 @@
 
         <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top"  Margin="25" HorizontalAlignment="Center" >
 
-            <TextBlock Text="Бир сахифадаги маълумотлар сони" HorizontalAlignment="Center" FontSize="18" Foreground="#614ccb"/>
+            <TextBlock Text="Бир сахифадаги маълумотлар сони" HorizontalAlignment="Center" FontSize="24" Foreground="#614ccb"/>
 
             <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" >
                 <TextBlock Text="Товарлар" />
@@ -90,7 +90,7 @@
                     <Button Name="btnEditProductsPerPage" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditProductsPerPage_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveProductsPerPage" Background="#09aa09"  Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveProductsPerPage_Click" IsEnabled="False">
+                    <Button Name="btnSaveProductsPerPage" Background="#09aa09" KeyDown="btnSave_KeyDown"   Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveProductsPerPage_Click" IsEnabled="False">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
@@ -104,7 +104,7 @@
                     <Button Name="btnEditCustomersPerPage" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditCustomersPerPage_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveCustomersPerPage" Background="#09aa09"  Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCustomersPerPage_Click" IsEnabled="False">
+                    <Button Name="btnSaveCustomersPerPage" Background="#09aa09" KeyDown="btnSave_KeyDown"   Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCustomersPerPage_Click" IsEnabled="False">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
@@ -118,7 +118,7 @@
                     <Button Name="btnEditOrdersPerPage" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditOrdersPerPage_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveOrdersPerPage" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrdersPerPage_Click" IsEnabled="False">
+                    <Button Name="btnSaveOrdersPerPage" Background="#09aa09"  KeyDown="btnSave_KeyDown" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrdersPerPage_Click" IsEnabled="False">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
@@ -132,7 +132,7 @@
                     <Button Name="btnEditOrderDetailsPerPage" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditOrderDetailsPerPage_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveOrderDetailsPerPage" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrderDetailsPerPage_Click" IsEnabled="False">
+                    <Button Name="btnSaveOrderDetailsPerPage" Background="#09aa09" KeyDown="btnSave_KeyDown" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrderDetailsPerPage_Click" IsEnabled="False">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
@@ -142,7 +142,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top"  Margin="25" HorizontalAlignment="Center">
-            <TextBlock Text="Жадвал шрифт улчамлари" HorizontalAlignment="Center" FontSize="18" Foreground="#614ccb"/>
+            <TextBlock Text="Жадвал шрифт улчамлари" HorizontalAlignment="Center" FontSize="24" Foreground="#614ccb"/>
 
             <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center">
 
@@ -153,7 +153,7 @@
                     <Button Name="btnEditProductDataGridFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditProductDataGridFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveProductDataGridFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveProductDataGridFontSize_Click" IsEnabled="False">
+                    <Button Name="btnSaveProductDataGridFontSize" Background="#09aa09" KeyDown="btnSave_KeyDown" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveProductDataGridFontSize_Click" IsEnabled="False">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
@@ -168,7 +168,7 @@
                     <Button Name="btnEditCustomerDataGridFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditCustomerDataGridFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveCustomerDataGridFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCustomerDataGridFontSize_Click" IsEnabled="False">
+                    <Button Name="btnSaveCustomerDataGridFontSize" Background="#09aa09" KeyDown="btnSave_KeyDown" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCustomerDataGridFontSize_Click" IsEnabled="False">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
@@ -183,7 +183,7 @@
                     <Button Name="btnEditOrderDataGridFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditOrderDataGridFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveOrderDataGridFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrderDataGridFontSize_Click" IsEnabled="False">
+                    <Button Name="btnSaveOrderDataGridFontSize" Background="#09aa09" KeyDown="btnSave_KeyDown" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrderDataGridFontSize_Click" IsEnabled="False">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
@@ -198,7 +198,7 @@
                     <Button Name="btnEditOrderDetailsDataGridFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditOrderDetailsDataGridFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveOrderDetailsDataGridFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrderDetailsDataGridFontSize_Click" IsEnabled="False">
+                    <Button Name="btnSaveOrderDetailsDataGridFontSize" Background="#09aa09" KeyDown="btnSave_KeyDown" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveOrderDetailsDataGridFontSize_Click" IsEnabled="False">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
@@ -213,7 +213,7 @@
                     <Button Name="btnEditCartDataGridFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditCartDataGridFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveCartDataGridFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCartDataGridFontSize_Click" IsEnabled="False">
+                    <Button Name="btnSaveCartDataGridFontSize" Background="#09aa09" KeyDown="btnSave_KeyDown" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCartDataGridFontSize_Click" IsEnabled="False">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>
@@ -228,7 +228,7 @@
                     <Button Name="btnEditCategoriesFontSize" Background="#614ccb" Margin="0" MinHeight="50" Click="btnEditCategoriesFontSize_Click" IsEnabled="True">
                         <MaterialDesign:PackIcon Kind="Pencil" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
-                    <Button Name="btnSaveCategoriesFontSize" Background="#09aa09" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCategoriesFontSize_Click" IsEnabled="False">
+                    <Button Name="btnSaveCategoriesFontSize" Background="#09aa09" KeyDown="btnSave_KeyDown" Visibility="Hidden" BorderBrush="DarkGreen" Margin="0" MinHeight="50" Click="btnSaveCategoriesFontSize_Click" IsEnabled="False">
                         <MaterialDesign:PackIcon Kind="Tick" Foreground="ghostWhite" Width="20" Height="20" />
                     </Button>
                 </StackPanel>

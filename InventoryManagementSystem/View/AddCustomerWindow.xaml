@@ -27,6 +27,7 @@
                 <Setter Property="Foreground" Value="Red"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="Text" Value=""/>
+                <Setter Property="FontSize" Value="14"/>
             </Style>
 
         </ResourceDictionary>
@@ -44,8 +45,7 @@
             <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <userControls:ClearableTextBox Placeholder="Клиент ФИО" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput"/>
                 <TextBlock x:Name="txtErrorName" />
-                <userControls:ClearableTextBox Placeholder="Телефон номер" x:Name="tbPhone" PreviewTextInput="tbName_PreviewTextInput"/>
-                <TextBlock x:Name="txtErrorPhone" />
+                <userControls:ClearableTextBox Placeholder="Телефон номер" x:Name="tbPhone"/>
                 <userControls:ClearableTextBox Placeholder="Адрес (ихтиёрий)" x:Name="tbAddress" />
 
                 <Button Name="btnAddCustomer" Width="275" Height="40" Margin="15" Style="{StaticResource MaterialDesignOutlinedButton}"

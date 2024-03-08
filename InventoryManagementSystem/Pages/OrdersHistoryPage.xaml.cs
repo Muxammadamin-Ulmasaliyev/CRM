@@ -1,8 +1,6 @@
 ﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
-using Microsoft.EntityFrameworkCore;
 using Notification.Wpf;
-using NPOI.SS.Formula.Functions;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using System.Collections.ObjectModel;
@@ -18,7 +16,7 @@ namespace InventoryManagementSystem.Pages
         private ObservableCollection<Order> orders;
         private ObservableCollection<OrderDetail> orderDetails;
         private Customer customer;
-        private NotificationManager notificationManager;
+        private readonly NotificationManager notificationManager;
 
 
         private readonly OrderService _orderService;
@@ -28,6 +26,8 @@ namespace InventoryManagementSystem.Pages
         private int _pageSizeOrders = Properties.Settings.Default.OrdersPerPage;
         private int _currentPage = 1;
         private int _currentPage2 = 1;
+
+
 
         public OrdersHistoryPage(Customer customer)
         {
@@ -56,7 +56,7 @@ namespace InventoryManagementSystem.Pages
 
         private void PopulateOrderDetailsDataGrid(int orderId)
         {
-            orderDetails = new ObservableCollection<OrderDetail>(_orderDetailService.GetOrderDetailsByOrderId(orderId));
+            orderDetails = new ObservableCollection<OrderDetail>(_orderDetailService.GetAllOrderDetailsByOrderId(orderId));
             orderDetailsDataGrid.ItemsSource = orderDetails;
 
         }
@@ -65,7 +65,7 @@ namespace InventoryManagementSystem.Pages
         {
             Order order = (Order)(sender as Button).DataContext;
             PopulateOrderDetailsDataGrid(order.Id);
-            txtOrderDetailsTitle.Text = $"Списка заказ - {order.Id}";
+            txtOrderDetailsTitle.Text = $"Списка заказ - {order.OrderDate.ToString("dd-MM-yyyy")}";
             LoadPageOrderDetails();
 
         }
@@ -109,6 +109,7 @@ namespace InventoryManagementSystem.Pages
                 }
             }
         }
+
         private void GeneretePDFCheque(Order order)
         {
             QuestPDF.Settings.License = LicenseType.Community;
@@ -177,43 +178,18 @@ namespace InventoryManagementSystem.Pages
         private void CheckPaginationButtonStatesOrders()
         {
             // Orders
-            if (_currentPage == 1)
-            {
-                btnPreviousOrderPage.IsEnabled = false;
-            }
-            else
-            {
-                btnPreviousOrderPage.IsEnabled = true;
-            }
-            if (_currentPage == Math.Ceiling((decimal)orders.Count / _pageSizeOrders))
-            {
-                btnNextOrderPage.IsEnabled = false;
-            }
-            else
-            {
-                btnNextOrderPage.IsEnabled = true;
-            }
-            
+            btnPreviousOrderPage.IsEnabled = _currentPage != 1;
+            btnNextOrderPage.IsEnabled = _currentPage != Math.Ceiling((decimal)orders.Count / _pageSizeOrders);
+
+
         }
         private void CheckPaginationButtonStatesOrderDetails()
         {
-            if (_currentPage2 == 1)
-            {
-                btnPreviousOrderDetailsPage.IsEnabled = false;
-            }
-            else
-            {
-                btnPreviousOrderDetailsPage.IsEnabled = true;
-            }
-            if (_currentPage2 == Math.Ceiling((decimal)orderDetails.Count / _pageSizeOrderDetails))
-            {
-                btnNextOrderDetailsPage.IsEnabled = false;
-            }
-            else
-            {
-                btnNextOrderDetailsPage.IsEnabled = true;
-            }
+            btnPreviousOrderDetailsPage.IsEnabled = _currentPage2 != 1;
+            btnNextOrderDetailsPage.IsEnabled = _currentPage2 != Math.Ceiling((decimal)orderDetails.Count / _pageSizeOrderDetails);
+
         }
+
         private void LoadPageOrderDetails()
         {
             int startIndex = (_currentPage2 - 1) * _pageSizeOrderDetails;

@@ -50,7 +50,7 @@
         </StackPanel>
 
             <Button  x:Name="btnAddCustomer" Height="60" Width="150" 
-                      Margin="0,0,20,0"   Background="#4024ff" ToolTip="Мижоз кушиш"
+                      Margin="0,0,20,0"   Background="#6024ff" ToolTip="Мижоз кушиш"
                      Click="btnAddCustomer_Click" HorizontalAlignment="Right">
                 <MaterialDesign:PackIcon Kind="PersonAdd" Foreground="WhiteSmoke" Width="35" Height="35"/>
             </Button>

@@ -26,14 +26,11 @@
                 <Setter Property="Foreground" Value="Red"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="Text" Value=""/>
+                <Setter Property="FontSize" Value="14"/>
+
             </Style>
 
-            <Style TargetType="TextBlock" x:Key="ComboBoxPlaceholder">
-                <Setter Property="HorizontalAlignment" Value="Left"/>
-                <Setter Property="FontSize" Value="16"/>
-                <Setter Property="Margin" Value="15,-5,0,-25"/>
-                <Setter Property="Foreground" Value="MediumBlue"/>
-            </Style>
+          
 
         </ResourceDictionary>
     </Window.Resources>
@@ -75,31 +72,31 @@
 
 
             <ComboBox  Name="cbCountry"    DisplayMemberPath="Name" Width="auto" Height="auto"
-                       FontSize="16"  Background="GhostWhite" MaterialDesign:HintAssist.Hint="Давлат"
+                       FontSize="18"  Background="GhostWhite" MaterialDesign:HintAssist.Hint="Давлат"
                        Margin="15"  Style="{StaticResource MaterialDesignOutlinedComboBox}"
                        SelectionChanged="comboBox_SelectionChanged"/>
             <TextBlock x:Name="txtErrorCountry" />
 
             <ComboBox Name="cbCarType" DisplayMemberPath="Name" Margin="15" MaterialDesign:HintAssist.Hint="Машина"
-                      FontSize="16" Width="auto" Height="auto" Background="GhostWhite"
+                      FontSize="18" Width="auto" Height="auto" Background="GhostWhite"
                       Style="{StaticResource MaterialDesignOutlinedComboBox}"
                       SelectionChanged="comboBox_SelectionChanged"/>
             <TextBlock x:Name="txtErrorCarType" />
 
-            <ComboBox Name="cbCompany"   DisplayMemberPath="Name" FontSize="16" 
+            <ComboBox Name="cbCompany"   DisplayMemberPath="Name" FontSize="18" 
                       Width="auto" Height="auto" MaterialDesign:HintAssist.Hint="Завод"
                       Margin="15"  Style="{StaticResource MaterialDesignOutlinedComboBox}"   Background="GhostWhite"
                       SelectionChanged="comboBox_SelectionChanged"/>
             
             <TextBlock x:Name="txtErrorCompany" />
             
-            <ComboBox Name="cbSetType"  DisplayMemberPath="Name" FontSize="16" Width="auto" Height="auto"
+            <ComboBox Name="cbSetType"  DisplayMemberPath="Name" FontSize="18" Width="auto" Height="auto"
                       Background="GhostWhite" MaterialDesign:HintAssist.Hint="Урам"
                       Margin="15"  Style="{StaticResource MaterialDesignOutlinedComboBox}"
                       SelectionChanged="comboBox_SelectionChanged"/>
             <TextBlock x:Name="txtErrorSetType" />
 
-            <Button Name="btnAddProduct" Width="275" Height="40" 
+            <Button Name="btnAddProduct" Width="275" Height="60" FontSize="22"
                     Margin="15"  Style="{StaticResource MaterialDesignOutlinedButton}"
                     Content="Кушиш" Click="btnAddProduct_Click" KeyDown="btnAddProduct_KeyDown"/>
             <!--

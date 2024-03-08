@@ -66,12 +66,12 @@ public class ChequeDocument : IDocument
         {
             row.RelativeItem().AlignLeft().Column(column =>
             {
-                column.Item().Text($"Invoice #{Order.Id}").Style(titleStyle);
+                column.Item().Text($"Заказ #{Order.Id}").Style(titleStyle);
 
                 column.Item().Text(text =>
                 {
-                    text.Span("Issue date: ").SemiBold();
-                    text.Span($"{Order.OrderDate.ToString("dd-MM-yyyy")}");
+                    text.Span("Сана : ").SemiBold().FontFamily("Cambria");
+                    text.Span($"{Order.OrderDate.ToString("dd-MM-yyyy")}").FontFamily("Cambria");
                 });
 
 
@@ -79,10 +79,10 @@ public class ChequeDocument : IDocument
 
             row.RelativeItem().AlignRight().Column(column =>
             {
-                column.Item().Text($"Customer : {Order.Customer.Name}").Style(titleStyle);
+                column.Item().Text($"Мижоз : {Order.Customer.Name}").Style(titleStyle);
                 column.Item().Text(text =>
                 {
-                    text.Span("Phone : ").SemiBold();
+                    text.Span("Телефон : ").SemiBold().FontFamily("Cambria"); ;
                     text.Span($"{Order.Customer.Phone}");
                 });
             });
@@ -103,24 +103,30 @@ public class ChequeDocument : IDocument
 
             column.Item().AlignRight().DefaultTextStyle(x => x.FontFamily("Cambria")).Text(text =>
             {
-                text.Span($"Total Sum : {Order.TotalAmount.ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold();
+                text.Span($"Жами : {Order.TotalAmount.ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold();
 
             });
             column.Item().AlignRight().DefaultTextStyle(x => x.FontFamily("Cambria")).Text(text =>
             {
                 // ################################################################################
-                text.Span($"To`langan summa : {Order.TotalPaidAmount.ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold().FontColor("#26892a");
+                text.Span($"Туланган сумма  : {Order.TotalPaidAmount.ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold().FontColor("#26892a");
 
             });
             column.Item().AlignRight().DefaultTextStyle(x => x.FontFamily("Cambria")).Text(text =>
             {
                 // ################################################################################
 
-                text.Span($"Jami Qarzdorlik : {Order.Customer.Debt.ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold().FontColor("#BB2020");
+                text.Span($"Колдик : {(Order.TotalAmount - Order.TotalPaidAmount).ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold().FontColor("#ff5959");
+            });
+            column.Item().AlignRight().DefaultTextStyle(x => x.FontFamily("Cambria")).Text(text =>
+            {
+                // ################################################################################
+
+                text.Span($"Жами карздорлик : {Order.Customer.Debt.ToString("C0", new CultureInfo("uz-UZ"))}").SemiBold().FontColor("#BB2020");
             });
         });
 
-       
+
     }
 
 
@@ -148,13 +154,13 @@ public class ChequeDocument : IDocument
             table.Header(header =>
             {
                 header.Cell().Element(CellStyle).AlignCenter().Text("#");
-                header.Cell().Element(CellStyle).Text("Product");
-                header.Cell().Element(CellStyle).Text("Car");
-                header.Cell().Element(CellStyle).Text("Country");
-                header.Cell().Element(CellStyle).Text("Company");
-                header.Cell().Element(CellStyle).AlignRight().Text("Unit price");
-                header.Cell().Element(CellStyle).AlignRight().Text("Quantity");
-                header.Cell().Element(CellStyle).AlignRight().Text("Total");
+                header.Cell().Element(CellStyle).Text("Товар");
+                header.Cell().Element(CellStyle).Text("Машина");
+                header.Cell().Element(CellStyle).Text("Давлат");
+                header.Cell().Element(CellStyle).Text("Завод");
+                header.Cell().Element(CellStyle).AlignRight().Text("Нарх");
+                header.Cell().Element(CellStyle).AlignRight().Text("Сони");
+                header.Cell().Element(CellStyle).AlignRight().Text("Сумма");
 
                 static IContainer CellStyle(IContainer container)
                 {
@@ -170,14 +176,14 @@ public class ChequeDocument : IDocument
             foreach (var item in Order.OrderDetails)
             {
                 table.Cell().Element(CellStyle).AlignCenter().Text(Order.OrderDetails.IndexOf(item) + 1);
-                
+
                 table.Cell().Element(CellStyle).Text(item.ProductName);
                 table.Cell().Element(CellStyle).Text(item.ProductCarType);
                 table.Cell().Element(CellStyle).Text(item.ProductCountry);
                 table.Cell().Element(CellStyle).Text(item.ProductCompany);
                 table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price.ToString("C0", new CultureInfo("uz-UZ"))}");
                 table.Cell().Element(CellStyle).AlignRight().Text($"{item.Quantity} {item.ProductSetType}");
-               // table.Cell().Element(CellStyle).Text(item.ProductSetType);
+                // table.Cell().Element(CellStyle).Text(item.ProductSetType);
                 table.Cell().Element(CellStyle).AlignRight().Text($"{item.SubTotal.ToString("C0", new CultureInfo("uz-UZ"))}");
 
                 static IContainer CellStyle(IContainer container)

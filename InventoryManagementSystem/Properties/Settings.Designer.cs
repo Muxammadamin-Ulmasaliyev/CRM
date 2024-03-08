@@ -223,5 +223,17 @@ namespace InventoryManagementSystem.Properties {
                 this["NumberOfTopCustomers"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int NumberOfLeastProducts {
+            get {
+                return ((int)(this["NumberOfLeastProducts"]));
+            }
+            set {
+                this["NumberOfLeastProducts"] = value;
+            }
+        }
     }
 }

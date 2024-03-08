@@ -1,4 +1,5 @@
-﻿using Notification.Wpf;
+﻿using MahApps.Metro.Controls;
+using Notification.Wpf;
 using Ookii.Dialogs.Wpf;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,8 +21,9 @@ namespace InventoryManagementSystem.Pages
 
             PopulateFontFamilyComboBoxes();
 
+            KeyDown += btnSave_KeyDown;
         }
-       
+
         private void SetupUserCustomizationsSettings()
         {
             this.FontFamily = new FontFamily(Properties.Settings.Default.AppFontFamily);
@@ -41,7 +43,6 @@ namespace InventoryManagementSystem.Pages
                 Properties.Settings.Default.AppFontFamily = selectedFont.Source;
                 Properties.Settings.Default.Save();
             }
-            //var parentWindow = this.Parent as Window;
         }
         private void SaveChanges()
         {
@@ -87,7 +88,10 @@ namespace InventoryManagementSystem.Pages
 
         private void btnEditCurrencyRate_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+
             tbCurrencyRate.IsEnabled = true;
+            tbCurrencyRate.Focus();
+
             btnsaveCurrencyRate.IsEnabled = true;
             btnsaveCurrencyRate.Visibility = Visibility.Visible;
             btnEditCurrencyRate.IsEnabled = false;
@@ -114,6 +118,8 @@ namespace InventoryManagementSystem.Pages
         private void btnEditProductsPerPage_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             tbProductsPerPage.IsEnabled = true;
+            tbProductsPerPage.Focus();
+
             btnSaveProductsPerPage.IsEnabled = true;
             btnSaveProductsPerPage.Visibility = Visibility.Visible;
 
@@ -148,6 +154,7 @@ namespace InventoryManagementSystem.Pages
         private void btnEditCustomersPerPage_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             tbCustomersPerPage.IsEnabled = true;
+            tbCustomersPerPage.Focus();
             btnSaveCustomersPerPage.IsEnabled = true;
             btnSaveCustomersPerPage.Visibility = Visibility.Visible;
 
@@ -182,6 +189,7 @@ namespace InventoryManagementSystem.Pages
         private void btnEditOrdersPerPage_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             tbOrdersPerPage.IsEnabled = true;
+            tbOrdersPerPage.Focus();
             btnSaveOrdersPerPage.IsEnabled = true;
             btnSaveOrdersPerPage.Visibility = Visibility.Visible;
 
@@ -243,6 +251,7 @@ namespace InventoryManagementSystem.Pages
         private void btnEditOrderDetailsPerPage_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             tbOrderDetailsPerPage.IsEnabled = true;
+            tbOrderDetailsPerPage.Focus();
             btnSaveOrderDetailsPerPage.IsEnabled = true;
             btnSaveOrderDetailsPerPage.Visibility = Visibility.Visible;
 
@@ -252,6 +261,7 @@ namespace InventoryManagementSystem.Pages
         private void btnEditProductDataGridFontSize_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             tbProductDataGridFontSize.IsEnabled = true;
+            tbProductDataGridFontSize.Focus();
             btnSaveProductDataGridFontSize.IsEnabled = true;
             btnSaveProductDataGridFontSize.Visibility = Visibility.Visible;
 
@@ -309,6 +319,7 @@ namespace InventoryManagementSystem.Pages
         private void btnEditCustomerDataGridFontSize_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             tbCustomerDataGridFontSize.IsEnabled = true;
+            tbCustomerDataGridFontSize.Focus();
             btnSaveCustomerDataGridFontSize.IsEnabled = true;
             btnSaveCustomerDataGridFontSize.Visibility = Visibility.Visible;
 
@@ -318,6 +329,7 @@ namespace InventoryManagementSystem.Pages
         private void btnEditOrderDataGridFontSize_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             tbOrderDataGridFontSize.IsEnabled = true;
+            tbOrderDataGridFontSize.Focus();
             btnSaveOrderDataGridFontSize.IsEnabled = true;
             btnSaveOrderDataGridFontSize.Visibility = Visibility.Visible;
 
@@ -351,6 +363,7 @@ namespace InventoryManagementSystem.Pages
         private void btnEditOrderDetailsDataGridFontSize_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             tbOrderDetailsDataGridFontSize.IsEnabled = true;
+            btnEditOrderDetailsDataGridFontSize.Focus();
             btnSaveOrderDetailsDataGridFontSize.IsEnabled = true;
             btnSaveOrderDetailsDataGridFontSize.Visibility = Visibility.Visible;
 
@@ -385,6 +398,7 @@ namespace InventoryManagementSystem.Pages
         private void btnEditCartDataGridFontSize_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             tbCartDataGridFontSize.IsEnabled = true;
+            tbCartDataGridFontSize.Focus();
             btnSaveCartDataGridFontSize.IsEnabled = true;
             btnSaveCartDataGridFontSize.Visibility = Visibility.Visible;
 
@@ -419,6 +433,7 @@ namespace InventoryManagementSystem.Pages
         private void btnEditCategoriesFontSize_Click(object sender, RoutedEventArgs e)
         {
             tbCategoriesFontSize.IsEnabled = true;
+            tbCategoriesFontSize.Focus();
             btnSaveCategoriesFontSize.IsEnabled = true;
             btnSaveCategoriesFontSize.Visibility = Visibility.Visible;
 
@@ -446,6 +461,82 @@ namespace InventoryManagementSystem.Pages
                 tbCategoriesFontSize.Text = Properties.Settings.Default.CategoriesDataGridFontSize.ToString();
                 tbCategoriesFontSize.Focus();
                 _notificationManager.Show("Хатолик", "Сон киритинг", NotificationType.Error);
+            }
+        }
+
+
+        private void btnSave_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                if (tbCurrencyRate.IsFocused)
+                {
+                    btnsaveCurrencyRate_Click(sender, e);
+                    return;
+                }
+
+
+                if (tbProductsPerPage.IsFocused)
+                {
+                    btnSaveProductsPerPage_Click(sender, e);
+                    return;
+                }
+                if (tbCustomersPerPage.IsFocused)
+                {
+                    btnSaveCustomersPerPage_Click(sender, e);
+
+                    return;
+                }
+                if (tbOrdersPerPage.IsFocused)
+                {
+                    btnSaveOrdersPerPage_Click(sender, e);
+
+                    return;
+                }
+                if (tbOrderDetailsPerPage.IsFocused)
+                {
+                    btnSaveOrderDetailsPerPage_Click(sender, e);
+
+                    return;
+                }
+
+
+                if (tbProductDataGridFontSize.IsFocused)
+                {
+                    btnSaveProductDataGridFontSize_Click(sender, e);
+
+                    return;
+                }
+                if (tbCustomerDataGridFontSize.IsFocused)
+                {
+                    btnSaveCustomerDataGridFontSize_Click(sender, e);
+
+                    return;
+                }
+                if (tbOrderDataGridFontSize.IsFocused)
+                {
+                    btnSaveOrderDataGridFontSize_Click(sender, e);
+
+                    return;
+                }
+                if (tbOrderDetailsDataGridFontSize.IsFocused)
+                {
+                    btnSaveOrderDetailsDataGridFontSize_Click(sender, e);
+
+                    return;
+                }
+                if (tbCartDataGridFontSize.IsFocused)
+                {
+                    btnSaveCartDataGridFontSize_Click(sender, e);
+
+                    return;
+                }
+                if (tbCategoriesFontSize.IsFocused)
+                {
+                    btnSaveCategoriesFontSize_Click(sender, e);
+
+                    return;
+                }
             }
         }
     }

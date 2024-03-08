@@ -5,7 +5,6 @@ using Notification.Wpf;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
 namespace InventoryManagementSystem.View
 {
     public partial class AddProductWindow : Window
@@ -23,6 +22,8 @@ namespace InventoryManagementSystem.View
 
             rbUzs.IsChecked = true;
             PopulateComboboxes();
+
+            tbName.txtInput.Focus();
             // KeyDown += btnAddProduct_KeyDown;
         }
 
@@ -65,10 +66,9 @@ namespace InventoryManagementSystem.View
                     SetTypeId = (cbSetType.SelectedItem as SetType).Id
                 };
 
-
-
                 if (_productService.IsProductCodeExists(productToAdd.Code, productToAdd.Barcode, out var productFromDb))
                 {
+
                     productFromDb.Quantity += productToAdd.Quantity;
                     using (var dbContext = new AppDbContext())
                     {
@@ -82,6 +82,8 @@ namespace InventoryManagementSystem.View
                 {
                     _productService.AddProduct(productToAdd);
                     notificationManager.Show("Муваффакият", "Товар кушилди", NotificationType.Success);
+
+
                     ProductAdded();
                 }
 

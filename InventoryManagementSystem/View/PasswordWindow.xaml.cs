@@ -38,7 +38,6 @@ namespace InventoryManagementSystem.View
             if (passwordBox.Password == Properties.Settings.Default.AdminPassword || passwordBox.Password == Properties.Settings.Default.AdminRecoveryPassword)
             {
                 this.Close();
-                notificationManager.Show("Муваффакият", "Хуш келибсиз", NotificationType.Success);
                 _isPasswordCorrect = true;
                 navframe.Navigate(navButton.NavLink);
             }

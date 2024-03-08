@@ -55,5 +55,15 @@ namespace InventoryManagementSystem.Services
            // return dbContext.Customers.Where(c => c.Debt > 0).Sum(c => c.Debt);
             return dbContext.Customers.Sum(c => c.Debt);
         }
+
+        public int GetCustomersCount()
+        {
+            return dbContext.Customers.Count();
+        }
+
+        public List<Customer> GetPageOfCustomers(int startIndex, int pageSize)
+        {
+            return dbContext.Customers.Skip(startIndex).Take(pageSize).ToList();
+        }
     }
 }

@@ -7,7 +7,7 @@
       xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
 
-      mc:Ignorable="d"  Background="#f2f2f2"
+      mc:Ignorable="d"  Background="#EEF1FF"
       d:DesignHeight="720" d:DesignWidth="1350"
       Title="AdminPage">
     <Page.Resources>
@@ -18,166 +18,285 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="Border" x:Key="card">
+                <Setter Property="Background" Value="#554df5"/>
+                <Setter Property="BorderBrush" Value="Silver"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Width" Value="260"/>
+                <Setter Property="Height" Value="120"/>
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="Margin" Value="5,0,5,0"/>
+            </Style>
+            <Style TargetType="TextBlock" x:Key="cardPlaceholder">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Margin" Value="15,15,0,0"/>
+                <Setter Property="Foreground" Value="GhostWhite"/>
+            </Style>
+            <Style TargetType="TextBlock" x:Key="cardInfoTextBlock">
+                <Setter Property="FontSize" Value="22"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,15,0,0"/>
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+            <Style TargetType="MaterialDesign:PackIcon" x:Key="infoIcon">
+                <Setter Property="Width" Value="20"/>
+                <Setter Property="Height" Value="20"/>
+                <Setter Property="Foreground" Value="Silver"/>
+                <Setter Property="Margin" Value="4,0,0,0"/>
+
+            </Style>
+            <Style TargetType="TextBlock" x:Key="TitleTextBlock">
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="24"/>
+                <Setter Property="FontStyle" Value="Italic"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Foreground" Value="#614ccb"/>
+
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="Width" Value="100"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Background" Value="#bababa"/>
+                <Setter Property="BorderBrush" Value="Silver"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Visibility" Value="Hidden"/>
+            </Style>
+            <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button" x:Key="btnSave">
+                <Setter Property="Width" Value="50"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Background" Value="#09aa09"/>
+                <Setter Property="Visibility" Value="Hidden"/>
+                <Setter Property="BorderBrush" Value="DarkGreen"/>
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style>
+            <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button" x:Key="MaterialDesignBtnEdit">
+                <Setter Property="Width" Value="50"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Background" Value="#614ccb"/>
+                <Setter Property="BorderBrush" Value="#614ccb"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Margin" Value="0,0,20,0"/>
+            </Style>
         </ResourceDictionary>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="15"/>
             <RowDefinition Height="20*"/>
             <RowDefinition Height="45*"/>
             <RowDefinition Height="35*"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="15"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="45*"/>
             <ColumnDefinition Width="55*"/>
         </Grid.ColumnDefinitions>
 
-
-
-        <Button x:Name="btnExportToExcel" Grid.Row="0" HorizontalAlignment="Left" Width="100" Height="45"
-                    Content="Export To Excel" Margin="10" Click="btnExportToExcel_Click" />
-
-        <Button Name="btnChangePassword" Grid.Row="0" HorizontalAlignment="Right" Margin="20" Width="120" Height="40" 
-                Background="#a416c7" Click="btnChangePassword_Click">
-            <MaterialDesign:PackIcon Kind="PasswordAdd" Width="25" Height="25"/>
-        </Button>
-
-        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-
-            <Border BorderBrush="Silver" BorderThickness="2" Width="260" Height="120" CornerRadius="20"  Margin="5,0,5,0"
-                     MaterialDesign:ShadowAssist.Darken="True" MaterialDesign:ShadowAssist.ShadowAnimationDuration="100" 
-                     MaterialDesign:ShadowAssist.ShadowEdges="All" MaterialDesign:ElevationAssist.Elevation="Dp24" Background="#8c66ff" >
-                <StackPanel>
-                    <TextBlock FontSize="18" Text="Дукон дастмояси"  HorizontalAlignment="Left" Margin="15,15,0,0" Foreground="GhostWhite" />
-                    <TextBlock FontSize="22" Text="" Name="txtNetWorth" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" Foreground="White" />
-                </StackPanel>
-            </Border>
-
-            <Border BorderBrush="Silver" BorderThickness="2" Width="260" Height="120" CornerRadius="20" Margin="5,0,5,0" 
-                      MaterialDesign:ShadowAssist.Darken="True" MaterialDesign:ShadowAssist.ShadowAnimationDuration="100"
-                     MaterialDesign:ShadowAssist.ShadowEdges="All" MaterialDesign:ElevationAssist.Elevation="Dp24" Background="#8c66ff" >
-                <StackPanel>
-                    <TextBlock FontSize="18" Text="Уртача фойда фоизи"  HorizontalAlignment="Left" Margin="15,15,0,0" Foreground="GhostWhite" />
-                    <TextBlock FontSize="22" Text="" Name="txtIncomePercentage" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" Foreground="White" />
-                </StackPanel>
-            </Border>
-
-            <Border BorderBrush="Silver" BorderThickness="2" Width="260" Height="120" CornerRadius="20" Margin="5,0,5,0" 
-               MaterialDesign:ShadowAssist.Darken="True" MaterialDesign:ShadowAssist.ShadowAnimationDuration="100"
-                 MaterialDesign:ShadowAssist.ShadowEdges="All" MaterialDesign:ElevationAssist.Elevation="Dp24" Background="#8c66ff" >
-                <StackPanel>
-                    <TextBlock FontSize="18" Text="Мижозларнинг жами карзи"  HorizontalAlignment="Left" Margin="13,15,0,0" Foreground="GhostWhite" />
-                    <TextBlock FontSize="22" Text="" Name="txtCustomersDebtAmount" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" Foreground="White" />
-                </StackPanel>
-            </Border>
-
-            <Border BorderBrush="Silver" BorderThickness="2" Width="260" Height="120" CornerRadius="20" Margin="5,0,5,0" 
-                  MaterialDesign:ShadowAssist.Darken="True" MaterialDesign:ShadowAssist.ShadowAnimationDuration="100"
-                 MaterialDesign:ShadowAssist.ShadowEdges="All" MaterialDesign:ElevationAssist.Elevation="Dp24" Background="#8c66ff" >
-                <StackPanel>
-                    <TextBlock FontSize="18" Text="Жами карздорлик"  HorizontalAlignment="Left" Margin="15,15,0,0" Foreground="GhostWhite" />
-                    <TextBlock FontSize="22" Text="" Name="q" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" Foreground="White" />
-                </StackPanel>
-            </Border>
-
-            <Border BorderBrush="Silver" BorderThickness="2" Width="260" Height="120" CornerRadius="20" Margin="5,0,5,0" 
-               MaterialDesign:ShadowAssist.Darken="True" MaterialDesign:ShadowAssist.ShadowAnimationDuration="100"
-                MaterialDesign:ShadowAssist.ShadowEdges="All" MaterialDesign:ElevationAssist.Elevation="Dp24" Background="#8c66ff" >
-                <StackPanel>
-                    <TextBlock FontSize="18" Text="Жами карздорлик"  HorizontalAlignment="Left" Margin="15,15,0,0" Foreground="GhostWhite" />
-                    <TextBlock FontSize="22" Text="123123123123123123123" Name="qwesw" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" Foreground="White" />
-                </StackPanel>
-            </Border>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Name="loadingPanel" Visibility="Hidden" Orientation="Vertical">
+            <ProgressBar IsIndeterminate="True" Width="auto" Height="15" Foreground="#09aa09" Background="#eaeaea" />
         </StackPanel>
 
+        <ScrollViewer Grid.Row="1" x:Name="scrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Grid.RowSpan="3" Grid.ColumnSpan="2" >
+            <StackPanel Orientation="Vertical">
 
-        <TextBlock  Grid.Column="1" Grid.Row="2" Text="Ойлик савдо статистика" HorizontalAlignment="Center"  FontSize="20" 
-                    FontStyle="Italic" FontWeight="Bold" Foreground="#614ccb" />
-
-        <lvc:CartesianChart Grid.Column="1" Grid.Row="2" Name="monthlySalesChart" FontSize="16" 
-                            Background="White" Foreground="Black" Width="auto" Height="auto" Margin="30,30,30,10" >
-            
-        </lvc:CartesianChart>
-
-        <ScrollViewer  Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="15,0,15,0">
 
 
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" >
+                    <Border Style="{StaticResource card}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource cardPlaceholder}" Text="Жами товар суммаси"    />
+                            <TextBlock x:Name="txtNetWorth" Text="" Style="{StaticResource cardInfoTextBlock}" />
 
-                <TextBlock Text="Энг куп сотилайотган товарлар" HorizontalAlignment="Center"  FontSize="20" 
-                       FontStyle="Italic" FontWeight="Bold" Foreground="#614ccb"/>
+                            <Button x:Name="btnNetWorthInfo" Click="btnNetWorthInfo_Click"  HorizontalAlignment="Right" Style="{StaticResource MaterialDesignToolButton}"
+                            Margin="0,5,0,0" Width="55" Height="auto" Background="Transparent" BorderBrush="Transparent" >
+                                <MaterialDesign:PackIcon Kind="InformationSlabCircle" Style="{StaticResource infoIcon}" />
+                            </Button>
+
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource card}" >
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource cardPlaceholder}" Text="Уртача фойда фоизи"   />
+                            <TextBlock Text="" Name="txtIncomePercentage" Style="{StaticResource cardInfoTextBlock}" />
+                            <Button x:Name="btnAverageIncomePercentageInfo" Click="btnAverageIncomePercentageInfo_Click"  HorizontalAlignment="Right" Style="{StaticResource MaterialDesignToolButton}"
+                          Margin="0,5,0,0" Width="55" Height="auto" Background="Transparent" BorderBrush="Transparent" >
+                                <MaterialDesign:PackIcon Kind="InformationSlabCircle" Style="{StaticResource infoIcon}"  />
+                            </Button>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource card}" >
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource cardPlaceholder}" Text="Мижозларнинг жами карзи"  HorizontalAlignment="Left" Margin="13,15,0,0" Foreground="GhostWhite" />
+                            <TextBlock Text="" Name="txtCustomersDebtAmount" Style="{StaticResource cardInfoTextBlock}" />
+                            <Button x:Name="btnCustomersDebtAmountInfo" Click="btnCustomersDebtAmountInfo_Click"  HorizontalAlignment="Right" Style="{StaticResource MaterialDesignToolButton}"
+                                      Margin="0,5,0,0" Width="55" Height="auto" Background="Transparent" BorderBrush="Transparent" >
+                                <MaterialDesign:PackIcon Kind="InformationSlabCircle" Style="{StaticResource infoIcon}"  />
+                            </Button>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource card}" >
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource cardPlaceholder}" Text="Бугунги савдо"   />
+                            <TextBlock  Text="" Name="txtTodaysSaleAmount" Style="{StaticResource cardInfoTextBlock}" />
+                            <Button x:Name="btnTodaysSaleInfo" Click="btnTodaysSaleInfo_Click"  HorizontalAlignment="Right" Style="{StaticResource MaterialDesignToolButton}"
+                                  Margin="0,5,0,0" Width="55" Height="auto" Background="Transparent" BorderBrush="Transparent" >
+                                <MaterialDesign:PackIcon Kind="InformationSlabCircle" Style="{StaticResource infoIcon}"  />
+                            </Button>
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                        <Button x:Name="btnExportToExcel" HorizontalAlignment="Left" Width="190" Height="50" Background="#2440ff" FontSize="15" Padding="0"
+                          Click="btnExportToExcel_Click" Content="Excel га экспорт килиш" Margin="10,5,0,5" >
+                        </Button>
+
+                        <Button Name="btnChangePassword"  HorizontalAlignment="Right"  Width="190" Height="50" Margin="10,5,0,5" FontSize="15" Padding="0"
+                        Background="#2440ff" Click="btnChangePassword_Click" Content="Парольни узгартириш">
+                        </Button>
+
+                    </StackPanel>
 
 
-                <DataGrid x:Name="topSoldProductsDataGrid" HeadersVisibility="Column" Background="White" FontSize="16" FontWeight="SemiBold" 
-                CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True" Margin="30,5,0,0"  >
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Товар номи" IsReadOnly="False" Binding="{Binding Name}" Width="Auto"/>
-                        <DataGridTextColumn Header="Завод" IsReadOnly="False" Binding="{Binding Company.Name}" Width="Auto"/>
-                        <DataGridTextColumn Header="Давлат" IsReadOnly="False" Binding="{Binding Country.Name}" Width="Auto"/>
-                        <DataGridTextColumn Header="Машина" IsReadOnly="False" Binding="{Binding CarType.Name}" Width="Auto"/>
-
-                        <DataGridTextColumn Header="Жами сотилган" IsReadOnly="False" Binding="{Binding QuantitySold, StringFormat=N0}" Width="Auto">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style>
-                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-
-                    <TextBox x:Name="tbNumberOfTopProducts" Width="100" Height="30" FontSize="14" Background="#bababa" BorderBrush="Silver" BorderThickness="2"  Visibility="Hidden" />
-                    <Button x:Name="btnSaveNumberOfTopProducts" Click="btnSaveNumberOfTopProducts_Click" Width="50" Height="30" Background="#09aa09"  Visibility="Hidden"
-                             BorderBrush="DarkGreen" Margin="0" HorizontalAlignment="Right" >
-                        <MaterialDesign:PackIcon Kind="Tick" Foreground="White" Height="20" Width="20"/>
-                    </Button>
-                    <Button x:Name="btnEditNumberOfTopProducts" Click="btnEditNumberOfTopProducts_Click" Width="50" Height="30" Background="#614ccb" Margin="0" HorizontalAlignment="Right">
-                        <MaterialDesign:PackIcon Kind="Pencil" Foreground="White" Height="20" Width="20"/>
-
-                    </Button>
                 </StackPanel>
+
+
+
+                <TextBlock   Grid.Row="2" Text="Ойлик савдо статистика"  Style="{StaticResource TitleTextBlock}" Margin="0,15,0,0" />
+
+                <StackPanel>
+                    <lvc:CartesianChart  Name="monthlySalesChart" FontSize="16" 
+                          Background="White" Foreground="Black" Width="auto" Height="350" Margin="30,5,20,0" >
+                    </lvc:CartesianChart>
+
+                    <ComboBox  Name="cbYears" Style="{StaticResource MaterialDesignOutlinedComboBox}" FontSize="16"
+                               Width="auto" Height="auto" SelectionChanged="cbYears_SelectionChanged" HorizontalAlignment="Right" Margin="0,-650,35,-5"/>
+
+                </StackPanel>
+
+
+
+
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" >
+
+                    <TextBlock Text="Энг куп сотилайотган товарлар" Style="{StaticResource TitleTextBlock}" Margin="0,15,0,0"/>
+
+
+                    <DataGrid x:Name="topSoldProductsDataGrid" HeadersVisibility="Column" Background="White" FontSize="16" FontWeight="SemiBold" 
+                                 CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True" Margin="30,5,20,0"  >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Товар номи" IsReadOnly="False" Binding="{Binding Name}" Width="28*"/>
+                            <DataGridTextColumn Header="Завод" IsReadOnly="False" Binding="{Binding Company.Name}" Width="17*"/>
+                            <DataGridTextColumn Header="Давлат" IsReadOnly="False" Binding="{Binding Country.Name}" Width="17*"/>
+                            <DataGridTextColumn Header="Машина" IsReadOnly="False" Binding="{Binding CarType.Name}" Width="17*"/>
+
+                            <DataGridTextColumn Header="Жами сотилган" IsReadOnly="False" Binding="{Binding QuantitySold, StringFormat=N0}" Width="20*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                        <TextBox x:Name="tbNumberOfTopProducts"  />
+                        <Button x:Name="btnSaveNumberOfTopProducts" Click="btnSaveNumberOfTopProducts_Click" Style="{StaticResource btnSave}" KeyDown="btnSave_KeyDown" >
+                            <MaterialDesign:PackIcon Kind="Tick" Foreground="White" Height="20" Width="20"/>
+                        </Button>
+                        <Button x:Name="btnEditNumberOfTopProducts" Click="btnEditNumberOfTopProducts_Click" Style="{StaticResource MaterialDesignBtnEdit}">
+                            <MaterialDesign:PackIcon Kind="Pencil" Foreground="White" Height="20" Width="20"/>
+
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+
+
+
+                <StackPanel  Orientation="Vertical" HorizontalAlignment="Center">
+
+                    <TextBlock Text="Энг фаол мижозлар" Style="{StaticResource TitleTextBlock}"  Margin="0,15,0,0"/>
+
+                    <DataGrid x:Name="topCustomersDataGrid" HeadersVisibility="Column" Background="white" FontSize="16" FontWeight="SemiBold" 
+                      CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True" Margin="30,5,20,0"  >
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Мижоз" IsReadOnly="False" Binding="{Binding Name}" Width="35*"/>
+                            <DataGridTextColumn Header="Заказлари сони" IsReadOnly="False" Binding="{Binding NoOfOrders, StringFormat=N0}" Width="25*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Жами савдо суммаси" IsReadOnly="False" Binding="{Binding TotalAmountOfOrders, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="40*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                        <TextBox x:Name="tbNumberOfTopCustomers" />
+                        <Button x:Name="btnSaveNumberOfTopCustomers" Click="btnSaveNumberOfTopCustomers_Click" Style="{StaticResource btnSave}"  KeyDown="btnSave_KeyDown" >
+                            <MaterialDesign:PackIcon Kind="Tick" Foreground="White" Height="20" Width="20"/>
+                        </Button>
+                        <Button x:Name="btnEditNumberOfTopCustomers" Click="btnEditNumberOfTopCustomers_Click" Style="{StaticResource MaterialDesignBtnEdit}">
+                            <MaterialDesign:PackIcon Kind="Pencil" Foreground="White" Height="20" Width="20"/>
+                        </Button>
+
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel  Orientation="Vertical" HorizontalAlignment="Center">
+
+                    <TextBlock Text="Кам колган товарлар" Style="{StaticResource TitleTextBlock}"  Margin="0,15,0,0"/>
+
+                    <DataGrid x:Name="leastAmountProductsDataGrid" HeadersVisibility="Column" Background="white" FontSize="16" FontWeight="SemiBold" Width="auto"
+                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True" Margin="30,5,20,0"  >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Товар номи" IsReadOnly="False" Binding="{Binding Name}" Width="30*"/>
+                            <DataGridTextColumn Header="Завод" IsReadOnly="False" Binding="{Binding Company.Name}" Width="18*"/>
+                            <DataGridTextColumn Header="Давлат" IsReadOnly="False" Binding="{Binding Country.Name}" Width="18*"/>
+                            <DataGridTextColumn Header="Машина" IsReadOnly="False" Binding="{Binding CarType.Name}" Width="18*"/>
+                            <DataGridTextColumn Header="Колди" IsReadOnly="False" Binding="{Binding Quantity, StringFormat=N0}" Width="15*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                        <TextBox x:Name="tbNumberOfLeastProducts"   />
+                        <Button x:Name="btnSaveNumberOfLeastProducts" Click="btnSaveNumberOfLeastProducts_Click" Style="{StaticResource btnSave}" KeyDown="btnSave_KeyDown"  >
+                            <MaterialDesign:PackIcon Kind="Tick" Foreground="White" Height="20" Width="20"/>
+                        </Button>
+                        <Button x:Name="btnEditNumberOfLeastProducts" Click="btnEditNumberOfLeastProducts_Click" Style="{StaticResource MaterialDesignBtnEdit}">
+                            <MaterialDesign:PackIcon Kind="Pencil" Foreground="White" Height="20" Width="20"/>
+                        </Button>
+
+                    </StackPanel>
+                </StackPanel>
+
+
+
+
             </StackPanel>
         </ScrollViewer>
 
-        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" >
-
-
-            <StackPanel  Orientation="Vertical" HorizontalAlignment="Center">
-
-                <TextBlock Text="Энг фаол мижозлар" HorizontalAlignment="Center"   FontSize="20" 
-                         FontStyle="Italic" FontWeight="Bold" Foreground="#614ccb"/>
-
-                <DataGrid x:Name="topCustomersDataGrid" HeadersVisibility="Column" Background="white" FontSize="16" FontWeight="SemiBold" 
-                      CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True" Margin="30,5,0,0"  >
-                    
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Мижоз" IsReadOnly="False" Binding="{Binding Name}" Width="35*"/>
-                        <DataGridTextColumn Header="Заказлари сони" IsReadOnly="False" Binding="{Binding NoOfOrders, StringFormat=N0}" Width="25*">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style>
-                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Жами савдо суммаси" IsReadOnly="False" Binding="{Binding TotalAmountOfOrders, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="40*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-
-                    <TextBox x:Name="tbNumberOfTopCustomers" Width="100" Height="30" FontSize="14" Background="#bababa" BorderBrush="Silver" BorderThickness="2" Visibility="Hidden"  />
-                    <Button x:Name="btnSaveNumberOfTopCustomers" Click="btnSaveNumberOfTopCustomers_Click" Width="50" Height="30" Background="#09aa09" Visibility="Hidden"
-                        BorderBrush="DarkGreen" Margin="0" HorizontalAlignment="Right" >
-                        <MaterialDesign:PackIcon Kind="Tick" Foreground="White" Height="20" Width="20"/>
-                    </Button>
-                    <Button x:Name="btnEditNumberOfTopCustomers" Click="btnEditNumberOfTopCustomers_Click" Width="50" Height="30" Background="#614ccb" Margin="0" HorizontalAlignment="Right">
-                        <MaterialDesign:PackIcon Kind="Pencil" Foreground="White" Height="20" Width="20"/>
-                    </Button>
-
-                </StackPanel>
-            </StackPanel>
-        </ScrollViewer>
     </Grid>
 </Page>

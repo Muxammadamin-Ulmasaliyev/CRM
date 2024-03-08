@@ -19,10 +19,11 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="TextBlock">
-                <Setter Property="Margin" Value="0"/>
                 <Setter Property="Foreground" Value="Red"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="Text" Value=""/>
+                <Setter Property="Margin" Value="0,3,0,0"/>
+                <Setter Property="FontSize" Value="14"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -31,7 +32,7 @@
         <Grid>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBox  x:Name="tbIncome"   TextChanged="tbName_PreviewTextInput" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                          MaterialDesign:HintAssist.Hint="Сумма . . ."
+                          MaterialDesign:HintAssist.Hint="Берилган пул . . ."
                           Width="275" Height="auto" FontSize="20"/>
                 <TextBlock x:Name="txtErrorName" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">

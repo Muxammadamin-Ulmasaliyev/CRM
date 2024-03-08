@@ -1,6 +1,7 @@
 ﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
+using MethodTimer;
 using Notification.Wpf;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -21,6 +22,9 @@ namespace InventoryManagementSystem.Pages
         private ProductService _productService;
         private readonly CustomerService _customerService;
         private readonly OrderDetailService _orderDetailService;
+
+
+        private int _productsCountInDb;
         private int _pageSize = Properties.Settings.Default.ProductsPerPage;
         private int _currentPage = 1;
 
@@ -28,22 +32,37 @@ namespace InventoryManagementSystem.Pages
 
         public HomePage()
         {
+            // Shared.Shared.SeedFakeProducts();
             InitializeComponent();
             SetupUserCustomizationsSettings();
             SetupTimerSettings();
             _productService = new(new AppDbContext());
             _customerService = new(new AppDbContext());
             _orderDetailService = new(new AppDbContext());
+            _productsCountInDb = _productService.GetProductsCount();
             InitializeNewOrder();
-            PopulateDataGrid();
             PopulateDataGridComboboxes();
             PopulateCurrencyRate();
             LoadPage();
             PopulateNumberOfProductsTxt();
+            CheckPaginationButtonStates();
             notificationManager = new();
-            txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {products.Count}";
+            txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {_productsCountInDb}";
             KeyDown += btnSaveCurrencyRate_KeyDown;
 
+        }
+
+        private void IsCartEmpty()
+        {
+            if (currentOrder.OrderDetails.Count > 0)
+            {
+                Shared.Shared.IsCartEmpty = false;
+            }
+            else
+            {
+                Shared.Shared.IsCartEmpty = true;
+
+            }
         }
 
         private void SetupUserCustomizationsSettings()
@@ -77,78 +96,39 @@ namespace InventoryManagementSystem.Pages
 
         private void CheckPaginationButtonStates()
         {
-            if (_currentPage == 1)
-            {
-                btnPrevious.IsEnabled = false;
-            }
-            else
-            {
-                btnPrevious.IsEnabled = true;
-            }
-            if (!IsFilteringDisabled())
-            {
-                if (_currentPage == Math.Ceiling((decimal)filteredProducts.Count / _pageSize))
-                {
-                    btnNext.IsEnabled = false;
-                }
-                else
-                {
-                    btnNext.IsEnabled = true;
-                }
-            }
-            else
-            {
+            btnPrevious.IsEnabled = _currentPage > 1;
 
-                if (_currentPage == Math.Ceiling((decimal)products.Count / _pageSize))
-                {
-                    btnNext.IsEnabled = false;
-                }
-                else
-                {
-                    btnNext.IsEnabled = true;
-                }
-            }
+            btnNext.IsEnabled = IsFilteringDisabled()
+                ? _currentPage < Math.Ceiling((decimal)_productsCountInDb / _pageSize)
+                : _currentPage < Math.Ceiling((decimal)filteredProducts.Count / _pageSize);
+
         }
-        private void LoadPage()
+
+        [Time]
+        private async Task LoadPage()
         {
-            if (!IsFilteringDisabled())
+            if (IsFilteringDisabled())
+            {
+                int startIndex = (_currentPage - 1) * _pageSize;
+                var currentPageData = new ObservableCollection<Product>(await _productService.GetPageOfProducts(startIndex, _pageSize));
+                productDataGrid.ItemsSource = currentPageData;
+                currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)_productsCountInDb / _pageSize)}";
+
+            }
+            else
             {
                 int startIndex = (_currentPage - 1) * _pageSize;
                 int endIndex = Math.Min(startIndex + _pageSize - 1, filteredProducts.Count - 1);
-
                 var currentPageData = new ObservableCollection<Product>();
-
                 for (int i = startIndex; i <= endIndex; i++)
                 {
                     currentPageData.Add(filteredProducts[i]);
                 }
-
                 productDataGrid.ItemsSource = currentPageData;
-
                 currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)filteredProducts.Count / _pageSize)}";
-                PopulateNumberOfProductsTxt();
-
-                CheckPaginationButtonStates();
             }
-            else
-            {
-                int startIndex = (_currentPage - 1) * _pageSize;
-                int endIndex = Math.Min(startIndex + _pageSize - 1, products.Count - 1);
-
-                var currentPageData = new ObservableCollection<Product>();
-
-                for (int i = startIndex; i <= endIndex; i++)
-                {
-                    currentPageData.Add(products[i]);
-                }
-
-                productDataGrid.ItemsSource = currentPageData;
-
-                currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)products.Count / _pageSize)}";
-                PopulateNumberOfProductsTxt();
-
-                CheckPaginationButtonStates();
-            }
+            PopulateNumberOfProductsTxt();
+            CheckPaginationButtonStates();
         }
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
         {
@@ -163,14 +143,11 @@ namespace InventoryManagementSystem.Pages
         private void NextPage_Click(object sender, RoutedEventArgs e)
         {
             int totalPages;
-            if (IsFilteringDisabled())
-            {
-                totalPages = (int)Math.Ceiling((double)products.Count / _pageSize);
-            }
-            else
-            {
-                totalPages = (int)Math.Ceiling((double)filteredProducts.Count / _pageSize);
-            }
+
+            totalPages = IsFilteringDisabled()
+                             ? (int)Math.Ceiling((double)_productsCountInDb / _pageSize)
+                             : (int)Math.Ceiling((double)filteredProducts.Count / _pageSize);
+
             if (_currentPage < totalPages)
             {
                 _currentPage++;
@@ -181,8 +158,6 @@ namespace InventoryManagementSystem.Pages
 
 
         }
-
-
         private void PopulateCurrencyRate()
         {
             txtCurrencyRate.Text = $"Курс : 1 $ = {Properties.Settings.Default.CurrencyRate} сум";
@@ -194,6 +169,8 @@ namespace InventoryManagementSystem.Pages
             {
                 OrderDetails = new List<OrderDetail>()
             };
+
+            IsCartEmpty();
 
         }
 
@@ -214,20 +191,8 @@ namespace InventoryManagementSystem.Pages
             txtNumberOfProducts.Text = $"Жадвалдаги продуктлар сони : {productDataGrid.Items.Count}";
         }
 
-        private void PopulateDataGrid()
-        {
-            try
-            {
 
-                products = new ObservableCollection<Product>(_productService.GetAll());
-                PopulateNumberOfProductsTxt();
-            }
-            catch (Exception)
-            {
-
-            }
-
-        }
+        /******************************** OPTIMIZE ******************************************************************************/
 
         private bool IsFilteringDisabled()
         {
@@ -238,31 +203,25 @@ namespace InventoryManagementSystem.Pages
                 cbCountry.SelectedItem == null &&
                 cbSetType.SelectedItem == null;
         }
+
+        [Time]
         private void Search()
         {
             _currentPage = 1;
             if (IsFilteringDisabled())
             {
                 LoadPage();
-                txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {products.Count}";
-
+                txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {_productsCountInDb}";
             }
             else
             {
-                productDataGrid.ItemsSource = products;
-                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(productDataGrid.ItemsSource);
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(_productService.GetAll());
                 view.Filter = SearchFilter;
                 filteredProducts = new ObservableCollection<Product>(view.Cast<Product>().ToList());
                 LoadPage();
                 txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {filteredProducts.Count}";
             }
-
-
         }
-
-
-
-        /******************************** OPTIMIZE ******************************************************************************/
         private bool SearchFilter(object item)
         {
             bool isMatching = true;
@@ -296,10 +255,20 @@ namespace InventoryManagementSystem.Pages
         }
         private void AddProductWindow_AddProductButtonClicked(object? sender, EventArgs e)
         {
-            PopulateDataGrid();
-            PopulateDataGridComboboxes();
             LoadPage();
-            txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {products.Count}";
+            _productsCountInDb++;
+
+            if (IsFilteringDisabled())
+            {
+
+                txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {_productsCountInDb}";
+                currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)_productsCountInDb / _pageSize)}";
+            }
+            else
+            {
+                currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)filteredProducts.Count / _pageSize)}";
+            }
+            CheckPaginationButtonStates();
 
 
         }
@@ -320,6 +289,7 @@ namespace InventoryManagementSystem.Pages
             Search();
         }
 
+        #region Categories
         private void btnAddCarType_Click(object sender, RoutedEventArgs e)
         {
             var addCarTypeWindow = new AddCarTypeWindow();
@@ -350,13 +320,13 @@ namespace InventoryManagementSystem.Pages
             addCountryWindow.AddCountryButtonClicked += Window_AddSomeCategoryButtonClicked;
             addCountryWindow.Show();
         }
-
+        #endregion
 
         private void btnResetFilter_Click(object sender, RoutedEventArgs e)
         {
             ResetFilters();
             LoadPage();
-            txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {products.Count}";
+            txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {_productsCountInDb}";
 
         }
 
@@ -381,17 +351,28 @@ namespace InventoryManagementSystem.Pages
             var choice = MessageBox.Show($"{product.Name} : продуктни учириб ташламокчимисиз ? ", "Огохлантириш !", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (choice == MessageBoxResult.Yes)
             {
-                if (_orderDetailService.ProductExists(product.Id))
+                if (_orderDetailService.IsProductSoldAtLeastOneTime(product.Id))
                 {
                     MessageBox.Show($"{product.Name} продукт аввл сотилганлиги учун, учириб ташлаш мумкин емас !", "Хатолик !", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 _productService.Delete(product);
+                _productsCountInDb--;
+
+                if (IsFilteringDisabled())
+                {
+                    txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {_productsCountInDb}";
+
+                }
+                else
+                {
+                    txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {filteredProducts.Count}";
+
+                }
 
                 notificationManager.Show("Муваффакият !", "Продукт учириб ташланди !", NotificationType.Success, areaName: "notificationArea");
 
-                PopulateDataGrid();
                 LoadPage();
             }
         }
@@ -444,6 +425,8 @@ namespace InventoryManagementSystem.Pages
                 currentOrder.OrderDetails.Add(orderDetail);
                 CalculateOrderTotals();
                 notificationManager.Show("Муваффакият !", "Товар корзинага кушилди !", NotificationType.Success, "notificationArea");
+                IsCartEmpty();
+
             }
 
 
@@ -469,8 +452,9 @@ namespace InventoryManagementSystem.Pages
             _productService = new(new AppDbContext());
             InitializeNewOrder();
 
-            PopulateDataGrid();
             LoadPage();
+            IsCartEmpty();
+
 
         }
 
@@ -608,6 +592,8 @@ namespace InventoryManagementSystem.Pages
         {
             spCurrency.Visibility = Visibility.Visible;
             txtCurrencyRate.Visibility = Visibility.Collapsed;
+            tbCurrencyRate.Focus();
+
             btnEditCurrency.IsEnabled = false;
         }
 
@@ -670,9 +656,24 @@ namespace InventoryManagementSystem.Pages
             spCurrency.Visibility = Visibility.Collapsed;
             txtCurrencyRate.Visibility = Visibility.Visible;
             btnEditCurrency.IsEnabled = true;
+
             notificationManager.Show("Муваффакият !", "Курс янгиланди", NotificationType.Success);
 
+            ChangeOrderDetailsPricesAccordingToCurrency();
 
+
+
+        }
+
+        private void ChangeOrderDetailsPricesAccordingToCurrency()
+        {
+            foreach (var orderDetail in currentOrder.OrderDetails)
+            {
+                orderDetail.Price = (double)(orderDetail.Product.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate);
+                orderDetail.SubTotal = orderDetail.Price * orderDetail.Quantity;
+            }
+
+            CalculateOrderTotals();
         }
 
         private void btnSaveCurrencyRate_KeyDown(object sender, KeyEventArgs e)
@@ -682,6 +683,54 @@ namespace InventoryManagementSystem.Pages
                 if (tbCurrencyRate.IsFocused)
                 {
                     btnSaveCurrencyRate_Click((object)sender, e);
+                }
+            }
+        }
+
+        private void currentPageNumber_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (tbcurrentPageNumber.IsFocused)
+            {
+                if (e.Key == Key.Enter)
+                {
+                    if (int.TryParse(tbcurrentPageNumber.Text, out var pageNumber))
+                    {
+                        if (IsFilteringDisabled())
+                        {
+
+                            if (pageNumber > 0 && pageNumber <= Math.Ceiling((decimal)_productsCountInDb / _pageSize) + 1)
+                            {
+                                _currentPage = pageNumber;
+                                LoadPage();
+                            }
+                            else
+                            {
+                                notificationManager.Show("Хатолик !", "Бу сахифа мавжуд эмас", NotificationType.Error);
+
+                            }
+                            tbcurrentPageNumber.Text = string.Empty;
+
+
+                        }
+                        else
+                        {
+                            if (pageNumber > 0 && pageNumber <= Math.Ceiling((decimal)filteredProducts.Count / _pageSize))
+                            {
+                                _currentPage = pageNumber;
+                                LoadPage();
+                            }
+                            else
+                            {
+                                notificationManager.Show("Хатолик !", "Бу сахифа мавжуд эмас", NotificationType.Error);
+
+                            }
+                            tbcurrentPageNumber.Text = string.Empty;
+
+
+                        }
+
+                    }
+
                 }
             }
         }

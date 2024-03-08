@@ -20,19 +20,20 @@ namespace InventoryManagementSystem.Pages
         private CustomerService _customerService;
         private int _pageSize = Properties.Settings.Default.CustomersPerPage;
         private int _currentPage = 1;
+        private int _customersCountInDb;
         private System.Timers.Timer debounceTimer;
 
         public CustomersPage()
         {
             SetupTimerSettings();
             _customerService = new(new AppDbContext());
+            _customersCountInDb = _customerService.GetCustomersCount();
             InitializeComponent();
             SetupUserCustomizationsSettings();
-            PopulateDataGrid();
             LoadPage();
             PopulateNumberOfCustomersTxt();
             notificationManager = new();
-            txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами мижозлар сони : {customers.Count}";
+            txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами мижозлар сони : {_customersCountInDb}";
 
         }
         private void SetupUserCustomizationsSettings()
@@ -67,79 +68,34 @@ namespace InventoryManagementSystem.Pages
                 MessageBox.Show(ex.ToString(), "Хатолик !", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void PopulateDataGrid()
-        {
-            try
-            {
-                customers = new ObservableCollection<Customer>(_customerService.GetAll());
-                PopulateNumberOfCustomersTxt();
 
-            }
-            catch (Exception)
-            {
 
-            }
-        }
+       
         private bool IsFilteringDisabled()
         {
             return string.IsNullOrWhiteSpace(searchBar.Text);
         }
         private void CheckPaginationButtonStates()
         {
-            if (_currentPage == 1)
-            {
-                btnPrevious.IsEnabled = false;
-            }
-            else
-            {
-                btnPrevious.IsEnabled = true;
-            }
+            btnPrevious.IsEnabled = _currentPage != 1;
 
-            if (IsFilteringDisabled())
-            {
-                if (_currentPage == Math.Ceiling((decimal)customers.Count / _pageSize))
-                {
-                    btnNext.IsEnabled = false;
-                }
-                else
-                {
-                    btnNext.IsEnabled = true;
-                }
-            }
-            else
-            {
+            int totalPages = IsFilteringDisabled()
+                ? (int)Math.Ceiling((decimal)_customersCountInDb / _pageSize)
+                : (int)Math.Ceiling((decimal)filteredCustomers.Count / _pageSize);
 
-                if (_currentPage == Math.Ceiling((decimal)filteredCustomers.Count / _pageSize))
-                {
-                    btnNext.IsEnabled = false;
-                }
-                else
-                {
-                    btnNext.IsEnabled = true;
-                }
-            }
+            btnNext.IsEnabled = _currentPage != totalPages;
+
+
         }
         private void LoadPage()
         {
             if (IsFilteringDisabled())
             {
-
                 int startIndex = (_currentPage - 1) * _pageSize;
-                int endIndex = Math.Min(startIndex + _pageSize - 1, customers.Count - 1);
-
-                var currentPageData = new ObservableCollection<Customer>();
-
-                for (int i = startIndex; i <= endIndex; i++)
-                {
-                    currentPageData.Add(customers[i]);
-                }
-
+                var currentPageData = new ObservableCollection<Customer>(_customerService.GetPageOfCustomers(startIndex, _pageSize));
                 customerDataGrid.ItemsSource = currentPageData;
+                currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)_customersCountInDb / _pageSize)}";
 
-                currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)customers.Count / _pageSize)}";
-                PopulateNumberOfCustomersTxt();
-
-                CheckPaginationButtonStates();
             }
             else
             {
@@ -156,10 +112,11 @@ namespace InventoryManagementSystem.Pages
                 customerDataGrid.ItemsSource = currentPageData;
 
                 currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)filteredCustomers.Count / _pageSize)}";
-                PopulateNumberOfCustomersTxt();
 
-                CheckPaginationButtonStates();
             }
+            PopulateNumberOfCustomersTxt();
+
+            CheckPaginationButtonStates();
         }
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
         {
@@ -178,14 +135,11 @@ namespace InventoryManagementSystem.Pages
         private void NextPage_Click(object sender, RoutedEventArgs e)
         {
             int totalPages;
-            if (IsFilteringDisabled())
-            {
-                totalPages = (int)Math.Ceiling((double)customers.Count / _pageSize);
-            }
-            else
-            {
-                totalPages = (int)Math.Ceiling((double)filteredCustomers.Count / _pageSize);
-            }
+
+            totalPages = IsFilteringDisabled()
+                            ? (int)Math.Ceiling((double)_customersCountInDb / _pageSize)
+                            : (int)Math.Ceiling((double)filteredCustomers.Count / _pageSize);
+
             if (_currentPage < totalPages)
             {
                 _currentPage++;
@@ -205,8 +159,23 @@ namespace InventoryManagementSystem.Pages
 
         private void AddCustomerWindow_AddCustomerButtonClicked(object? sender, EventArgs e)
         {
-            PopulateDataGrid();
             LoadPage();
+
+            _customersCountInDb++;
+            txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами продуктлар сони : {_customersCountInDb}";
+            if (IsFilteringDisabled())
+            {
+                txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами продуктлар сони : {_customersCountInDb}";
+
+                currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)_customersCountInDb / _pageSize)}";
+            }
+            else
+            {
+                currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)filteredCustomers.Count / _pageSize)}";
+
+            }
+            CheckPaginationButtonStates();
+
         }
 
 
@@ -220,7 +189,7 @@ namespace InventoryManagementSystem.Pages
                     if (choice == MessageBoxResult.Yes)
                     {
 
-                        if(customer.TotalOrdersCount > 0)
+                        if (customer.TotalOrdersCount > 0)
                         {
                             MessageBox.Show($"{customer.Name} : мижоз аввал товар сотиб олгани учун, учириб ташлаш мумкин емас !", "Хатолик !", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
@@ -228,9 +197,20 @@ namespace InventoryManagementSystem.Pages
 
                         _customerService.Delete(customer);
 
+                        _customersCountInDb--;
+                        if (IsFilteringDisabled())
+                        {
+                            txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами продуктлар сони : {_customersCountInDb}";
+
+                        }
+                        else
+                        {
+                            txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами продуктлар сони : {filteredCustomers.Count}";
+
+                        }
+
                         notificationManager.Show("Муваффакият !", "Мижоз учирилди !", NotificationType.Success);
 
-                        PopulateDataGrid();
                         LoadPage();
                     }
                 }
@@ -337,18 +317,11 @@ namespace InventoryManagementSystem.Pages
 
                     break;
                 case "Phone":
-                    if (string.IsNullOrWhiteSpace(editedValue.ToString()))
-                    {
-                        notificationManager.Show("Хатолик !", "Телефон номерни киритинг !", NotificationType.Error);
-                        (e.EditingElement as TextBox).Text = editedCustomer.Phone.ToString();
-                        return;
-                    }
-                    else
-                    {
-                        editedCustomer.Phone = editedValue.ToString();
-                        notificationManager.Show("Муваффакият !", "Мижоз телефон номери янгиланди", NotificationType.Success);
 
-                    }
+
+                    editedCustomer.Phone = editedValue.ToString();
+                    notificationManager.Show("Муваффакият !", "Мижоз телефон номери янгиланди", NotificationType.Success);
+
                     break;
 
                 default:

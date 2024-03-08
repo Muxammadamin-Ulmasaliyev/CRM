@@ -1,7 +1,5 @@
 ﻿using InventoryManagementSystem.Services;
-using InventoryManagementSystem.UserControls;
 using Notification.Wpf;
-using System.Drawing;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -87,8 +85,8 @@ namespace InventoryManagementSystem.View
 
                 CultureInfo uzCulture = new CultureInfo("uz-UZ");
                 uzCulture.NumberFormat.CurrencySymbol = "";
-                // Remove non-numeric characters
-                string input = new string(textBox.Text.Where(char.IsDigit).ToArray());
+
+                string input = new string(textBox.Text.Where(char.IsAscii).ToArray());
 
                 if (double.TryParse(input, out var amount))
                 {

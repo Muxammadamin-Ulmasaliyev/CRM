@@ -17,7 +17,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="TextBlock">
-                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Margin" Value="0,3,0,0"/>
+                <Setter Property="FontSize" Value="14"/>
                 <Setter Property="Foreground" Value="Red"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="Text" Value=""/>

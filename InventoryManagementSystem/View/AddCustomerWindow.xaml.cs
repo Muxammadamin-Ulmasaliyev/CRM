@@ -22,6 +22,7 @@ namespace InventoryManagementSystem.View
             InitializeComponent();
             WindowStylingHelper.SetDefaultFontFamily(this);
 
+            tbName.txtInput.Focus();
             KeyDown += btnAddCustomer_KeyDown;
             KeyDown += btnCancel_KeyDown;
         }
@@ -55,10 +56,7 @@ namespace InventoryManagementSystem.View
             {
                 txtErrorName.Text = "* Клиент ФИО ни киритинг! *";
             }
-            if (string.IsNullOrWhiteSpace(tbPhone.txtInput.Text))
-            {
-                txtErrorPhone.Text = "* Телефон ракамни киритинг! *";
-            }
+           
         }
         private void tbName_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -68,7 +66,6 @@ namespace InventoryManagementSystem.View
             switch (textBoxName)
             {
                 case "tbName": txtErrorName.Text = string.Empty; break;
-                case "tbPhone": txtErrorPhone.Text = string.Empty; break;
                 default: break;
             }
         }
@@ -81,8 +78,7 @@ namespace InventoryManagementSystem.View
         private bool IsModelStateValid()
         {
             return
-                !string.IsNullOrWhiteSpace(tbName.txtInput.Text) &&
-                !string.IsNullOrWhiteSpace(tbPhone.txtInput.Text);
+                !string.IsNullOrWhiteSpace(tbName.txtInput.Text);
         }
 
        
@@ -94,7 +90,6 @@ namespace InventoryManagementSystem.View
             tbPhone.txtInput.Clear();
             tbAddress.txtInput.Clear();
             txtErrorName.Text = string.Empty;
-            txtErrorPhone.Text = string.Empty;
         }
 
         protected virtual void CustomerAdded()

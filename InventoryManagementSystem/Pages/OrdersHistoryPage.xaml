@@ -67,11 +67,10 @@
           CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True"
                       LoadingRow="ordersDataGrid_LoadingRow">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="auto"/>
-                    <DataGridTextColumn Header="Сана" Binding="{Binding OrderDate, StringFormat={}{0:dd-MM-yyyy}}" Width="auto"/>
-                    <DataGridTextColumn Header="Жами сумма" Binding="{Binding TotalAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="auto"/>
-                    <DataGridTextColumn Header="Туланган сумма" Binding="{Binding TotalPaidAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="auto"/>
-                    <DataGridTemplateColumn Header="Списка" Width="auto">
+                    <DataGridTextColumn Header="Сана" Binding="{Binding OrderDate, StringFormat={}{0:dd-MM-yyyy}}" Width="25*"/>
+                    <DataGridTextColumn Header="Жами сумма" Binding="{Binding TotalAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="30*"/>
+                    <DataGridTextColumn Header="Туланган сумма" Binding="{Binding TotalPaidAmount, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="30*"/>
+                    <DataGridTemplateColumn Header="Списка" Width="65">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="btnShowDetails"  Style="{StaticResource MaterialDesignToolButton}"
@@ -81,7 +80,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Чек" Width="auto">
+                    <DataGridTemplateColumn Header="Чек" Width="65">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="btnPrintPdfCheque"  Style="{StaticResource MaterialDesignToolButton}"
@@ -100,19 +99,18 @@
 
 
         <ScrollViewer x:Name="scrollViewer2" PreviewMouseWheel="scrollViewer_PreviewMouseWheel" Grid.Row="1" Grid.Column="2"
-        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="auto">
+        VerticalScrollBarVisibility="Auto" >
             <DataGrid  x:Name="orderDetailsDataGrid"   Background="GhostWhite"
                 CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
-                    <!--<DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto" />-->
-                    <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}" Width="Auto"/>
-                    <DataGridTextColumn Header="Машина" Binding="{Binding ProductCarType}" Width="Auto"/>
-                    <DataGridTextColumn Header="Завод" Binding="{Binding ProductCompany}" Width="Auto"/>
-                    <DataGridTextColumn Header="Давлат" Binding="{Binding ProductCountry}" Width="Auto"/>
-                    <DataGridTextColumn Header="Нарх" Binding="{Binding Price,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
-                    <DataGridTextColumn Header="Сони" Binding="{Binding Quantity}" Width="Auto"/>
-                    <DataGridTextColumn Header="Урам" Binding="{Binding ProductSetType}" Width="Auto"/>
-                    <DataGridTextColumn Header="Сумма" Binding="{Binding SubTotal,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}" Width="20*"/>
+                    <DataGridTextColumn Header="Машина" Binding="{Binding ProductCarType}" Width="10*"/>
+                    <DataGridTextColumn Header="Завод" Binding="{Binding ProductCompany}" Width="10*"/>
+                    <DataGridTextColumn Header="Давлат" Binding="{Binding ProductCountry}" Width="10*"/>
+                    <DataGridTextColumn Header="Нарх" Binding="{Binding Price,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="15*"/>
+                    <DataGridTextColumn Header="Сони" Binding="{Binding Quantity}" Width="10*"/>
+                    <DataGridTextColumn Header="Урам" Binding="{Binding ProductSetType}" Width="10*"/>
+                    <DataGridTextColumn Header="Сумма" Binding="{Binding SubTotal,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="15*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>

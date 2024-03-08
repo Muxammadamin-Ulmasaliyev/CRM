@@ -19,7 +19,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="TextBlock">
-                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Margin" Value="0,3,0,0"/>
+                <Setter Property="FontSize" Value="14"/>
                 <Setter Property="Foreground" Value="Red"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="Text" Value=""/>
@@ -31,7 +32,7 @@
 
         <Grid>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <userControls:ClearableTextBox Placeholder="Машина номи" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput" />
+                <userControls:ClearableTextBox Placeholder="Машина номи" x:Name="tbName" PreviewTextInput="tbName_PreviewTextInput"  />
                 <TextBlock x:Name="txtErrorName" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 

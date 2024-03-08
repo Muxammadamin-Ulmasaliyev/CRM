@@ -1,6 +1,7 @@
 ﻿using ControlzEx.Standard;
 using InventoryManagementSystem.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 
 namespace InventoryManagementSystem.Services
 {
@@ -14,14 +15,6 @@ namespace InventoryManagementSystem.Services
         }
 
 
-
-        public void AddProducts(List<Product> products)
-        {
-            products.RemoveAt(0);
-            dbContext.Products.AddRange(products);
-            dbContext.SaveChanges();
-        }
-
         public void AddProduct(Product product)
         {
             dbContext.Products.Add(product);
@@ -31,8 +24,8 @@ namespace InventoryManagementSystem.Services
         public double CalculateNetWorth()
         {
             double sum = 0, sumUsd = 0;
-            sum = (double)dbContext.Products.Take(5).Sum(p => p.Quantity * p.RealPrice);
-            sumUsd = (double)dbContext.Products.Take(5).Sum(p => p.Quantity * p.USDPrice * Properties.Settings.Default.CurrencyRate);
+            sum = (double)dbContext.Products.Sum(p => p.Quantity * p.RealPrice);
+            sumUsd = (double)dbContext.Products.Sum(p => p.Quantity * p.USDPrice * Properties.Settings.Default.CurrencyRate);
 
             return sum + sumUsd;
         }
@@ -40,6 +33,18 @@ namespace InventoryManagementSystem.Services
         public Product GetProduct(int id)
         {
             return dbContext.Products.Find(id);
+        }
+
+        public async Task<List<Product>> GetPageOfProducts(int firstIndex, int pageSize)
+        {
+            return await dbContext.Products
+                .Include(p => p.Company)
+                .Include(p => p.Country)
+                .Include(p => p.CarType)
+                .Include(p => p.SetType)
+                .Skip(firstIndex)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public void UpdateQuantity(Product productToUpdate)
@@ -98,6 +103,22 @@ namespace InventoryManagementSystem.Services
         {
             return dbContext.Products.Include(p => p.Company).Include(p => p.Country).Include(p => p.CarType).Include(p => p.SetType).FirstOrDefault(p => p.Barcode == barcode);
 
+        }
+
+        public List<Product> GetLeastProducts(int numberOfLeastProducts)
+        {
+            return dbContext.Products
+                   .Include(p => p.Company)
+                   .Include(p => p.Country)
+                   .Include(p => p.CarType)
+                   .OrderBy(p => p.Quantity)
+                   .Take(numberOfLeastProducts)
+                   .ToList();
+        }
+
+        public int GetProductsCount()
+        {
+            return dbContext.Products.Count();
         }
     }
 }
