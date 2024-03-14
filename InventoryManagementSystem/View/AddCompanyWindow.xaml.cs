@@ -4,6 +4,7 @@ using Notification.Wpf;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace InventoryManagementSystem.View
 {

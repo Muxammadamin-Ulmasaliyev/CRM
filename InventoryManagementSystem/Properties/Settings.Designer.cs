@@ -235,5 +235,17 @@ namespace InventoryManagementSystem.Properties {
                 this["NumberOfLeastProducts"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsPasswordRequired {
+            get {
+                return ((bool)(this["IsPasswordRequired"]));
+            }
+            set {
+                this["IsPasswordRequired"] = value;
+            }
+        }
     }
 }

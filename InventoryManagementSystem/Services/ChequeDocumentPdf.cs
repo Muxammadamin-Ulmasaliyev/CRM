@@ -1,6 +1,4 @@
 ﻿using InventoryManagementSystem.Model;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -43,8 +41,8 @@ public class ChequeDocument : IDocument
         {
             row.RelativeItem().AlignLeft().Column(column =>
             {
-                column.Item().Text($"Asadbek : +998916034105").Style(textStyle);
-                column.Item().Text($"Zohidjon : +998902560976").Style(textStyle);
+                column.Item().Text($"Асадбек : +998916034105").Style(textStyle);
+                column.Item().Text($"Зохиджон : +998902560976").Style(textStyle);
 
             });
 
@@ -76,6 +74,13 @@ public class ChequeDocument : IDocument
 
 
             });
+
+            row.RelativeItem().AlignLeft().Column(column =>
+            {
+                column.Item().Text("Богишамол бозор 90-дукон").Style(titleStyle);
+
+            });
+
 
             row.RelativeItem().AlignRight().Column(column =>
             {
@@ -156,10 +161,10 @@ public class ChequeDocument : IDocument
                 header.Cell().Element(CellStyle).AlignCenter().Text("#");
                 header.Cell().Element(CellStyle).Text("Товар");
                 header.Cell().Element(CellStyle).Text("Машина");
-                header.Cell().Element(CellStyle).Text("Давлат");
                 header.Cell().Element(CellStyle).Text("Завод");
-                header.Cell().Element(CellStyle).AlignRight().Text("Нарх");
+                header.Cell().Element(CellStyle).Text("Давлат");
                 header.Cell().Element(CellStyle).AlignRight().Text("Сони");
+                header.Cell().Element(CellStyle).AlignRight().Text("Нарх");
                 header.Cell().Element(CellStyle).AlignRight().Text("Сумма");
 
                 static IContainer CellStyle(IContainer container)
@@ -179,10 +184,10 @@ public class ChequeDocument : IDocument
 
                 table.Cell().Element(CellStyle).Text(item.ProductName);
                 table.Cell().Element(CellStyle).Text(item.ProductCarType);
-                table.Cell().Element(CellStyle).Text(item.ProductCountry);
                 table.Cell().Element(CellStyle).Text(item.ProductCompany);
-                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price.ToString("C0", new CultureInfo("uz-UZ"))}");
+                table.Cell().Element(CellStyle).Text(item.ProductCountry);
                 table.Cell().Element(CellStyle).AlignRight().Text($"{item.Quantity} {item.ProductSetType}");
+                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price.ToString("C0", new CultureInfo("uz-UZ"))}");
                 // table.Cell().Element(CellStyle).Text(item.ProductSetType);
                 table.Cell().Element(CellStyle).AlignRight().Text($"{item.SubTotal.ToString("C0", new CultureInfo("uz-UZ"))}");
 

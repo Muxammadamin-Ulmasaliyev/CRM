@@ -158,13 +158,20 @@
 
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                        <Button x:Name="btnExportToExcel" HorizontalAlignment="Left" Width="190" Height="50" Background="#2440ff" FontSize="15" Padding="0"
+                        <Button x:Name="btnExportToExcel" HorizontalAlignment="Left" Width="200" Height="40" Background="#2440ff" FontSize="17" Padding="0"
                           Click="btnExportToExcel_Click" Content="Excel га экспорт килиш" Margin="10,5,0,5" >
                         </Button>
 
-                        <Button Name="btnChangePassword"  HorizontalAlignment="Right"  Width="190" Height="50" Margin="10,5,0,5" FontSize="15" Padding="0"
+                        <Button Name="btnChangePassword"  HorizontalAlignment="Right"  Width="200" Height="40" Margin="10,5,0,5" FontSize="17" Padding="0"
                         Background="#2440ff" Click="btnChangePassword_Click" Content="Парольни узгартириш">
                         </Button>
+
+                        <StackPanel Margin="0,0,-8,0"  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+
+                            <CheckBox x:Name="chboxIsPasswordRequired" Width="20" Height="20" Background="#2440ff" Checked="CheckBox_Checked"  Unchecked="CheckBox_Unchecked" />
+                            <TextBlock Text="Пароль билан кириш" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"  />
+                        </StackPanel>
+
 
                     </StackPanel>
 
@@ -173,15 +180,18 @@
 
 
 
-                <TextBlock   Grid.Row="2" Text="Ойлик савдо статистика"  Style="{StaticResource TitleTextBlock}" Margin="0,15,0,0" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0"  >
 
+                    <TextBlock   Grid.Row="2" Text="Ойлик савдо статистика" Margin="5,0,15,0"  Style="{StaticResource TitleTextBlock}" />
+                    <ComboBox  Name="cbYears"  FontSize="16" MinWidth="100" Background="Transparent" 
+                             Width="auto" Height="auto" SelectionChanged="cbYears_SelectionChanged" HorizontalAlignment="Right" />
+                </StackPanel>
                 <StackPanel>
-                    <lvc:CartesianChart  Name="monthlySalesChart" FontSize="16" 
+                    <lvc:CartesianChart  Name="monthlySalesChart" FontSize="16" DataClick="monthlySalesChart_DataClick"
                           Background="White" Foreground="Black" Width="auto" Height="350" Margin="30,5,20,0" >
                     </lvc:CartesianChart>
 
-                    <ComboBox  Name="cbYears" Style="{StaticResource MaterialDesignOutlinedComboBox}" FontSize="16"
-                               Width="auto" Height="auto" SelectionChanged="cbYears_SelectionChanged" HorizontalAlignment="Right" Margin="0,-650,35,-5"/>
+
 
                 </StackPanel>
 
@@ -193,7 +203,7 @@
                     <TextBlock Text="Энг куп сотилайотган товарлар" Style="{StaticResource TitleTextBlock}" Margin="0,15,0,0"/>
 
 
-                    <DataGrid x:Name="topSoldProductsDataGrid" HeadersVisibility="Column" Background="White" FontSize="16" FontWeight="SemiBold" 
+                    <DataGrid x:Name="topSoldProductsDataGrid" HeadersVisibility="Column" Background="White" FontSize="18" FontWeight="SemiBold" 
                                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True" Margin="30,5,20,0"  >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Товар номи" IsReadOnly="False" Binding="{Binding Name}" Width="28*"/>
@@ -202,11 +212,7 @@
                             <DataGridTextColumn Header="Машина" IsReadOnly="False" Binding="{Binding CarType.Name}" Width="17*"/>
 
                             <DataGridTextColumn Header="Жами сотилган" IsReadOnly="False" Binding="{Binding QuantitySold, StringFormat=N0}" Width="20*">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
+                               
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -229,17 +235,13 @@
 
                     <TextBlock Text="Энг фаол мижозлар" Style="{StaticResource TitleTextBlock}"  Margin="0,15,0,0"/>
 
-                    <DataGrid x:Name="topCustomersDataGrid" HeadersVisibility="Column" Background="white" FontSize="16" FontWeight="SemiBold" 
+                    <DataGrid x:Name="topCustomersDataGrid" HeadersVisibility="Column" Background="white" FontSize="18" FontWeight="SemiBold" 
                       CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True" Margin="30,5,20,0"  >
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Мижоз" IsReadOnly="False" Binding="{Binding Name}" Width="35*"/>
                             <DataGridTextColumn Header="Заказлари сони" IsReadOnly="False" Binding="{Binding NoOfOrders, StringFormat=N0}" Width="25*">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
+
                             </DataGridTextColumn>
                             <DataGridTextColumn Header="Жами савдо суммаси" IsReadOnly="False" Binding="{Binding TotalAmountOfOrders, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="40*"/>
                         </DataGrid.Columns>
@@ -262,7 +264,7 @@
 
                     <TextBlock Text="Кам колган товарлар" Style="{StaticResource TitleTextBlock}"  Margin="0,15,0,0"/>
 
-                    <DataGrid x:Name="leastAmountProductsDataGrid" HeadersVisibility="Column" Background="white" FontSize="16" FontWeight="SemiBold" Width="auto"
+                    <DataGrid x:Name="leastAmountProductsDataGrid" HeadersVisibility="Column" Background="white" FontSize="18" FontWeight="SemiBold" Width="auto"
                         CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True" Margin="30,5,20,0"  >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Товар номи" IsReadOnly="False" Binding="{Binding Name}" Width="30*"/>
@@ -270,11 +272,7 @@
                             <DataGridTextColumn Header="Давлат" IsReadOnly="False" Binding="{Binding Country.Name}" Width="18*"/>
                             <DataGridTextColumn Header="Машина" IsReadOnly="False" Binding="{Binding CarType.Name}" Width="18*"/>
                             <DataGridTextColumn Header="Колди" IsReadOnly="False" Binding="{Binding Quantity, StringFormat=N0}" Width="15*">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
+                               
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>

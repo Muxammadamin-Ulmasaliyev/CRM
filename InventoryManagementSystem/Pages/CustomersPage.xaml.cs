@@ -18,6 +18,7 @@ namespace InventoryManagementSystem.Pages
         private ObservableCollection<Customer> filteredCustomers;
         private NotificationManager notificationManager;
         private CustomerService _customerService;
+        private DebtWithdrawalService _debtWithdrawalService;
         private int _pageSize = Properties.Settings.Default.CustomersPerPage;
         private int _currentPage = 1;
         private int _customersCountInDb;
@@ -27,6 +28,7 @@ namespace InventoryManagementSystem.Pages
         {
             SetupTimerSettings();
             _customerService = new(new AppDbContext());
+            _debtWithdrawalService = new(new AppDbContext());
             _customersCountInDb = _customerService.GetCustomersCount();
             InitializeComponent();
             SetupUserCustomizationsSettings();
@@ -70,7 +72,7 @@ namespace InventoryManagementSystem.Pages
         }
 
 
-       
+
         private bool IsFilteringDisabled()
         {
             return string.IsNullOrWhiteSpace(searchBar.Text);
@@ -234,13 +236,12 @@ namespace InventoryManagementSystem.Pages
             if (IsFilteringDisabled())
             {
                 LoadPage();
-                txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами мижозлар сони : {customers.Count}";
+                txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами мижозлар сони : {_customersCountInDb}";
 
             }
             else
             {
-                customerDataGrid.ItemsSource = customers;
-                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(customerDataGrid.ItemsSource);
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(_customerService.GetAll());
                 view.Filter = SearchFilter;
                 filteredCustomers = new ObservableCollection<Customer>(view.Cast<Customer>().ToList());
                 LoadPage();
@@ -275,7 +276,7 @@ namespace InventoryManagementSystem.Pages
         {
             searchBar.Clear();
             LoadPage();
-            txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами мижозлар сони : {customers.Count}";
+            txtNumberOfCustomersInDb.Text = $"Базада мавжуд жами мижозлар сони : {_customersCountInDb}";
         }
 
         private void btnHistory_Click(object sender, RoutedEventArgs e)
@@ -339,10 +340,10 @@ namespace InventoryManagementSystem.Pages
                 {
                     e.Row.Foreground = Brushes.Red;
                 }
-                if (customer.Debt < 0)
+               /* if (customer.Debt < 0)
                 {
                     e.Row.Foreground = Brushes.Green;
-                }
+                }*/
             }
         }
 
@@ -360,9 +361,18 @@ namespace InventoryManagementSystem.Pages
 
             Customer customer = (Customer)(sender as Button).DataContext;
             customer.Debt -= incomeInputWindow.GetTotalPaidAmount();
+
+            _debtWithdrawalService.Add(new DebtWithdrawal()
+            {
+                Amount = incomeInputWindow.GetTotalPaidAmount(),
+                CustomerId = customer.Id
+            });
+
             _customerService.Update(customer);
             notificationManager.Show("Муваффакият !", "Карз туланди", NotificationType.Success);
             LoadPage();
         }
+
+       
     }
 }

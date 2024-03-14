@@ -9,18 +9,18 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MessageBox = System.Windows.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace InventoryManagementSystem.Pages
 {
     public partial class HomePage : Page
     {
         private NotificationManager notificationManager;
-        private ObservableCollection<Product> products;
         private ObservableCollection<Product> filteredProducts;
         private Order? currentOrder;
-        private Customer selectedCustomer;
         private ProductService _productService;
-        private readonly CustomerService _customerService;
         private readonly OrderDetailService _orderDetailService;
 
 
@@ -37,7 +37,6 @@ namespace InventoryManagementSystem.Pages
             SetupUserCustomizationsSettings();
             SetupTimerSettings();
             _productService = new(new AppDbContext());
-            _customerService = new(new AppDbContext());
             _orderDetailService = new(new AppDbContext());
             _productsCountInDb = _productService.GetProductsCount();
             InitializeNewOrder();
@@ -68,7 +67,7 @@ namespace InventoryManagementSystem.Pages
         private void SetupUserCustomizationsSettings()
         {
             productDataGrid.FontSize = Properties.Settings.Default.ProductsDataGridFontSize;
-            this.FontFamily = new FontFamily(Properties.Settings.Default.AppFontFamily);
+            this.FontFamily = new System.Windows.Media.FontFamily(Properties.Settings.Default.AppFontFamily);
         }
 
         private void SetupTimerSettings()
@@ -105,12 +104,12 @@ namespace InventoryManagementSystem.Pages
         }
 
         [Time]
-        private async Task LoadPage()
+        private void LoadPage()
         {
             if (IsFilteringDisabled())
             {
                 int startIndex = (_currentPage - 1) * _pageSize;
-                var currentPageData = new ObservableCollection<Product>(await _productService.GetPageOfProducts(startIndex, _pageSize));
+                var currentPageData = new ObservableCollection<Product>(_productService.GetPageOfProducts(startIndex, _pageSize));
                 productDataGrid.ItemsSource = currentPageData;
                 currentPageText.Text = $"Сахифа {_currentPage} / {Math.Ceiling((decimal)_productsCountInDb / _pageSize)}";
 

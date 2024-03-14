@@ -14,6 +14,8 @@ namespace InventoryManagementSystem.Model
         public double Debt { get; set; } = 0;
         public int TotalOrdersCount { get; set; } = 0;
         public List<Order> Orders { get; set; }
+        public List<DebtWithdrawal> DebtWithdrawals { get; set; }
+
 
 
     }

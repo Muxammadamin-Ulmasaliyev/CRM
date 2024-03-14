@@ -36,7 +36,7 @@ namespace InventoryManagementSystem
                         {
                             var selected = sidebar.SelectedItem as NavButton;
 
-                            if (selected.Name == "navBtnAdmin")
+                            if (selected.Name == "navBtnAdmin" && Properties.Settings.Default.IsPasswordRequired)
                             {
                                 CheckPassword(navframe, selected);
                             }
@@ -56,7 +56,7 @@ namespace InventoryManagementSystem
                     {
                         var selected = sidebar.SelectedItem as NavButton;
 
-                        if (selected.Name == "navBtnAdmin")
+                        if (selected.Name == "navBtnAdmin" && Properties.Settings.Default.IsPasswordRequired)
                         {
                             CheckPassword(navframe, selected);
                         }
@@ -74,7 +74,7 @@ namespace InventoryManagementSystem
             {
                 var selected = sidebar.SelectedItem as NavButton;
 
-                if (selected.Name == "navBtnAdmin")
+                if (selected.Name == "navBtnAdmin" && Properties.Settings.Default.IsPasswordRequired)
                 {
                     CheckPassword(navframe, selected);
                 }
@@ -105,7 +105,7 @@ namespace InventoryManagementSystem
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var choice = MessageBox.Show("Dasturni yopmoqchimisz", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var choice = MessageBox.Show("Дастурни ёпмокчимисиз ?", "Хабар", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (choice == MessageBoxResult.No)
             {
                 // Cancel the closing event to prevent the window from closing

@@ -3,6 +3,7 @@ using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using System.Windows;
 using System.Windows.Input;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace InventoryManagementSystem.View
 {

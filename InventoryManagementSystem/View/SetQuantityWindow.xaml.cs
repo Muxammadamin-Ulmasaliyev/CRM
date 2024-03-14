@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace InventoryManagementSystem.View
 {

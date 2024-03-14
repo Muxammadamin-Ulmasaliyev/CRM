@@ -97,7 +97,7 @@
                          SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
 
             <ComboBox Margin="5" MinWidth="100" Width="auto" Height="auto" FontSize="15"
-                      Name="cbSetType"  MaterialDesign:HintAssist.Hint="Урам"
+                      Name="cbSetType"  MaterialDesign:HintAssist.Hint="Улчов"
                       DisplayMemberPath="Name" Style="{StaticResource MaterialDesignOutlinedComboBox}"  Background="MintCream"
                      SelectionChanged="searchBar_TextChanged_OR_ComboBox_SelectionChanged" />
 
@@ -165,14 +165,14 @@
                     <!-- <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>-->
                     <DataGridTextColumn Header="Товар номи" IsReadOnly="False" Binding="{Binding Name}" Width="20*"/>
                     <DataGridTextColumn Header="Код" IsReadOnly="False" Binding="{Binding Code}" Width="10*"/>
-                    <DataGridTextColumn Header="Штрих код" IsReadOnly="True" Binding="{Binding Barcode}" Width="10*"/>
-                    <DataGridTextColumn Header="Таннарх" IsReadOnly="False" Binding="{Binding RealPrice, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
-                    <DataGridTextColumn Header="Сотиш нарх" IsReadOnly="False" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
-                    <DataGridTextColumn Header="Урам" IsReadOnly="True" Binding="{Binding SetType.Name}" Width="7*"/>
-                    <DataGridTextColumn Header="Сони" IsReadOnly="False" Binding="{Binding Quantity, StringFormat=N0}" Width="10*" />
-                    <DataGridTextColumn Header="Завод" IsReadOnly="True" Binding="{Binding Company.Name}" Width="10*"/>
-                    <DataGridTextColumn Header="Давлат" IsReadOnly="True" Binding="{Binding Country.Name}" Width="10*"/>
+                    <!--<DataGridTextColumn Header="Штрих код" IsReadOnly="True" Binding="{Binding Barcode}" Width="10*"/>-->
                     <DataGridTextColumn Header="Машина" IsReadOnly="True" Binding="{Binding CarType.Name}" Width="10*"/>
+                    <DataGridTextColumn Header="Завод" IsReadOnly="True" Binding="{Binding Company.Name}" Width="10*"/>
+                    <DataGridTextColumn Header="Сони" IsReadOnly="False" Binding="{Binding Quantity, StringFormat=N0}" Width="10*" />
+                    <DataGridTextColumn Header="Улчов" IsReadOnly="True" Binding="{Binding SetType.Name}" Width="7*"/>
+                    <DataGridTextColumn Header="Таннарх" IsReadOnly="False" Binding="{Binding RealPrice, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="15*"/>
+                    <DataGridTextColumn Header="Сотиш нарх" IsReadOnly="False" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="15*"/>
+                    <DataGridTextColumn Header="Давлат" IsReadOnly="True" Binding="{Binding Country.Name}" Width="10*"/>
                     <DataGridTextColumn Header="$ таннарх" IsReadOnly="False" Binding="{Binding USDPrice,StringFormat={}{0:C2}, ConverterCulture='en-US'}" Width="10*"/>
                     <DataGridTextColumn Header="$ сотиш" IsReadOnly="False" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C2}, ConverterCulture='en-US'}" Width="10*"/>
                     <DataGridTemplateColumn  Header="" Width="65">

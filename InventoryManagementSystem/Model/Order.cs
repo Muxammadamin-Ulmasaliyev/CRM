@@ -7,7 +7,7 @@ namespace InventoryManagementSystem.Model
         [Key]
 
         public int Id { get; set; }
-        public DateTime OrderDate { get; set; } = DateTime.Today;
+        public DateTime OrderDate { get; set; } = DateTime.Now;
         public double TotalAmount { get; set; } = 0;
         public double TotalPaidAmount { get; set; } = 0;
 

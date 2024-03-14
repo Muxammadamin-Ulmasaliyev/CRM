@@ -15,21 +15,25 @@ namespace InventoryManagementSystem.Services
             XSSFWorkbook workbook = new();
 
             ISheet sheet = workbook.CreateSheet("Products");
-
             
             // Header cell font styling
             IRow headerRow = sheet.CreateRow(1);
             ICellStyle borderedHeaderStyle = workbook.CreateCellStyle();
-            IFont fontStyle = workbook.CreateFont();
-            fontStyle.FontName = "Times New Roman";
 
-            fontStyle.Boldweight = (short)FontBoldWeight.Bold;
-            borderedHeaderStyle.SetFont(fontStyle);
+            IFont headerFontStyle = workbook.CreateFont();
+            headerFontStyle.FontName = "Times New Roman";
+            headerFontStyle.FontHeightInPoints = 16;
+            headerFontStyle.Boldweight = (short)FontBoldWeight.Bold;
+            borderedHeaderStyle.SetFont(headerFontStyle);
+
+           
+
 
             borderedHeaderStyle.BorderBottom = BorderStyle.Thin;
             borderedHeaderStyle.BorderTop = BorderStyle.Thin;
             borderedHeaderStyle.BorderLeft = BorderStyle.Thin;
             borderedHeaderStyle.BorderRight = BorderStyle.Thin;
+            borderedHeaderStyle.Alignment = HorizontalAlignment.Center;
 
 
             // Cell borders styling
@@ -38,29 +42,45 @@ namespace InventoryManagementSystem.Services
             borderedUpBottomCellStyle.BorderBottom = BorderStyle.Thin;
             borderedUpBottomCellStyle.BorderLeft = BorderStyle.None;
             borderedUpBottomCellStyle.BorderRight = BorderStyle.None;
+            borderedUpBottomCellStyle.Alignment = HorizontalAlignment.Center;
 
             ICellStyle borderedLeftUpBottomCellStyle = workbook.CreateCellStyle();
             borderedLeftUpBottomCellStyle.BorderBottom = BorderStyle.Thin;
             borderedLeftUpBottomCellStyle.BorderLeft = BorderStyle.Thin;
             borderedLeftUpBottomCellStyle.BorderTop = BorderStyle.Thin;
+            borderedLeftUpBottomCellStyle.Alignment = HorizontalAlignment.Center;
+
 
             ICellStyle borderedRightUpBottomCellStyle = workbook.CreateCellStyle();
             borderedRightUpBottomCellStyle.BorderBottom = BorderStyle.Thin;
             borderedRightUpBottomCellStyle.BorderRight = BorderStyle.Thin;
             borderedRightUpBottomCellStyle.BorderTop = BorderStyle.Thin;
+            borderedRightUpBottomCellStyle.Alignment = HorizontalAlignment.Center;
+
+
+
+            IFont fontStyle = workbook.CreateFont();
+            fontStyle.FontName = "Times New Roman";
+            fontStyle.FontHeightInPoints = 15;
+
+            borderedUpBottomCellStyle.SetFont(fontStyle);
+            borderedLeftUpBottomCellStyle.SetFont(fontStyle);
+            borderedRightUpBottomCellStyle.SetFont(fontStyle);
+
+
 
 
             // Createing header cells
             headerRow.CreateCell(1).SetCellValue("Id");
-            headerRow.CreateCell(2).SetCellValue("Nomi");
+            headerRow.CreateCell(2).SetCellValue("Товар");
             headerRow.CreateCell(3).SetCellValue("Kodi");
-            headerRow.CreateCell(4).SetCellValue("Narxi");
-            headerRow.CreateCell(5).SetCellValue("$ Narxi");
-            headerRow.CreateCell(6).SetCellValue("Miqdor");
-            headerRow.CreateCell(7).SetCellValue("Zavod");
-            headerRow.CreateCell(8).SetCellValue("Davlat");
-            headerRow.CreateCell(9).SetCellValue("Mashina");
-            headerRow.CreateCell(10).SetCellValue("O`ram");
+            headerRow.CreateCell(4).SetCellValue("Нарх");
+            headerRow.CreateCell(5).SetCellValue("$ Нарх");
+            headerRow.CreateCell(6).SetCellValue("Сони");
+            headerRow.CreateCell(7).SetCellValue("Завод");
+            headerRow.CreateCell(8).SetCellValue("Давлат");
+            headerRow.CreateCell(9).SetCellValue("Машина");
+            headerRow.CreateCell(10).SetCellValue("Улчов");
 
             // Styling header cells
             for (int i = 1; i <= 10; i++)

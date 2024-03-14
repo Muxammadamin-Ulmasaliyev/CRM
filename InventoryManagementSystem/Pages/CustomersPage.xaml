@@ -82,7 +82,9 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                
+               
+                
                 <DataGridTemplateColumn Header="" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

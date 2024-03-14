@@ -9,6 +9,7 @@ using System.Globalization;
 using Notification.Wpf;
 using System.Windows;
 using MethodTimer;
+using Ookii.Dialogs.Wpf;
 
 namespace InventoryManagementSystem.Pages
 {
@@ -20,7 +21,7 @@ namespace InventoryManagementSystem.Pages
         private readonly OrderService _orderService;
         private readonly CustomerService _customerService;
         private NotificationManager _notificationManager;
-
+        
         public AdminPage()
         {
             _notificationManager = new();
@@ -45,8 +46,10 @@ namespace InventoryManagementSystem.Pages
             KeyDown += btnSave_KeyDown;
 
 
+            chboxIsPasswordRequired.IsChecked = Properties.Settings.Default.IsPasswordRequired;
 
-          //  monthlySalesChart.AnimationsSpeed = TimeSpan.FromMicroseconds(200);
+
+            monthlySalesChart.AnimationsSpeed = TimeSpan.FromMicroseconds(200);
 
 
         }
@@ -178,11 +181,21 @@ namespace InventoryManagementSystem.Pages
 
         private async void btnExportToExcel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            var folderBrowserDialog = new VistaFolderBrowserDialog();
+            bool? result = folderBrowserDialog.ShowDialog();
+            if (result == false)
+            {
+                return;
+            }
+
+            string selectedDirectory = folderBrowserDialog.SelectedPath;
+
+
             StartLoading();
 
             await Task.Run(() =>
             {
-                ChequeDocumentXlsx.ExportToExcel(_productService.GetAll(), $"D://{DateTime.Now.ToString("dd-MM-yyyy")}producst.xlsx");
+                ChequeDocumentXlsx.ExportToExcel(_productService.GetAll(), $"{selectedDirectory}/{DateTime.Now.ToString("dd-MM-yyyy")}producst.xlsx");
             });
 
             StopLoading();
@@ -345,6 +358,45 @@ namespace InventoryManagementSystem.Pages
 
         }
 
+        [Time]
+        private void monthlySalesChart_DataClick(object sender, ChartPoint chartPoint)
+        {
+            var month = chartPoint.Key + 1;
+            var year = (int)cbYears.SelectedItem;
 
+
+            var daysCount = DateTime.DaysInMonth(year, month);
+
+            var dailySales = _orderService.GetDailyOrdersSum(year, month);
+
+            for (int i = 1; i <= daysCount; i++)
+            {
+                if (!dailySales.Any(ds => ds.Day == i))
+                {
+                    dailySales.Add(new DailySale() { Day = i, Month = month, Year = year, SalesTotalAmount = 0 });
+                }
+            }
+
+            dailySales = dailySales.OrderBy(ds => ds.Day).ToList();
+
+            DailySalesOverviewWindow dailySalesOverviewWindow = new DailySalesOverviewWindow(dailySales, month, year);
+            this.Opacity = 0.4;
+            dailySalesOverviewWindow.ShowDialog();
+            this.Opacity = 1;
+
+
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.IsPasswordRequired = (bool)chboxIsPasswordRequired.IsChecked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.IsPasswordRequired = (bool)chboxIsPasswordRequired.IsChecked;
+            Properties.Settings.Default.Save();
+        }
     }
 }

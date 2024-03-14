@@ -29,7 +29,7 @@ namespace InventoryManagementSystem.Services
                         .ToList();
         }
 
-
+        //////////////////////////////////////////////////////////////////////////////////////////
         public double CalculateAverageIncomePercentage()
         {
             if (dbContext.OrderDetails.Count() > 0)

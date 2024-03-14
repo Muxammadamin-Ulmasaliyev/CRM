@@ -7,7 +7,7 @@
         xmlns:userControls="clr-namespace:InventoryManagementSystem.UserControls"
         xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" 
-        Title="AddProductWindow" Height="575" Width="700" ResizeMode="NoResize">
+        Title="Товар кушиш" Height="575" Width="700" ResizeMode="NoResize">
 
     <Window.Resources>
         <ResourceDictionary>

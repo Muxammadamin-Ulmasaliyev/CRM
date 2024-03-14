@@ -1,7 +1,9 @@
 ﻿using InventoryManagementSystem.Model;
+using MethodTimer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections;
+using System.Linq;
 
 namespace InventoryManagementSystem.Services
 {
@@ -22,11 +24,31 @@ namespace InventoryManagementSystem.Services
             return orderEntity;
         }
 
+
+
+        // #################################################################################################################################
+
+
         public List<Order> GetOrdersByCustomerId(int customerId)
         {
-            return dbContext.Orders.Where(o => o.CustomerId == customerId).ToList();
+            var debtWithrawals = dbContext.DebtWithdrawals.Where(dw => dw.CustomerId == customerId).ToList();
+
+            var debtWithrawalsAsOrders = debtWithrawals.Select(dw => new Order()
+            {
+                OrderDate = dw.Date,
+                TotalPaidAmount = dw.Amount
+            }).ToList();
+
+            var orders = dbContext.Orders.Where(o => o.CustomerId == customerId).ToList();
+
+            orders.AddRange(debtWithrawalsAsOrders);
+
+            orders = orders.OrderByDescending(o => o.OrderDate).ToList();
+
+            return orders;
+            //return dbContext.Orders.Where(o => o.CustomerId == customerId).OrderByDescending(o => o.OrderDate).ToList();
         }
-       
+
 
         public Order GetOrderById(int selectedOrderId)
         {
@@ -42,76 +64,6 @@ namespace InventoryManagementSystem.Services
 
         // #################################################################################################################################
 
-
-        public void GetYearlyStats()
-        {
-            var yearlySales = new Dictionary<int, Dictionary<int, double>>();
-
-            var groupingByYear = dbContext.Orders.GroupBy(o => o.OrderDate.Year).ToList();
-
-            double sum = 0;
-
-            foreach (var year in groupingByYear)
-            {
-                var monthlySalesInYear = new Dictionary<int, double>();
-                var groupingByMonth = year.GroupBy(y => y.OrderDate.Month).ToList();
-                foreach (var salesInMonth in groupingByMonth)
-                {
-                    foreach (var order in salesInMonth)
-                    {
-                        sum += order.TotalAmount;
-                    }
-                    monthlySalesInYear.Add(salesInMonth.Key, sum);
-                    sum = 0;
-                }
-                for (int i = 1; i <= 12; i++)
-                {
-                    if (!monthlySalesInYear.Keys.Contains(i))
-                    {
-                        monthlySalesInYear.Add(i, 0);
-                    }
-                }
-                monthlySalesInYear = monthlySalesInYear.OrderBy(pair => pair.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
-
-                yearlySales.Add(year.Key, monthlySalesInYear);
-            }
-        }
-
-        // #################################################################################################################################
-
-
-        public Dictionary<int, double> GetMonthlySalesOfYear()
-        {
-            double sum = 0;
-            var salesInYear = new Dictionary<int, double>();
-            // var salesInYear = new List<double>();
-            var monthlySalesGrouping = dbContext.Orders.GroupBy(o => o.OrderDate.Month).ToList();
-            foreach (var salesInMonth in monthlySalesGrouping)
-            {
-                foreach (var order in salesInMonth)
-                {
-                    sum += order.TotalAmount;
-                }
-                salesInYear.Add(salesInMonth.Key, sum);
-                //      salesInYear.Add(sum);
-                sum = 0;
-            }
-
-
-            // check everymonth sales
-            for (int i = 1; i <= 12; i++)
-            {
-                if (!salesInYear.Keys.Contains(i))
-                {
-                    salesInYear.Add(i, 0);
-                }
-            }
-
-
-            //salesInYear = (Dictionary<int, double>)salesInYear.OrderBy(sy => sy.Key);
-            return salesInYear.OrderBy(pair => pair.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
-
-        }
 
         public Dictionary<int, double> GetMonthlySalesOfYear(int year)
         {
@@ -163,16 +115,50 @@ namespace InventoryManagementSystem.Services
         }
 
 
-
         // #################################################################################################################################
+
         public double CalculateTodaysSaleAmount()
         {
             return dbContext.Orders.Where(o => o.OrderDate == DateTime.Today).Sum(o => o.TotalAmount);
+        }
+
+        public double CalculateTodaysCustomersTotalPaidAmount()
+        {
+            return dbContext.Orders.Where(o => o.OrderDate == DateTime.Today).Sum(o => o.TotalPaidAmount);
         }
 
         public List<int> GetDistinctYears()
         {
             return dbContext.Orders.Select(o => o.OrderDate.Year).Distinct().ToList();
         }
+
+
+        // #################################################################################################################################
+
+        public List<DailySale> GetDailyOrdersSum(int year, int monthIndex)
+        {
+            var dailySales = dbContext.Orders.Where(o => o.OrderDate.Year == year && o.OrderDate.Month == monthIndex)
+               .GroupBy(o => o.OrderDate.Day)
+               .Select(group => new DailySale
+               {
+                   Day = group.Key,
+                   Month = monthIndex,
+                   Year = year,
+                   SalesTotalAmount  = group.Sum(o => o.TotalAmount)
+               })
+               .ToList();
+
+            return dailySales;
+        }
+
+        [Time]
+        public List<Order> GetOrdersOfDay(int year, int month, int day)
+        {
+            return dbContext.Orders.Include(o => o.Customer).Where(o => o.OrderDate == new DateTime(year, month, day)).ToList();
+        }
+
+
+        // #################################################################################################################################
+
     }
 }

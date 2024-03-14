@@ -68,14 +68,14 @@ namespace InventoryManagementSystem.View
 
                 return;
             }
-
+            
             _paidAmount = income;
             isSuccess = true;
             Close();
 
         }
 
-       
+
 
         private void tbName_PreviewTextInput(object sender, TextChangedEventArgs e)
         {

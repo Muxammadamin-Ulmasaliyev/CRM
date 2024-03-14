@@ -15,6 +15,8 @@ namespace InventoryManagementSystem.Services
         }
 
 
+
+
         public void AddProduct(Product product)
         {
             dbContext.Products.Add(product);
@@ -35,16 +37,16 @@ namespace InventoryManagementSystem.Services
             return dbContext.Products.Find(id);
         }
 
-        public async Task<List<Product>> GetPageOfProducts(int firstIndex, int pageSize)
+        public List<Product> GetPageOfProducts(int firstIndex, int pageSize)
         {
-            return await dbContext.Products
+            return dbContext.Products
                 .Include(p => p.Company)
                 .Include(p => p.Country)
                 .Include(p => p.CarType)
                 .Include(p => p.SetType)
                 .Skip(firstIndex)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToList();
         }
 
         public void UpdateQuantity(Product productToUpdate)

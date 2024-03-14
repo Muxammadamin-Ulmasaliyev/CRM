@@ -1,16 +1,22 @@
 ﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
+using MaterialDesignThemes.Wpf;
 using MethodTimer;
 using Notification.Wpf;
+using NPOI.SS.Formula.Functions;
+using NPOI.XSSF.UserModel;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
+using FontFamily = System.Windows.Media.FontFamily;
+using MessageBox = System.Windows.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace InventoryManagementSystem.Pages
 {
@@ -26,8 +32,10 @@ namespace InventoryManagementSystem.Pages
         private readonly ProductService _productService;
         private readonly CustomerService _customerService;
 
+
         public CartPage(Order currentOrder)
         {
+
             _orderDetailService = new(new AppDbContext());
             _orderService = new(new AppDbContext());
             _productService = new(new AppDbContext());
@@ -146,7 +154,6 @@ namespace InventoryManagementSystem.Pages
         {
             orderDetailsDataGrid.FontSize = Properties.Settings.Default.CartDataGridFontSize;
             this.FontFamily = new FontFamily(Properties.Settings.Default.AppFontFamily);
-
         }
         private void PopulateCustomersComboBox()
         {
@@ -220,6 +227,7 @@ namespace InventoryManagementSystem.Pages
 
             if (!incomeInputWindow.IsResultSuccessful())
             {
+                tbBarcode.Focus();
                 return;
             }
 
@@ -261,16 +269,52 @@ namespace InventoryManagementSystem.Pages
             UpdateOrdersCountAndDebtAmountOfCustomer(currentCustomer.Id);
             currentOrder.Id = newOrder.Entity.Id;
             // currentOrder.OrderDetails = orderDetailsLocal;
-            GeneretePDFCheque(currentOrder);
 
+            GeneretePDFCheque(currentOrder);
+            PrintReceiptCheque(currentOrder);
             notificationManager.Show("Муваффакият !", "Товарлар сотилди ва чек яратилди !", NotificationType.Success, onClick: () => OpenChequesFolder());
 
             txtOrderTotalSumUzs.Text = string.Empty;
             orderDetails.Clear();
             currentOrder = null;
+
             tbBarcode.Focus();
 
         }
+
+        private void PrintReceiptCheque(Order order)
+        {
+
+            PrintOverviewWindow printOverviewWindow = new PrintOverviewWindow(order, true);
+            printOverviewWindow.Show();
+            printOverviewWindow.Visibility = Visibility.Collapsed;
+            try
+            {
+                printOverviewWindow.IsEnabled = false;
+                PrintDialog printDialog = new PrintDialog();
+                if (printDialog.ShowDialog() == true)
+                {
+                    printDialog.PrintVisual(printOverviewWindow.print, "Чек");
+                }
+            }
+            finally
+            {
+                printOverviewWindow.IsEnabled = true;
+            }
+
+            printOverviewWindow.Close();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentOrder != null)
+            {
+                bool isUzsCurrency = true;
+                PrintOverviewWindow printOverviewWindow = new PrintOverviewWindow(currentOrder, isUzsCurrency);
+                printOverviewWindow.ShowDialog();
+            }
+        }
+
         private void OpenChequesFolder()
         {
 
@@ -354,7 +398,6 @@ namespace InventoryManagementSystem.Pages
                     {
                         var orderDetail = currentOrder.OrderDetails.First(x => x.ProductId == editedOrderDetail.ProductId);
                         orderDetail.Price = price;
-                        notificationManager.Show("Муваффакият !", "Нарх янгиланди !", NotificationType.Success);
 
                     }
                     else
@@ -381,7 +424,6 @@ namespace InventoryManagementSystem.Pages
 
                         orderDetail.Quantity = quantity;
 
-                        notificationManager.Show("Муваффакият !", "Микдор янгиланди !", NotificationType.Success);
                     }
                     else
                     {
@@ -457,4 +499,5 @@ namespace InventoryManagementSystem.Pages
 
     }
 }
+
 

@@ -22,7 +22,12 @@ namespace InventoryManagementSystem.Model
         public string ProductCarType { get; set; }
         public string ProductCompany { get; set; }
         public string ProductCountry { get; set; }
-        public string  ProductSetType { get; set; }
+        public string ProductSetType { get; set; }
+
+        public string QuantityAndSetType
+        {
+            get { return $" {Quantity}\n{ProductSetType}"; }
+        }
 
 
     }

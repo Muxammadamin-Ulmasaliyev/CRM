@@ -53,6 +53,11 @@
                 
             </Button>
 
+<!--
+            <Button Click="Button_Click">
+                
+            </Button>
+-->
             
             
         </StackPanel>
@@ -75,7 +80,7 @@
                 <DataGridTextColumn  IsReadOnly="True" Header="Давлат" Binding="{Binding ProductCountry}" Width="8*"/>
                 <DataGridTextColumn  IsReadOnly="False" Header="Нарх" Binding="{Binding Price, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="12*"/>
                 <DataGridTextColumn  IsReadOnly="False" Header="Сони" Binding="{Binding Quantity}" Width="10*"/>
-                <DataGridTextColumn  IsReadOnly="True" Header="Урам" Binding="{Binding ProductSetType}" Width="10*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Улчов" Binding="{Binding ProductSetType}" Width="10*"/>
                 <DataGridTextColumn  IsReadOnly="True" Header="Сумма" Binding="{Binding SubTotal, StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="18*"/>
                 <DataGridTemplateColumn Header="" Width="4*">
                     <DataGridTemplateColumn.CellTemplate>

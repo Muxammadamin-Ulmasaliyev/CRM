@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:InventoryManagementSystem"
         xmlns:customControls="clr-namespace:InventoryManagementSystem.CustomControls"
         mc:Ignorable="d" WindowState="Maximized" Closing="Window_Closing"
-        Title="MainWindow" Height="650" Width="1500">
+        Title="StockMaster" Height="650" Width="1500">
     <Window.Resources>
         
         <Style TargetType="Button">

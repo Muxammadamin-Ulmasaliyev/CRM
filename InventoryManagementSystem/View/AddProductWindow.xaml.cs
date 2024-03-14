@@ -66,26 +66,26 @@ namespace InventoryManagementSystem.View
                     SetTypeId = (cbSetType.SelectedItem as SetType).Id
                 };
 
-                if (_productService.IsProductCodeExists(productToAdd.Code, productToAdd.Barcode, out var productFromDb))
-                {
+                /*  if (_productService.IsProductCodeExists(productToAdd.Code, productToAdd.Barcode, out var productFromDb))
+                  {
 
-                    productFromDb.Quantity += productToAdd.Quantity;
-                    using (var dbContext = new AppDbContext())
-                    {
-                        _productService.UpdateQuantity(productFromDb);
-                    }
+                      productFromDb.Quantity += productToAdd.Quantity;
+                      using (var dbContext = new AppDbContext())
+                      {
+                          _productService.UpdateQuantity(productFromDb);
+                      }
 
-                    notificationManager.Show("Муваффакият", "Бу товар базада борлиги учун, уни сони оширилди", NotificationType.Information);
+                      notificationManager.Show("Муваффакият", "Бу товар базада борлиги учун, уни сони оширилди", NotificationType.Information);
 
-                }
-                else
-                {
-                    _productService.AddProduct(productToAdd);
-                    notificationManager.Show("Муваффакият", "Товар кушилди", NotificationType.Success);
+                  }*/
+                //else
+                // {
+                _productService.AddProduct(productToAdd);
+                notificationManager.Show("Муваффакият", "Товар кушилди", NotificationType.Success);
 
 
-                    ProductAdded();
-                }
+                ProductAdded();
+                //  }
 
                 ClearTextBoxesAndComboBoxes();
             }

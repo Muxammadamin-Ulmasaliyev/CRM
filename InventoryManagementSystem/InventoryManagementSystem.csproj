@@ -7,11 +7,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>gadget_computer_device_network_layers_stack_technology_icon_260538.ico</ApplicationIcon>
+    <UseWindowsForms>False</UseWindowsForms>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="gadget_computer_device_network_layers_stack_technology_icon_260538.ico" />
-    <Content Include="icons8-коробка-64.ico" />
   </ItemGroup>
 
   <ItemGroup>

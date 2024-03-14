@@ -1,5 +1,6 @@
 ﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
+using InventoryManagementSystem.View;
 using Notification.Wpf;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
@@ -64,8 +65,13 @@ namespace InventoryManagementSystem.Pages
         private void btnShowDetails_Click(object sender, RoutedEventArgs e)
         {
             Order order = (Order)(sender as Button).DataContext;
+            if(order.TotalAmount == 0)
+            {
+                MessageBox.Show("Бу карз тулаш холос, списка мавжуд эмас.", "Хабар", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
             PopulateOrderDetailsDataGrid(order.Id);
-            txtOrderDetailsTitle.Text = $"Списка заказ - {order.OrderDate.ToString("dd-MM-yyyy")}";
+            txtOrderDetailsTitle.Text = $"Списка заказ - {order.OrderDate.ToString("dd-MM-yyyy hh:mm:ss")}";
             LoadPageOrderDetails();
 
         }
@@ -74,15 +80,44 @@ namespace InventoryManagementSystem.Pages
         {
             Order selectedOrder = (Order)(sender as Button).DataContext;
 
+            if(selectedOrder.TotalAmount == 0)
+            {
+                MessageBox.Show("Бу карз тулаш холос, чек мавжуд эмас.","Хабар",MessageBoxButton.OK,MessageBoxImage.Information);
+                return;
+            }
 
             Order order = _orderService.GetOrderById(selectedOrder.Id);
 
             GeneretePDFCheque(order);
+            PrintReceiptCheque(order);
 
             notificationManager.Show("Муваффакият !", "Чек яратилди !", NotificationType.Success, onClick: () => OpenChequesFolder());
-
-
         }
+
+
+        private void PrintReceiptCheque(Order order)
+        {
+
+            PrintOverviewWindow printOverviewWindow = new PrintOverviewWindow(order, true);
+            printOverviewWindow.Show();
+            printOverviewWindow.Visibility  = Visibility.Collapsed;
+            try
+            {
+                printOverviewWindow.IsEnabled = false;
+                PrintDialog printDialog = new PrintDialog();
+                if (printDialog.ShowDialog() == true)
+                {
+                    printDialog.PrintVisual(printOverviewWindow.print, "Чек");
+                }
+            }
+            finally
+            {
+                printOverviewWindow.IsEnabled = true;
+            }
+
+            printOverviewWindow.Close();
+        }
+
         private void OpenChequesFolder()
         {
 
@@ -232,7 +267,7 @@ namespace InventoryManagementSystem.Pages
             }
         }
 
-        private void ordersDataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+        /*private void ordersDataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             if (e.Row.DataContext is Order order)
             {
@@ -245,6 +280,6 @@ namespace InventoryManagementSystem.Pages
                     e.Row.Foreground = Brushes.Green;
                 }
             }
-        }
+        }*/
     }
 }
