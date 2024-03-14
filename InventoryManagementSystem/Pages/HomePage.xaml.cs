@@ -49,6 +49,8 @@ namespace InventoryManagementSystem.Pages
             txtNumberOfProductsInDb.Text = $"Базада мавжуд жами продуктлар сони : {_productsCountInDb}";
             KeyDown += btnSaveCurrencyRate_KeyDown;
 
+            checkBoxShowRealPrices.IsChecked = true;
+
         }
 
         private void IsCartEmpty()
@@ -731,6 +733,31 @@ namespace InventoryManagementSystem.Pages
                     }
 
                 }
+            }
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            ToggleColumnVisibility(true);
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ToggleColumnVisibility(false);
+        }
+        private void ToggleColumnVisibility(bool isVisible)
+        {
+            var column = productDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "Таннарх");
+            var column2 = productDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "$ таннарх");
+
+            if (column != null)
+            {
+                column.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+            }
+
+            if (column2 != null)
+            {
+                column2.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
             }
         }
     }

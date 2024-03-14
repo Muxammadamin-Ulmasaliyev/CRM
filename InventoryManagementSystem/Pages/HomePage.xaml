@@ -46,6 +46,14 @@
                 <MaterialDesign:PackIcon Kind="Cart" Width="40" Height="40"/>
             </Button>
 
+            <StackPanel Orientation="Horizontal">
+
+                <CheckBox x:Name="checkBoxShowRealPrices" Margin="50,0,0,0"  Style="{StaticResource MaterialDesignActionSecondaryCheckBox}" 
+                          Background="AliceBlue"  VerticalAlignment="Center" Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked"/>
+                <TextBlock Text="Таннархларни куриш" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" Foreground="White" FontWeight="SemiBold"/>
+
+            </StackPanel>
+
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -59,7 +67,7 @@
             </StackPanel>
             <TextBlock x:Name="txtCurrencyRate" Text="" Foreground="FloralWhite" Margin="15"  HorizontalAlignment="Right" 
                        VerticalAlignment="Center" FontSize="24" FontWeight="SemiBold"  Style="{StaticResource MaterialDesignTextBlock}"/>
-            
+
             <Button Name="btnEditCurrency" Click="btnEditCurrency_Click" Width="50" Height="50" Margin="10,5,10,5" ToolTip="Курсни узгартириш" Background="#a47ce9">
                 <MaterialDesign:PackIcon Kind="Pencil" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Button>
@@ -207,17 +215,17 @@
 
         <TextBlock x:Name="txtNumberOfProductsInDb" FontSize="16" FontWeight="bold" Grid.Row="3" Grid.Column="1" Text="Базада мавжуд жами продуктлар сони :  " 
            HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="WhiteSmoke"/>
-        
+
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0,0,0">
-            
+
             <Button x:Name="btnPrevious" Click="PreviousPage_Click" IsEnabled="False" ToolTip="Олдинги сахифа"  >
                 <MaterialDesign:PackIcon Kind="ArrowLeftBold" Width="20" Height="20"/>
             </Button>
-            
+
 
             <TextBlock x:Name="currentPageText" VerticalAlignment="Center" Margin="10,0" Foreground="WhiteSmoke"
                        FontSize="16"  FontWeight="SemiBold"/>
-            
+
             <Button x:Name="btnNext"  Click="NextPage_Click" ToolTip="Кейинги сахифа" >
                 <MaterialDesign:PackIcon Kind="ArrowRightBold" Width="20" Height="20"/>
             </Button>
@@ -226,7 +234,7 @@
                   FontSize="16"  FontWeight="SemiBold" Width="auto" Height="auto" Style="{StaticResource MaterialDesignTextBox}" Background="#614ccb" HorizontalAlignment="Center" />
 
         </StackPanel>
-        
+
         <notifications:NotificationArea Grid.RowSpan="4" Grid.ColumnSpan="2" x:Name="notificationArea" Position="BottomRight" MaxItems="3"/>
 
     </Grid>
