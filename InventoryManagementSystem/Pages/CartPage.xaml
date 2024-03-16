@@ -43,7 +43,7 @@
            
             <ComboBox MinWidth="100" Width="auto" Height="auto" Name="cbCurrentCustomer"  Background="MintCream" 
                       FontSize="18" Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      MaterialDesign:HintAssist.Hint="Мижоз " Margin="10" SelectedIndex="0" ToolTip="Мижоз танланг"
+                      MaterialDesign:HintAssist.Hint="Мижоз " Margin="10"  ToolTip="Мижоз танланг"
                       DisplayMemberPath="Name" SelectionChanged="cbCurrentCustomer_SelectionChanged"/>
 
             <Button  x:Name="btnAddCustomer" Height="55" Width="125" ToolTip="Мижоз кушиш"

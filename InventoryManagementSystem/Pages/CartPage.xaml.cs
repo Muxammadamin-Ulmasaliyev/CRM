@@ -1,16 +1,13 @@
 ﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
-using MaterialDesignThemes.Wpf;
 using MethodTimer;
 using Notification.Wpf;
-using NPOI.SS.Formula.Functions;
-using NPOI.XSSF.UserModel;
+using NPOI.DDF;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing.Printing;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -53,7 +50,35 @@ namespace InventoryManagementSystem.Pages
             KeyDown += btnSeachWithBarcode_KeyDown;
             IsCartEmpty();
 
+            ShowCurrentCustomer();
+
         }
+
+        private void ShowCurrentCustomer()
+        {
+            int index = -1;
+            for (int i = 0; i < cbCurrentCustomer.Items.Count; i++)
+            {
+                var item = cbCurrentCustomer.Items[i] as Customer;
+                if (item.Id == currentOrder.CustomerId)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            // Set the SelectedIndex if the item is found
+            if (index != -1)
+            {
+                cbCurrentCustomer.SelectedIndex = index;
+            }
+            else
+            {
+                cbCurrentCustomer.SelectedIndex = 0;
+
+            }
+        }
+
         private void IsCartEmpty()
         {
             if (currentOrder.OrderDetails.Count > 0)
@@ -115,12 +140,12 @@ namespace InventoryManagementSystem.Pages
                     SubTotal = (double)(product.Price > 0 ?
                                 (1 * (product.Price)) :
                                 (1 * product.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate)),
-                    Price = (double)(product.Price > 0 ?
+                    Price = Math.Truncate((double)(product.Price > 0 ?
                                 (product.Price) :
-                                (product.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate)),
-                    RealPrice = (double)(product.RealPrice > 0 ?
+                                (product.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate))),
+                    RealPrice = Math.Truncate((double)(product.RealPrice > 0 ?
                                 (product.RealPrice) :
-                                (product.USDPrice * Properties.Settings.Default.CurrencyRate)),
+                                (product.USDPrice * Properties.Settings.Default.CurrencyRate))),
 
                     ProductName = product.Name,
                     ProductCarType = product.CarType.Name,
@@ -235,7 +260,7 @@ namespace InventoryManagementSystem.Pages
 
             var order = new Order()
             {
-                OrderDate = DateTime.Today,
+                OrderDate = DateTime.Now,
                 TotalAmount = currentOrder.TotalAmount,
                 CustomerId = currentOrder.CustomerId,
                 TotalPaidAmount = currentOrder.TotalPaidAmount
@@ -285,7 +310,7 @@ namespace InventoryManagementSystem.Pages
         private void PrintReceiptCheque(Order order)
         {
 
-            PrintOverviewWindow printOverviewWindow = new PrintOverviewWindow(order, true);
+            PrintOverviewWindow printOverviewWindow = new PrintOverviewWindow(order);
             printOverviewWindow.Show();
             printOverviewWindow.Visibility = Visibility.Collapsed;
             try
@@ -309,8 +334,7 @@ namespace InventoryManagementSystem.Pages
         {
             if (currentOrder != null)
             {
-                bool isUzsCurrency = true;
-                PrintOverviewWindow printOverviewWindow = new PrintOverviewWindow(currentOrder, isUzsCurrency);
+                PrintOverviewWindow printOverviewWindow = new PrintOverviewWindow(currentOrder);
                 printOverviewWindow.ShowDialog();
             }
         }
@@ -342,7 +366,7 @@ namespace InventoryManagementSystem.Pages
             }
         }
 
-        [Time]
+
         private void GeneretePDFCheque(Order order)
         {
             QuestPDF.Settings.License = LicenseType.Community;
@@ -459,13 +483,17 @@ namespace InventoryManagementSystem.Pages
             currentOrder.OrderDetails.ForEach(x => x.SubTotal = x.Price * x.Quantity);
         }
 
+
+
         private void cbCurrentCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             currentCustomer = (Customer)cbCurrentCustomer.SelectedItem;
             currentOrder.Customer = currentCustomer;
             currentOrder.CustomerId = currentCustomer.Id;
             CanSaveOrder();
+            // ShowCurrentCustomer();
             tbBarcode.Focus();
+
 
         }
 

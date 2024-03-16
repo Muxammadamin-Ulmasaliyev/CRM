@@ -1,5 +1,4 @@
-﻿using MahApps.Metro.Controls;
-using Notification.Wpf;
+﻿using Notification.Wpf;
 using Ookii.Dialogs.Wpf;
 using System.Windows;
 using System.Windows.Controls;

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240217024100_1")]
-    partial class _1
+    [Migration("20240315104837_newDb")]
+    partial class newDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,7 +95,6 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TotalOrdersCount")
@@ -104,6 +103,30 @@ namespace InventoryManagementSystem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.Model.DebtWithdrawal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("DebtWithdrawals");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Model.Order", b =>
@@ -121,6 +144,9 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<double>("TotalAmount")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalPaidAmount")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -144,11 +170,34 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<string>("ProductCarType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductCompany")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductCountry")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductSetType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<double>("RealPrice")
+                        .HasColumnType("float");
 
                     b.Property<double>("SubTotal")
                         .HasColumnType("float");
@@ -169,6 +218,10 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Barcode")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<int>("CarTypeId")
                         .HasColumnType("int");
@@ -238,6 +291,17 @@ namespace InventoryManagementSystem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SetTypes");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.Model.DebtWithdrawal", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.Model.Customer", "Customer")
+                        .WithMany("DebtWithdrawals")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Model.Order", b =>
@@ -322,6 +386,8 @@ namespace InventoryManagementSystem.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.Model.Customer", b =>
                 {
+                    b.Navigation("DebtWithdrawals");
+
                     b.Navigation("Orders");
                 });
 

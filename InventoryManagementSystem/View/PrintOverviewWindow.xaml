@@ -45,7 +45,7 @@
 
                         <TextBlock Grid.Column="1" Name="txtOrderId" Text="" FontSize="13" Margin="3" FontWeight="DemiBold" HorizontalAlignment="Right"/>
 
-                        <StackPanel Grid.ColumnSpan="2"  Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,40,0,0">
+                        <StackPanel Grid.ColumnSpan="2"  Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,45,0,0">
                             <TextBlock Name="txtCustomerName" Text="" FontWeight="Bold" FontSize="20" Margin="2" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
                         </StackPanel>
 
@@ -88,13 +88,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="Нарх" Width="55">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Price, StringFormat={}{0:N0}, ConverterCulture='uz-UZ'}" TextWrapping="Wrap" HorizontalAlignment="Center" FontWeight="SemiBold"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                            
 
                             <DataGridTemplateColumn Header="Сони" Width="35">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -104,6 +98,14 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
+                            <DataGridTemplateColumn Header="Нарх" Width="55">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Price, StringFormat={}{0:N0}, ConverterCulture='uz-UZ'}" TextWrapping="Wrap" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            
                             <DataGridTextColumn Width="25.5" Header="+/-" />
 
                         </DataGrid.Columns>
@@ -135,7 +137,7 @@
                 </Grid>
                 <TextBlock Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Text="------------------------------------------" FontSize="16" FontWeight="Light" />
 
-                <StackPanel Grid.Row="3" HorizontalAlignment="Center">
+                <StackPanel Grid.Row="3" HorizontalAlignment="Center" Margin="0,5,0,0">
                     <TextBlock/>
                     <TextBlock Text="Асадбек     : (91) 603-41-05" FontSize="13" FontWeight="Bold" FontStyle="Italic" Margin="2"/>
                     <TextBlock Text="Зохиджон : (90) 256-09-76" FontSize="13" FontWeight="Bold" FontStyle="Italic" Margin="2"/>

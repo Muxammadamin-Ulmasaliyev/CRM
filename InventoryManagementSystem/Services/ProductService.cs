@@ -1,7 +1,5 @@
-﻿using ControlzEx.Standard;
-using InventoryManagementSystem.Model;
+﻿using InventoryManagementSystem.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
 
 namespace InventoryManagementSystem.Services
 {

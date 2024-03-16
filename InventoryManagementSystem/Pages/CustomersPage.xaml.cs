@@ -1,9 +1,7 @@
 ﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Notification.Wpf;
-using NPOI.SS.Formula.Functions;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;

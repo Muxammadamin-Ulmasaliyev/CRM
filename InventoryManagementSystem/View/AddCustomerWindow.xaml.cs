@@ -4,7 +4,6 @@ using InventoryManagementSystem.UserControls;
 using Notification.Wpf;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace InventoryManagementSystem.View
 {

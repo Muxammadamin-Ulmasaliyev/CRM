@@ -1,5 +1,4 @@
 ﻿using InventoryManagementSystem.Model;
-using System.Xml.Linq;
 
 namespace InventoryManagementSystem.Services
 {

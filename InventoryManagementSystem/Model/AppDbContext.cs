@@ -24,7 +24,7 @@ namespace InventoryManagementSystem.Model
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Configure your SQL Server connection string here
-            optionsBuilder.UseSqlServer("server=(localDb)\\MSSQLLocalDB;database=999999999999999999;Integrated Security=true;");
+            optionsBuilder.UseSqlServer("server=(localDb)\\MSSQLLocalDB;database=Baza;Integrated Security=true;");
         }
     }
 }

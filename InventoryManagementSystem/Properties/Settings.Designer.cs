@@ -247,5 +247,29 @@ namespace InventoryManagementSystem.Properties {
                 this["IsPasswordRequired"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsLicensed {
+            get {
+                return ((bool)(this["IsLicensed"]));
+            }
+            set {
+                this["IsLicensed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MuxUlm26032005$")]
+        public string LicensePassword {
+            get {
+                return ((string)(this["LicensePassword"]));
+            }
+            set {
+                this["LicensePassword"] = value;
+            }
+        }
     }
 }

@@ -59,5 +59,11 @@
     <Setting Name="IsPasswordRequired" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="IsLicensed" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LicensePassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">MuxUlm26032005$</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

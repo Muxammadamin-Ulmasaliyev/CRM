@@ -58,45 +58,38 @@ namespace InventoryManagementSystem.Pages
             cbYears.ItemsSource = _orderService.GetDistinctYears();
             cbYears.SelectedIndex = 0;
         }
-        [Time]
 
         private void PopulateNetWorthTxt()
         {
             txtNetWorth.Text = _productService.CalculateNetWorth().ToString("C0", new CultureInfo("uz-UZ"));
         }
-        [Time]
 
         private void PopulateIncomePercentageTxt()
         {
             txtIncomePercentage.Text = _orderDetailService.CalculateAverageIncomePercentage().ToString("P2");
         }
-        [Time]
 
         private void PopulateDebtAmountOfCustomersTxt()
         {
             txtCustomersDebtAmount.Text = _customerService.CalculateDebtAmountOfCustomers().ToString("C0", new CultureInfo("uz-UZ"));
         }
-        [Time]
 
         private void PopulateTodaysSaleAmountTxt()
         {
             txtTodaysSaleAmount.Text = _orderService.CalculateTodaysSaleAmount().ToString("C0", new CultureInfo("uz-UZ"));
         }
-        [Time]
 
         private void PopulateTopCustomersDataGrid()
         {
             topCustomersDataGrid.ItemsSource = _orderService.GetTopCustomers(Properties.Settings.Default.NumberOfTopCustomers);
 
         }
-        [Time]
 
 
         private void PopulateTopSoldProductsDataGrid()
         {
             topSoldProductsDataGrid.ItemsSource = _productService.GetTopSoldProducts(Properties.Settings.Default.NumberOfTopProducts);
         }
-        [Time]
 
         private void PopulateLeastProductsDataGrid()
         {
@@ -109,7 +102,6 @@ namespace InventoryManagementSystem.Pages
             RefreshChart(selectedYear);
         }
 
-        [Time]
         private void RefreshChart(int selectedYear)
         {
             // Clear existing series before adding a new one
@@ -124,8 +116,6 @@ namespace InventoryManagementSystem.Pages
         {
             return _orderService.GetMonthlySalesOfYear(year);
         }
-        [Time]
-
         private void InitializeChart(int selectedYear)
         {
             var sales = GetMonthlySalesOfYear(selectedYear);
@@ -177,7 +167,6 @@ namespace InventoryManagementSystem.Pages
             loadingPanel.Visibility = System.Windows.Visibility.Collapsed;
         }
 
-        [Time]
 
         private async void btnExportToExcel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -210,7 +199,6 @@ namespace InventoryManagementSystem.Pages
 
 
 
-        [Time]
 
 
         private void btnSaveNumberOfTopCustomers_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -358,7 +346,6 @@ namespace InventoryManagementSystem.Pages
 
         }
 
-        [Time]
         private void monthlySalesChart_DataClick(object sender, ChartPoint chartPoint)
         {
             var month = chartPoint.Key + 1;

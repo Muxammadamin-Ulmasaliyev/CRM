@@ -1,5 +1,4 @@
-﻿using Bogus.DataSets;
-using InventoryManagementSystem.Model;
+﻿using InventoryManagementSystem.Model;
 using InventoryManagementSystem.Services;
 using Notification.Wpf;
 using System.Collections.ObjectModel;

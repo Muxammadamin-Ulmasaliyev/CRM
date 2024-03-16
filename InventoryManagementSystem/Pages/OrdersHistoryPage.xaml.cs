@@ -98,7 +98,7 @@ namespace InventoryManagementSystem.Pages
         private void PrintReceiptCheque(Order order)
         {
 
-            PrintOverviewWindow printOverviewWindow = new PrintOverviewWindow(order, true);
+            PrintOverviewWindow printOverviewWindow = new PrintOverviewWindow(order);
             printOverviewWindow.Show();
             printOverviewWindow.Visibility  = Visibility.Collapsed;
             try

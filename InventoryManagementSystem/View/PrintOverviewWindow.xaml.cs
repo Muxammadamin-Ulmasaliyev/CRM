@@ -8,23 +8,11 @@ namespace InventoryManagementSystem.View
     public partial class PrintOverviewWindow : Window
     {
         private Order _order { get; }
-        private bool _isUzsCurrency;
-
-
-
-        private void ChangeCurrencyToUsd()
-        {
-            _order.OrderDetails.ForEach(od =>
-            {
-                od.Price = Math.Round((od.Price / Properties.Settings.Default.CurrencyRate), 3);
-
-            });
-        }
+      
 
         
-        public PrintOverviewWindow(Order order, bool isUzsCurrency)
+        public PrintOverviewWindow(Order order)
         {
-            _isUzsCurrency = isUzsCurrency;
             InitializeComponent();
             _order = order;
             PopulateDataGrid(_order);

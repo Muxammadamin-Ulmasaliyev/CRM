@@ -9,7 +9,7 @@ namespace InventoryManagementSystem.View
 {
     public partial class IncomeInputWindow : Window
     {
-        NotificationManager _notificationManager;
+        private NotificationManager _notificationManager;
         private double _paidAmount = 0;
         private bool isSuccess = false;
         public IncomeInputWindow()

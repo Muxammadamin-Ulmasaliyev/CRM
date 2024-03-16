@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
@@ -33,6 +32,12 @@ namespace InventoryManagementSystem.Pages
         public HomePage()
         {
             // Shared.Shared.SeedFakeProducts();
+
+            if (!IsLicensed())
+            {
+                Environment.Exit(0);
+            }
+
             InitializeComponent();
             SetupUserCustomizationsSettings();
             SetupTimerSettings();
@@ -52,7 +57,27 @@ namespace InventoryManagementSystem.Pages
             checkBoxShowRealPrices.IsChecked = true;
 
         }
+        private bool IsLicensed()
+        {
+            if (Properties.Settings.Default.IsLicensed)
+            {
+                return true;
+            }
+            else
+            {
+                LicenseCheckWindow licenseCheckWindow = new LicenseCheckWindow();
+                this.Opacity = 0.4;
+                licenseCheckWindow.ShowDialog();
+                this.Opacity = 1;
 
+                if (licenseCheckWindow.IsPasswordCorrect())
+                {
+                    
+                    return true;
+                }
+                return false;
+            }
+        }
         private void IsCartEmpty()
         {
             if (currentOrder.OrderDetails.Count > 0)
@@ -409,12 +434,12 @@ namespace InventoryManagementSystem.Pages
                     SubTotal = (double)(selectedProduct.Price > 0 ?
                                 (quantity * (selectedProduct.Price)) :
                                 (quantity * selectedProduct.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate)),
-                    Price = (double)(selectedProduct.Price > 0 ?
+                    Price = Math.Truncate((double)(selectedProduct.Price > 0 ?
                                 (selectedProduct.Price) :
-                                (selectedProduct.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate)),
-                    RealPrice = (double)(selectedProduct.RealPrice > 0 ?
+                                (selectedProduct.USDPriceForCustomer * Properties.Settings.Default.CurrencyRate))),
+                    RealPrice = Math.Truncate((double)(selectedProduct.RealPrice > 0 ?
                                 (selectedProduct.RealPrice) :
-                                (selectedProduct.USDPrice * Properties.Settings.Default.CurrencyRate)),
+                                (selectedProduct.USDPrice * Properties.Settings.Default.CurrencyRate))),
                     ProductName = selectedProduct.Name,
                     ProductCarType = selectedProduct.CarType.Name,
                     ProductCompany = selectedProduct.Company.Name,
@@ -425,7 +450,7 @@ namespace InventoryManagementSystem.Pages
 
                 currentOrder.OrderDetails.Add(orderDetail);
                 CalculateOrderTotals();
-                notificationManager.Show("Муваффакият !", "Товар корзинага кушилди !", NotificationType.Success, "notificationArea");
+                notificationManager.Show("Муваффакият !", "Товар корзинага кушилди !", NotificationType.Success, "notificationArea", expirationTime: TimeSpan.FromSeconds(1));
                 IsCartEmpty();
 
             }
