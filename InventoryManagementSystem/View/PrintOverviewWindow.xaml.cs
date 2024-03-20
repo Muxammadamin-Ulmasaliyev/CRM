@@ -18,8 +18,20 @@ namespace InventoryManagementSystem.View
             PopulateDataGrid(_order);
             PopulateTxts();
 
+
+			KeyDown += PrintOverviewWindow_KeyDown;
+
         }
-        private void PopulateDataGrid(Order order)
+
+		private void PrintOverviewWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		{
+            if(e.Key == System.Windows.Input.Key.Escape)
+            {
+                this.Close();
+            }
+		}
+
+		private void PopulateDataGrid(Order order)
         {
             orderDetailsDataGrid.ItemsSource = _order.OrderDetails;
         }
@@ -31,7 +43,7 @@ namespace InventoryManagementSystem.View
             uzCulture.NumberFormat.CurrencySymbol = "сум";
             txtCurrencyRate.Text = "Курс : " + Properties.Settings.Default.CurrencyRate.ToString("C0", uzCulture);
             txtCustomerName.Text = _order.Customer.Name.ToUpper();
-            txtOrderDate.Text = _order.OrderDate.ToString("dd-MM-yyyy hh:mm:ss");
+            txtOrderDate.Text = _order.OrderDate.ToString("dd-MM-yyyy HH:mm:ss");
             txtOrderId.Text = _order.Id.ToString();
             txtDebtAmount.Text = _order.Customer.Debt.ToString("C0", uzCulture);
             txtTotalSum.Text = _order.TotalAmount.ToString("C0", uzCulture);

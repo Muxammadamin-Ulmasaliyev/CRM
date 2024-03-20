@@ -71,7 +71,7 @@ namespace InventoryManagementSystem.Pages
                 return;
             }
             PopulateOrderDetailsDataGrid(order.Id);
-            txtOrderDetailsTitle.Text = $"Списка заказ - {order.OrderDate.ToString("dd-MM-yyyy hh:mm:ss")}";
+            txtOrderDetailsTitle.Text = $"Списка заказ - {order.OrderDate.ToString("dd-MM-yyyy HH:mm:ss")}";
             LoadPageOrderDetails();
 
         }

@@ -7,7 +7,7 @@
       xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       
       mc:Ignorable="d"  Background="#614ccb"
-      d:DesignHeight="450" d:DesignWidth="800" 
+      d:DesignHeight="450" d:DesignWidth="800"
       Title="CartPage">
     
     <Page.Resources>
@@ -53,11 +53,9 @@
                 
             </Button>
 
-<!--
-            <Button Click="Button_Click">
-                
+            <Button Click="Button_Click" Height="55" Width="125" ToolTip="Чек" Margin="15,0,0,0"  Background="#6024ff" >
+                <MaterialDesign:PackIcon Kind="PrinterPreview" />
             </Button>
--->
             
             
         </StackPanel>

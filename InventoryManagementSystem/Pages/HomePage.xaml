@@ -183,7 +183,7 @@
                     <DataGridTextColumn Header="Давлат" IsReadOnly="True" Binding="{Binding Country.Name}" Width="10*"/>
                     <DataGridTextColumn Header="$ таннарх" IsReadOnly="False" Binding="{Binding USDPrice,StringFormat={}{0:C2}, ConverterCulture='en-US'}" Width="10*"/>
                     <DataGridTextColumn Header="$ сотиш" IsReadOnly="False" Binding="{Binding USDPriceForCustomer,StringFormat={}{0:C2}, ConverterCulture='en-US'}" Width="10*"/>
-                    <DataGridTemplateColumn  Header="" Width="65">
+                    <DataGridTemplateColumn  Header="" Width="65" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="btnAddToCart" Style="{StaticResource MaterialDesignToolButton}" Click="btnAddToCart_Click" ToolTip="Корзинага кушиш">
@@ -193,7 +193,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="" Width="65">
+                    <DataGridTemplateColumn Header="" Width="65" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="btnDeleteProduct" Style="{StaticResource MaterialDesignToolButton}" Click="btnDeleteProduct_Click" ToolTip="Учириш">

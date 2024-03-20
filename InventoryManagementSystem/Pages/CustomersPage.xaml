@@ -71,7 +71,7 @@
                 <DataGridTextColumn IsReadOnly="True" Header="Карз" Binding="{Binding Debt,StringFormat={}{0:C0}, ConverterCulture='uz-UZ'}" Width="10*"/>
                 <DataGridTextColumn IsReadOnly="True" Header="Жами заказлар" Binding="{Binding TotalOrdersCount}" Width="10*"/>
 
-                <DataGridTemplateColumn Header="" Width="auto">
+                <DataGridTemplateColumn Header="" Width="auto" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button x:Name="btnHistory"  Style="{StaticResource MaterialDesignToolButton}" ToolTip="Заказлар тарихи"

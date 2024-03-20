@@ -19,12 +19,13 @@ namespace InventoryManagementSystem.Model
 
 
 
-        
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Configure your SQL Server connection string here
             optionsBuilder.UseSqlServer("server=(localDb)\\MSSQLLocalDB;database=Baza;Integrated Security=true;");
+           // optionsBuilder.UseSqlServer("server=(localDb)\\MSSQLLocalDB;AttachDbFilename=" + System.IO.Path.GetFullPath("Baza.mdf") + ";Integrated Security=true;");
         }
     }
 }

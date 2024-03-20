@@ -6,16 +6,16 @@
         xmlns:local="clr-namespace:InventoryManagementSystem.View"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
         
-        mc:Ignorable="d"
-        Title="Invoice" Height="600" Width="290" ResizeMode="NoResize" WindowStyle="None" FontFamily="helvetica"  WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d" WindowStyle="None"
+        Title="Invoice" Height="600" Width="290" ResizeMode="NoResize"  FontFamily="helvetica"  WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
     </Window.Resources>
     <ScrollViewer>
         <Grid>
-            <Button HorizontalAlignment="Right" Margin="5" Click="Button_Click" VerticalAlignment="Top">
+          <!--  <Button HorizontalAlignment="Right" Margin="5" Click="Button_Click" VerticalAlignment="Top">
                 <materialDesign:PackIcon Kind="Printer"/>
-            </Button>
+            </Button>-->
             <Grid x:Name="print">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>

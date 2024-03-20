@@ -3,7 +3,6 @@ using InventoryManagementSystem.Services;
 using InventoryManagementSystem.View;
 using MethodTimer;
 using Notification.Wpf;
-using NPOI.DDF;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using System.Collections.ObjectModel;
@@ -48,7 +47,6 @@ namespace InventoryManagementSystem.Pages
             ShowTotalSums();
             tbBarcode.Focus();
             KeyDown += btnSeachWithBarcode_KeyDown;
-            IsCartEmpty();
 
             ShowCurrentCustomer();
 
@@ -75,6 +73,9 @@ namespace InventoryManagementSystem.Pages
             else
             {
                 cbCurrentCustomer.SelectedIndex = 0;
+                currentCustomer = (Customer)cbCurrentCustomer.SelectedItem;
+                currentOrder.Customer = currentCustomer;
+                currentOrder.CustomerId = currentCustomer.Id;
 
             }
         }
@@ -162,6 +163,7 @@ namespace InventoryManagementSystem.Pages
             CalculateSubTotals();
             CalculateOrderTotals();
             ShowTotalSums();
+
             tbBarcode.Text = string.Empty;
             tbBarcode.Focus();
 
@@ -290,7 +292,6 @@ namespace InventoryManagementSystem.Pages
 
 
             WithdrawalSoldProducts();
-            OrderSaved();
             UpdateOrdersCountAndDebtAmountOfCustomer(currentCustomer.Id);
             currentOrder.Id = newOrder.Entity.Id;
             // currentOrder.OrderDetails = orderDetailsLocal;
@@ -301,11 +302,24 @@ namespace InventoryManagementSystem.Pages
 
             txtOrderTotalSumUzs.Text = string.Empty;
             orderDetails.Clear();
-            currentOrder = null;
+
+
+           
+
+           
 
             tbBarcode.Focus();
 
+            CanSaveOrder();
+
+            OrderSaved();
+
+            cbCurrentCustomer.SelectedIndex = 0;
+            currentCustomer = (Customer)cbCurrentCustomer.SelectedItem;
+            currentOrder.Customer = currentCustomer;
+            currentOrder.CustomerId = currentCustomer.Id;
         }
+        
 
         private void PrintReceiptCheque(Order order)
         {
@@ -328,6 +342,7 @@ namespace InventoryManagementSystem.Pages
             }
 
             printOverviewWindow.Close();
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -525,6 +540,10 @@ namespace InventoryManagementSystem.Pages
 
         }
 
+        public void SetCurrentOrder(Order currentOrder)
+        {
+            this.currentOrder = currentOrder;
+        }
     }
 }
 

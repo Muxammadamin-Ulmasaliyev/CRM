@@ -29,6 +29,8 @@ namespace InventoryManagementSystem.Pages
 
         private System.Timers.Timer debounceTimer;
 
+
+        private CartPage _cartPage;
         public HomePage()
         {
             // Shared.Shared.SeedFakeProducts();
@@ -197,6 +199,8 @@ namespace InventoryManagementSystem.Pages
             };
 
             IsCartEmpty();
+
+            _cartPage?.SetCurrentOrder(currentOrder);
 
         }
 
@@ -466,8 +470,11 @@ namespace InventoryManagementSystem.Pages
         {
 
             var cartPage = new CartPage(currentOrder);
+            _cartPage = cartPage;
             NavigationService?.Navigate(cartPage);
             cartPage.OrderSavedButtonClicked += CurrentOrderDetails_OrderSaved;
+
+
 
         }
 
@@ -476,6 +483,7 @@ namespace InventoryManagementSystem.Pages
         private void CurrentOrderDetails_OrderSaved(object sender, EventArgs e)
         {
             _productService = new(new AppDbContext());
+
             InitializeNewOrder();
 
             LoadPage();

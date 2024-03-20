@@ -387,6 +387,9 @@ namespace InventoryManagementSystem.View
                 tbUsdPrice2.Visibility = Visibility.Collapsed;
                 txtErrorUsdPrice.Visibility = Visibility.Collapsed;
                 txtErrorUsdPrice2.Visibility = Visibility.Collapsed;
+
+                tbUsdPrice.txtInput.Text = string.Empty;
+                tbUsdPrice2.txtInput.Text = string.Empty;
             }
             if (rbUzs.IsChecked == false)
             {
@@ -402,6 +405,9 @@ namespace InventoryManagementSystem.View
                 tbPrice.Visibility = Visibility.Collapsed;
                 txtErrorRealPrice.Visibility = Visibility.Collapsed;
                 txtErrorPrice.Visibility = Visibility.Collapsed;
+
+                tbRealPrice.txtInput.Text = string.Empty;
+                tbPrice.txtInput.Text = string.Empty;
             }
             if (rbUsd.IsChecked == false)
             {
