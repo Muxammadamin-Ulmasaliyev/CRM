@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="baza.db" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="baza.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="gadget_computer_device_network_layers_stack_technology_icon_260538.ico" />
   </ItemGroup>
 
@@ -22,7 +29,7 @@
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.3.0" />
     <PackageReference Include="MethodTimer.Fody" Version="3.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.15" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="7.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -33,6 +40,8 @@
     <PackageReference Include="QuestPDF" Version="2023.12.4" />
     <PackageReference Include="ShowMeTheXAML" Version="2.0.0" />
     <PackageReference Include="ShowMeTheXAML.MSBuild" Version="2.0.0" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.9" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="2.1.9" />
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
   </ItemGroup>
 
@@ -51,12 +60,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Baza.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Baza_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -4,7 +4,6 @@ namespace InventoryManagementSystem.Model
 {
     public class Order
     {
-        [Key]
 
         public int Id { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.Now;

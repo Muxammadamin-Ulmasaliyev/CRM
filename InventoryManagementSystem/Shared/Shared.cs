@@ -8,10 +8,10 @@ namespace InventoryManagementSystem.Shared
         public static bool IsCartEmpty { get; set; } = true;
 
 
-        public static void SeedFakeProducts()
+        public static void SeedFakeProducts(int count)
         {
             var db = new AppDbContext();
-            var products = GenerateFakeProducts(5000);
+            var products = GenerateFakeProducts(count);
             db.Products.AddRange(products);
             db.SaveChanges();
         }
@@ -26,11 +26,11 @@ namespace InventoryManagementSystem.Shared
 
                 .RuleFor(p => p.Barcode, f => f.Random.AlphaNumeric(13))
 
-                .RuleFor(p => p.RealPrice, f => f.Random.Number(1, 100))
-                .RuleFor(p => p.Price, f => f.Random.Number(100, 10000))
+               // .RuleFor(p => p.RealPrice, f => f.Random.Number(1, 100))
+              //  .RuleFor(p => p.Price, f => f.Random.Number(100, 10000))
                 .RuleFor(p => p.Quantity, f => f.Random.Number(100, 10000))
-               // .RuleFor(p => p.USDPrice, f => f.Random.Number(1, 100))
-               // .RuleFor(p => p.USDPriceForCustomer, f => f.Random.Number(1, 100))
+                .RuleFor(p => p.USDPrice, f => f.Random.Number(1, 100))
+                .RuleFor(p => p.USDPriceForCustomer, f => f.Random.Number(1, 100))
                 .RuleFor(p => p.StoredAt, f => f.Date.Past())
                 .RuleFor(p => p.QuantitySold, f => f.Random.Number(0, 200))
                 .RuleFor(p => p.CompanyId, f => f.Random.Number(1, 6)+2) // Update with your actual CompanyId generation logic

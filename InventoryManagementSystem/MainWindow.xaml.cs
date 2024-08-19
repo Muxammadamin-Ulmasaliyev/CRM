@@ -19,7 +19,9 @@ namespace InventoryManagementSystem
             sidebarSelectionsHistory = new List<int>();
             sidebar.SelectedIndex = 0;
             sidebarSelectionsHistory.Add(sidebar.SelectedIndex);
-        }
+
+           // Shared.Shared.SeedFakeProducts(5000);
+		}
 
 
         /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

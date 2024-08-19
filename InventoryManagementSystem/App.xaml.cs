@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Model;
+using Microsoft.EntityFrameworkCore;
 using System.Windows;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
@@ -14,12 +15,19 @@ namespace InventoryManagementSystem
             base.OnStartup(e);
 
 
-            AppDbContext = new AppDbContext();
-            AppDbContext.Database.EnsureCreated();
+           /* AppDbContext = new AppDbContext();
+            AppDbContext.Database.EnsureCreated();*/
+
+			SQLitePCL.Batteries.Init();
 
 
-            AppDomain.CurrentDomain.UnhandledException += GlobalExceptionHandler;
-        }
+			AppDomain.CurrentDomain.UnhandledException += GlobalExceptionHandler;
+
+			using (var context = new AppDbContext())
+			{
+				context.Database.Migrate();
+			}
+		}
 
         private void GlobalExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
@@ -33,10 +41,14 @@ namespace InventoryManagementSystem
         }
         protected override void OnExit(ExitEventArgs e)
         {
-            base.OnExit(e);
 
-            AppDbContext.Dispose();
-        }
+
+            base.OnExit(e);
+			using (var context = new AppDbContext())
+			{
+				context.Database.CloseConnection();
+			}
+		}
     }
 
 }

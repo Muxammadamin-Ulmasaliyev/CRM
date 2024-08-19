@@ -1,29 +1,30 @@
-﻿<Application x:Class="InventoryManagementSystem.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:InventoryManagementSystem"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             StartupUri="MainWindow.xaml">
+﻿<Application
+    x:Class="InventoryManagementSystem.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:InventoryManagementSystem"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                
-               
-                <materialDesign:CustomColorTheme BaseTheme="Light" PrimaryColor="Blue" SecondaryColor="DarkViolet" />
+
+
+                <materialDesign:CustomColorTheme
+                    BaseTheme="Light"
+                    PrimaryColor="Blue"
+                    SecondaryColor="DarkViolet" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
-              
+
             </ResourceDictionary.MergedDictionaries>
-           
+
             <!-- <ResourceDictionary Source="Styles/ButtonStyles.xaml"/>-->
-              <!--  <ResourceDictionary Source="Styles/TextBoxStyles.xaml"/>-->
+            <!--  <ResourceDictionary Source="Styles/TextBoxStyles.xaml"/>-->
         </ResourceDictionary>
     </Application.Resources>
 </Application>
 
-    
-    
-    <!--
 
-   
 
-    -->
+<!--
+-->

@@ -4,7 +4,6 @@ namespace InventoryManagementSystem.Model
 {
     public class DebtWithdrawal
     {
-        [Key]
         public int Id { get; set; }
         public double Amount { get; set; }
         public DateTime Date { get; set; } = DateTime.Today;

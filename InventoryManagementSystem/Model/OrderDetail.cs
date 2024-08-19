@@ -4,7 +4,6 @@ namespace InventoryManagementSystem.Model
 {
     public class OrderDetail
     {
-        [Key]
 
         public int Id { get; set; }
         public double SubTotal { get; set; } = 0;

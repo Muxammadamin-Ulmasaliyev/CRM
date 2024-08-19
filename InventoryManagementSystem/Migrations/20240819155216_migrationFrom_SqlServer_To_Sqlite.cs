@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InventoryManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class newDb : Migration
+    public partial class migrationFrom_SqlServer_To_Sqlite : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,9 +15,9 @@ namespace InventoryManagementSystem.Migrations
                 name: "CarTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,9 +28,9 @@ namespace InventoryManagementSystem.Migrations
                 name: "Companies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,9 +41,9 @@ namespace InventoryManagementSystem.Migrations
                 name: "Countries",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,13 +54,13 @@ namespace InventoryManagementSystem.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Debt = table.Column<double>(type: "float", nullable: false),
-                    TotalOrdersCount = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: true),
+                    Phone = table.Column<string>(type: "TEXT", nullable: true),
+                    Debt = table.Column<double>(type: "REAL", nullable: false),
+                    TotalOrdersCount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,9 +71,9 @@ namespace InventoryManagementSystem.Migrations
                 name: "SetTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,11 +84,11 @@ namespace InventoryManagementSystem.Migrations
                 name: "DebtWithdrawals",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Amount = table.Column<double>(type: "float", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CustomerId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Amount = table.Column<double>(type: "REAL", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,12 +105,12 @@ namespace InventoryManagementSystem.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalAmount = table.Column<double>(type: "float", nullable: false),
-                    TotalPaidAmount = table.Column<double>(type: "float", nullable: false),
-                    CustomerId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TotalAmount = table.Column<double>(type: "REAL", nullable: false),
+                    TotalPaidAmount = table.Column<double>(type: "REAL", nullable: false),
+                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -127,22 +127,22 @@ namespace InventoryManagementSystem.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Barcode = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
-                    RealPrice = table.Column<double>(type: "float", nullable: true),
-                    Price = table.Column<double>(type: "float", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    USDPrice = table.Column<double>(type: "float", nullable: true),
-                    USDPriceForCustomer = table.Column<double>(type: "float", nullable: true),
-                    StoredAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    QuantitySold = table.Column<int>(type: "int", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
-                    CarTypeId = table.Column<int>(type: "int", nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: false),
-                    SetTypeId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Code = table.Column<string>(type: "TEXT", nullable: true),
+                    Barcode = table.Column<string>(type: "TEXT", maxLength: 128, nullable: true),
+                    RealPrice = table.Column<double>(type: "REAL", nullable: true),
+                    Price = table.Column<double>(type: "REAL", nullable: true),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    USDPrice = table.Column<double>(type: "REAL", nullable: true),
+                    USDPriceForCustomer = table.Column<double>(type: "REAL", nullable: true),
+                    StoredAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    QuantitySold = table.Column<int>(type: "INTEGER", nullable: false),
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CarTypeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CountryId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SetTypeId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -177,19 +177,19 @@ namespace InventoryManagementSystem.Migrations
                 name: "OrderDetails",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SubTotal = table.Column<double>(type: "float", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    RealPrice = table.Column<double>(type: "float", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductCarType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductCompany = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductCountry = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductSetType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SubTotal = table.Column<double>(type: "REAL", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    Price = table.Column<double>(type: "REAL", nullable: false),
+                    RealPrice = table.Column<double>(type: "REAL", nullable: false),
+                    OrderId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductName = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductCarType = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductCompany = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductCountry = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductSetType = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
