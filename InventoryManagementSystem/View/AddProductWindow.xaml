@@ -99,16 +99,15 @@
             <Button Name="btnAddProduct" Width="275" Height="60" FontSize="22"
                     Margin="15"  Style="{StaticResource MaterialDesignOutlinedButton}"
                     Content="Кушиш" Click="btnAddProduct_Click" KeyDown="btnAddProduct_KeyDown"/>
-            <!--
+            
             <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button Name="btnAddCountry" Width="80"  Height="40" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}" 
-                         Content="Add Country"  Click="btnAddCountry_Click"/>
-                <Button Name="btnAddCompany" Width="80"  Height="40" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Content="Add Company"  Click="btnAddCompany_Click"/>
-                <Button Name="btnAddCarType" Width="80"  Height="40" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}"
-                          Content="Add Car"  Click="btnAddCarType_Click"/>
+                <Button Name="btnAddCountry" Width="85" Padding="0"  Height="40" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}" 
+                         Content="Завод+"  Click="btnAddCountry_Click"/>
+                <Button Name="btnAddCompany" Width="85"  Height="40" Padding="0" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Content="Давлат+"  Click="btnAddCompany_Click"/>
+                <Button Name="btnAddCarType" Width="85"  Height="40" Margin="5" Style="{StaticResource MaterialDesignOutlinedButton}"
+                          Content="Машина+" Padding="0"  Click="btnAddCarType_Click"/>
             </StackPanel>
--->
 
         </StackPanel>
 

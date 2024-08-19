@@ -34,7 +34,7 @@ namespace InventoryManagementSystem.Services
         {
             if (dbContext.OrderDetails.Count() > 0)
             {
-                return dbContext.OrderDetails.Select(od => (od.Price / od.RealPrice) - 1).Average();
+                return dbContext.OrderDetails.Select(od => (od.Price - od.RealPrice) / od.Price).Average();
             }
             return 0;
         }

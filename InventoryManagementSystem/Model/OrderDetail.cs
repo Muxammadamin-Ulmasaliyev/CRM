@@ -29,6 +29,10 @@ namespace InventoryManagementSystem.Model
             get { return $" {Quantity}\n{ProductSetType}"; }
         }
 
+		public string CompanyAndCountry
+		{
+			get { return $"{ProductCompany}\n{ProductCountry}"; }
+		}
 
-    }
+	}
 }

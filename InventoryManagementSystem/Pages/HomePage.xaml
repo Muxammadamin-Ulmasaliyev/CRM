@@ -141,7 +141,7 @@
                 <Button Name="btnSetTypeCarType" Width="120"  Height="50" Margin="5" Background="#a47ce9" 
                        Click="btnAddSetType_Click">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock Text="Урам" VerticalAlignment="Center" Margin="0,0,0,3" FontSize="20" Foreground="White" FontWeight="SemiBold"/>
+                        <TextBlock Text="Улчов" VerticalAlignment="Center" Margin="0,0,0,3" FontSize="20" Foreground="White" FontWeight="SemiBold"/>
                         <MaterialDesign:PackIcon Kind="AddBold" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,3,0" Foreground="White"/>
                     </StackPanel>
                 </Button>

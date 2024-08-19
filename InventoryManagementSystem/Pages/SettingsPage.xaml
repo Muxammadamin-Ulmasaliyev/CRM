@@ -7,7 +7,7 @@
       xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 
       
-      mc:Ignorable="d"  Background="#e6e6e6" 
+      mc:Ignorable="d"  Background="#EEF1FF" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingsPage">
 

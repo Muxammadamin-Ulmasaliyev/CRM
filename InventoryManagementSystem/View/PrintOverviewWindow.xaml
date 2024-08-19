@@ -83,7 +83,7 @@
                             <DataGridTemplateColumn Header="Завод" Width="39">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding ProductCompany}" TextWrapping="Wrap"  HorizontalAlignment="Center"  FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding CompanyAndCountry}" TextWrapping="Wrap"  HorizontalAlignment="Center"  FontWeight="SemiBold"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

@@ -42,7 +42,7 @@
                                      ItemsSource="{Binding Companies}" SelectedItem="{Binding SelectedCompany}"
                                     CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
+                                <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>
                                 <DataGridTextColumn Header="Номи" Binding="{Binding Name}" Width="15*"/>
                                 <DataGridTemplateColumn Header="" Width="auto" IsReadOnly="True" >
                                     <DataGridTemplateColumn.CellTemplate>
@@ -68,7 +68,7 @@
                      ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}"
                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
+                                <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>
                                 <DataGridTextColumn Header="Номи" Binding="{Binding Name}" Width="15*"/>
                                 <DataGridTemplateColumn Header="" Width="auto" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -93,7 +93,7 @@
                     ItemsSource="{Binding CarTypes}" SelectedItem="{Binding SelectedCarType}"
                      CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="False">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
+                                <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>
                                 <DataGridTextColumn Header="Номи" Binding="{Binding Name}" Width="15*"/>
                                 <DataGridTemplateColumn Header="" Width="auto" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -115,12 +115,12 @@
 
                 <Expander Background="#614ccb"  Header="Улчовлар"  x:Name="setTypesExpander" ExpandDirection="Down" IsExpanded="False">
                     <StackPanel>
-                        <DataGrid  x:Name="setTypeDataGrid" IsReadOnly="True" CanUserSortColumns="False"
+                        <DataGrid  CellEditEnding="setTypeDataGrid_CellEditEnding"  x:Name="setTypeDataGrid" CanUserSortColumns="False"
                     ItemsSource="{Binding SetTypes}" SelectedItem="{Binding SelectedSetType}"
                     CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
-                                <DataGridTextColumn Header="Номи" Binding="{Binding Name}" Width="15*"/>
+                                <DataGridTextColumn Header="Id"  IsReadOnly="True" Binding="{Binding Id}" Width="Auto"/>
+                                <DataGridTextColumn Header="Номи" Binding="{Binding Name}" Width="15*" IsReadOnly="False" />
                                 <DataGridTemplateColumn Header="" Width="auto" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
